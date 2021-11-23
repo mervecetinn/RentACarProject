@@ -6,13 +6,22 @@ import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateCarRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteCarRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateCarRequest;
+import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.Result;
+import com.etiya.rentACarSpring.entities.complexTypes.CarDetail;
 
 public interface CarService {
-	void add(CreateCarRequest createCarRequest);
+	Result add(CreateCarRequest createCarRequest);
 
-	void update(UpdateCarRequest updateCarRequest);
+	Result update(UpdateCarRequest updateCarRequest);
 
-	void delete(DeleteCarRequest deleteCarRequest);
+	Result delete(DeleteCarRequest deleteCarRequest);
 
-	List<CarSearchListDto> getAll();
+	DataResult<List<CarSearchListDto>> getAll();
+	
+	DataResult<List<CarDetail>> getCarWithBrandAndColorDetails();
+	
+	DataResult<List<CarSearchListDto>> getByModelYear(int modelYear);
+	
+	DataResult<List<CarSearchListDto>> getByBrandName(String brandName);
 }

@@ -6,13 +6,15 @@ import com.etiya.rentACarSpring.business.dtos.BrandSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateBrandRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteBrandRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateBrandRequest;
+import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.Result;
 
 public interface BrandService {
-	void add(CreateBrandRequest createBrandRequest);
+	Result add(CreateBrandRequest createBrandRequest);
 
-	void update(UpdateBrandRequest updateBrandRequest);
+	Result update(UpdateBrandRequest updateBrandRequest);
 
-	void delete(DeleteBrandRequest deleteBrandRequest);
+	Result delete(DeleteBrandRequest deleteBrandRequest);
 
-	List<BrandSearchListDto> getAll();
+	DataResult<List<BrandSearchListDto>> getAll();
 }

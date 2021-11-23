@@ -2,6 +2,8 @@ package com.etiya.rentACarSpring.ws;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,8 @@ import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteColorRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateColorRequest;
+import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.Result;
 
 
 @RestController
@@ -31,23 +35,23 @@ public class ColorsController {
 	}
 	
 	@PostMapping("add")
-	public void add(@RequestBody CreateColorRequest createColorRequest) {
-		this.colorService.add(createColorRequest);
+	public Result add(@RequestBody @Valid CreateColorRequest createColorRequest) {
+		return this.colorService.add(createColorRequest);
 	}
 	
 	@PutMapping("update")
-	public void update(@RequestBody UpdateColorRequest updateColorRequest) {
-		this.colorService.update(updateColorRequest);
+	public Result update(@RequestBody @Valid UpdateColorRequest updateColorRequest) {
+		return this.colorService.update(updateColorRequest);
 		
 	}
 	
 	@DeleteMapping("delete")
-	public void delete(@RequestBody DeleteColorRequest deleteColorRequest) {
-		this.colorService.delete(deleteColorRequest);
+	public Result delete(@RequestBody @Valid DeleteColorRequest deleteColorRequest) {
+		return this.colorService.delete(deleteColorRequest);
 	}
 	
 	@GetMapping("all")
-	public List<ColorSearchListDto> getAll(){
+	public DataResult<List<ColorSearchListDto>> getAll(){
 		return this.colorService.getAll();
 	}
 

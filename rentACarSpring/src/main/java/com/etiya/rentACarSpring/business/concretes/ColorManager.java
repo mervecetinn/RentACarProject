@@ -11,6 +11,10 @@ import com.etiya.rentACarSpring.business.requests.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteColorRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateColorRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
+import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.Result;
+import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
+import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.ColorDao;
 import com.etiya.rentACarSpring.entities.Color;
 
@@ -26,34 +30,37 @@ public class ColorManager implements ColorService {
 	}
 
 	@Override
-	public void add(CreateColorRequest createColorRequest) {
+	public Result add(CreateColorRequest createColorRequest) {
 		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
 		this.colorDao.save(color);
+		return new SuccessResult("Color added.");
 		
 	}
 
 	@Override
-	public void update(UpdateColorRequest updateColorRequest) {
+	public Result update(UpdateColorRequest updateColorRequest) {
 		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		this.colorDao.save(color);
+		return new SuccessResult("Color updated.");
 		
 	}
 
 	@Override
-	public void delete(DeleteColorRequest deleteColorRequest) {
-		Color color = modelMapperService.forRequest().map(deleteColorRequest, Color.class);
-		this.colorDao.delete(color);
+	public Result delete(DeleteColorRequest deleteColorRequest) {
+		
+		this.colorDao.deleteById(deleteColorRequest.getId());
+		return new SuccessResult("Color deleted.");
 		
 	}
 
 	@Override
-	public List<ColorSearchListDto> getAll() {
+	public DataResult<List<ColorSearchListDto>> getAll() {
 		List<Color> result = this.colorDao.findAll();
 		List<ColorSearchListDto> response = result.stream()
 				.map(color -> modelMapperService.forDto().map(color, ColorSearchListDto.class))
 				.collect(Collectors.toList());
 		
-		return response;
+		return new SuccessDataResult<List<ColorSearchListDto>>(response);
 	}
 
 }
