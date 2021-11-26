@@ -11,6 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,26 +23,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "rentals")
-public class Rental {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rental_id")
-    private int id;
-
-    @Column(name = "rent_date")
-    private LocalDateTime rentDate;
-
-    @Column(name = "return_date")
-    private LocalDateTime returnDate;
-
-    @ManyToOne
-    @JoinColumn(name = "car_id")
-    private Car car;
-
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
+@Table(name="car_images")
+public class CarImage {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private int id;
+	
+	@Column(name="image_path")
+	private String imagePath;
+	
+	@CreationTimestamp
+	@Column(name="date")
+	private LocalDateTime date;
+	
+	@ManyToOne
+	@JoinColumn(name="car_id")
+	private Car car;
 }

@@ -1,6 +1,10 @@
 package com.etiya.rentACarSpring.business.requests;
 
-import java.time.LocalDateTime;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateRentalRequest {
-
-	private int userId;
-
+public class CreateCarImageRequest {
 	private int carId;
 
-	private LocalDateTime rentDate;
+	@JsonIgnore
+	private String imagePath;
 
-	private LocalDateTime returnDate;
-
+	
 }

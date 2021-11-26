@@ -5,9 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.UserService;
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.UserSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateUserRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteUserRequest;
@@ -18,7 +16,6 @@ import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.UserDao;
-import com.etiya.rentACarSpring.entities.Car;
 import com.etiya.rentACarSpring.entities.User;
 
 @Service

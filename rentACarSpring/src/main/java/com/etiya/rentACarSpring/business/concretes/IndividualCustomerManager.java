@@ -2,13 +2,10 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.IndividualCustomerService;
 import com.etiya.rentACarSpring.business.dtos.IndividualCustomerSearchListDto;
-import com.etiya.rentACarSpring.business.dtos.UserSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateIndividualCustomerRequest;
@@ -19,7 +16,7 @@ import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.IndividualCustomerDao;
 import com.etiya.rentACarSpring.entities.IndividualCustomer;
-import com.etiya.rentACarSpring.entities.User;
+
 
 @Service
 public class IndividualCustomerManager implements IndividualCustomerService {

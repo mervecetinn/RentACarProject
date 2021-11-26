@@ -72,16 +72,11 @@ public class RentalManager implements RentalService {
 	}
 	
 	private Result checkReturnDateExists(int carId) {
-		List<Rental> rentals=this.rentalDao.getByCarId(carId);
-		if(rentals!=null ) {
-			for(Rental rental:rentals) {
-			if(rental.getRentDate()!=null &&rental.getReturnDate()==null) {
-				return new ErrorResult("Araba teslim edilmedi.");
-			}
-			}
+		Rental rental=this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
+		if(rental!=null) {
+			return new ErrorResult("Araba teslim edilmedi.");
 		}
-		
-		return new SuccessResult("Araba kiralandı.");
+		return new SuccessResult("Araba kiralandı");
 		
 	}
 
