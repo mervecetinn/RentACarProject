@@ -6,9 +6,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.etiya.rentACarSpring.business.abstracts.CreditCardService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
-import com.etiya.rentACarSpring.business.requests.CreateCreditCardRequest;
-import com.etiya.rentACarSpring.business.requests.DeleteCreditCardRequest;
-import com.etiya.rentACarSpring.business.requests.UpdateCreditCardRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateCreditCardRequest;
+import com.etiya.rentACarSpring.business.requests.delete.DeleteCreditCardRequest;
+import com.etiya.rentACarSpring.business.requests.update.UpdateCreditCardRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;

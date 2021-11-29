@@ -1,4 +1,4 @@
-package com.etiya.rentACarSpring.business.requests;
+package com.etiya.rentACarSpring.business.requests.auth;
 
 import java.time.LocalDateTime;
 
@@ -9,19 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateIndividualCustomerRequest {
+public class RegisterIndividualCustomerRequest {
 
-	private int id;
-	
-	private int userId;
-	
 	private String email;
-
 	private String password;
-	
+	private String passwordRepeat;
 	private String firstName;
-
 	private String lastName;
-
 	private LocalDateTime birthday;
+
 }

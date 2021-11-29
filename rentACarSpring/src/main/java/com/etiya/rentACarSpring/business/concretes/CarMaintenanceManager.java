@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.etiya.rentACarSpring.business.abstracts.CarMaintenanceService;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
-import com.etiya.rentACarSpring.business.requests.CreateCarMaintenanceRequest;
-import com.etiya.rentACarSpring.business.requests.DeleteCarMaintenanceRequest;
-import com.etiya.rentACarSpring.business.requests.UpdateCarMaintenanceRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateCarMaintenanceRequest;
+import com.etiya.rentACarSpring.business.requests.delete.DeleteCarMaintenanceRequest;
+import com.etiya.rentACarSpring.business.requests.update.UpdateCarMaintenanceRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;

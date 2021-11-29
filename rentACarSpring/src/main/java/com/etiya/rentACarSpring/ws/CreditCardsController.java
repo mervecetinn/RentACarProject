@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etiya.rentACarSpring.business.abstracts.CreditCardService;
-import com.etiya.rentACarSpring.business.requests.CreateCreditCardRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateCreditCardRequest;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 
 @RestController

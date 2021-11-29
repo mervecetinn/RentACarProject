@@ -1,4 +1,4 @@
-package com.etiya.rentACarSpring.business.requests;
+package com.etiya.rentACarSpring.business.requests.create;
 
 import java.util.Date;
 

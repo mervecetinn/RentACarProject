@@ -1,4 +1,4 @@
-package com.etiya.rentACarSpring.business.requests;
+package com.etiya.rentACarSpring.business.requests.create;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

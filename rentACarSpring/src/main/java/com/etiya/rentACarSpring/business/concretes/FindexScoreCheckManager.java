@@ -7,7 +7,7 @@ import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.abstracts.FindexScoreCheckService;
 import com.etiya.rentACarSpring.business.abstracts.IndividualCustomerService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
-import com.etiya.rentACarSpring.business.requests.CreateRentalRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateRentalRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;

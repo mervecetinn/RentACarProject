@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etiya.rentACarSpring.business.abstracts.BrandService;
 import com.etiya.rentACarSpring.business.dtos.BrandSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
-import com.etiya.rentACarSpring.business.requests.CreateBrandRequest;
-import com.etiya.rentACarSpring.business.requests.DeleteBrandRequest;
-import com.etiya.rentACarSpring.business.requests.UpdateBrandRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateBrandRequest;
+import com.etiya.rentACarSpring.business.requests.delete.DeleteBrandRequest;
+import com.etiya.rentACarSpring.business.requests.update.UpdateBrandRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 

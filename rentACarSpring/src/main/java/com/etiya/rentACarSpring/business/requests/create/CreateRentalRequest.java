@@ -1,6 +1,8 @@
-package com.etiya.rentACarSpring.business.requests;
+package com.etiya.rentACarSpring.business.requests.create;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,17 +11,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateRentalRequest {
+public class CreateRentalRequest {
 
-	private int id;
+	@JsonIgnore
+	private int rentalId;
 	
+	private int userId;
+
+	private int carId;
+
 	private LocalDateTime rentDate;
-	
-	
+
 	private LocalDateTime returnDate;
 
-	
-	private int carId;
-	
-	private int customerId;
 }

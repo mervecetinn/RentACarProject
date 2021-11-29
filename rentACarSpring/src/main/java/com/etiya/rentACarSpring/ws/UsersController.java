@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etiya.rentACarSpring.business.abstracts.UserService;
-import com.etiya.rentACarSpring.business.requests.CreateUserRequest;
-import com.etiya.rentACarSpring.business.requests.DeleteUserRequest;
-import com.etiya.rentACarSpring.business.requests.UpdateUserRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateUserRequest;
+import com.etiya.rentACarSpring.business.requests.delete.DeleteUserRequest;
+import com.etiya.rentACarSpring.business.requests.update.UpdateUserRequest;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 
 @RestController

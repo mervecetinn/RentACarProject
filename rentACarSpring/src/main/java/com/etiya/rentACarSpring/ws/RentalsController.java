@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.dtos.RentalSearchListDto;
-import com.etiya.rentACarSpring.business.requests.CreateRentalRequest;
-import com.etiya.rentACarSpring.business.requests.DeleteRentalRequest;
-import com.etiya.rentACarSpring.business.requests.UpdateRentalRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateRentalRequest;
+import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalRequest;
+import com.etiya.rentACarSpring.business.requests.update.UpdateRentalRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 

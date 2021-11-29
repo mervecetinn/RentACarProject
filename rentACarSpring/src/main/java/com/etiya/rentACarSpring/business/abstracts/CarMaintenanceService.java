@@ -1,8 +1,8 @@
 package com.etiya.rentACarSpring.business.abstracts;
 
-import com.etiya.rentACarSpring.business.requests.CreateCarMaintenanceRequest;
-import com.etiya.rentACarSpring.business.requests.DeleteCarMaintenanceRequest;
-import com.etiya.rentACarSpring.business.requests.UpdateCarMaintenanceRequest;
+import com.etiya.rentACarSpring.business.requests.create.CreateCarMaintenanceRequest;
+import com.etiya.rentACarSpring.business.requests.delete.DeleteCarMaintenanceRequest;
+import com.etiya.rentACarSpring.business.requests.update.UpdateCarMaintenanceRequest;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 
 public interface CarMaintenanceService {

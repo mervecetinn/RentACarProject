@@ -1,4 +1,4 @@
-package com.etiya.rentACarSpring.business.requests;
+package com.etiya.rentACarSpring.business.requests.update;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

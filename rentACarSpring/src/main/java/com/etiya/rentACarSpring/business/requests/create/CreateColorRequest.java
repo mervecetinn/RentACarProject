@@ -1,4 +1,4 @@
-package com.etiya.rentACarSpring.business.requests;
+package com.etiya.rentACarSpring.business.requests.create;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,11 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateColorRequest {
+public class CreateColorRequest {
 	
-	@NotNull
-	private int id;
-
 	@NotNull
 	@Size(min=3,max=15)
 	private String name;
