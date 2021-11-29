@@ -39,6 +39,6 @@ public class Rental {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    private User user;
+    private ApplicationUser applicationUser;
 
 }

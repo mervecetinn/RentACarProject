@@ -10,21 +10,28 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateIndividualCustomerRequest extends CreateUserRequest{
+public class CreateIndividualCustomerRequest{
 	
 	@JsonIgnore
-	private int id;
+	private int individualCustomerId;
 	
 	@JsonIgnore
 	private int userId;
+	
+	private String email;
+
+	private String password;
+	
+	private String passwordRepeat;
 	
 	private String firstName;
 
 	private String lastName;
 
 	private LocalDateTime birthday;
+	
+	
 	
 }

@@ -1,6 +1,9 @@
 package com.etiya.rentACarSpring.business.requests;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateRentalRequest {
 
+	@JsonIgnore
+	private int rentalId;
+	
 	private int userId;
 
 	private int carId;

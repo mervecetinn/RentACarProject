@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.requests;
 
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,8 +13,6 @@ public class UpdateCarImageRequest {
 	
 	private int id;
 	
-	private int carId;
-
-	private String imagePath;
+	private MultipartFile imageFile;
 
 }

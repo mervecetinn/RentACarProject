@@ -8,6 +8,7 @@ import com.etiya.rentACarSpring.business.requests.DeleteIndividualCustomerReques
 import com.etiya.rentACarSpring.business.requests.UpdateIndividualCustomerRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
+import com.etiya.rentACarSpring.entities.IndividualCustomer;
 
 public interface IndividualCustomerService {
 
@@ -15,4 +16,5 @@ public interface IndividualCustomerService {
 	Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest);
 	Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest);
 	DataResult<List<IndividualCustomerSearchListDto>> getAll();
+	DataResult<IndividualCustomer> getById(int id);
 }

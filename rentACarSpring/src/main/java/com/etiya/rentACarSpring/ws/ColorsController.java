@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etiya.rentACarSpring.business.abstracts.ColorService;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteColorRequest;
@@ -53,6 +54,11 @@ public class ColorsController {
 	@GetMapping("all")
 	public DataResult<List<ColorSearchListDto>> getAll(){
 		return this.colorService.getAll();
+	}
+	
+	@GetMapping("getCarsOfRelatedColor")
+	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId){
+		return this.colorService.getCarsOfRelatedColor(colorId);
 	}
 
 }

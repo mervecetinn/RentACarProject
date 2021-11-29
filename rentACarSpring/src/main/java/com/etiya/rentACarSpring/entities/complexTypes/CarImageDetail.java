@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CarImageDetail {
 	private int id;
-	private int carId;
-	private String imagePath;
+	private byte[] image;
+	
+	
 }

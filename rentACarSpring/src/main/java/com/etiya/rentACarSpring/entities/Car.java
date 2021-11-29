@@ -37,6 +37,12 @@ public class Car {
     @Column(name="description")
 	private String description;
     
+    @Column(name="min_findex_score")
+    private int minFindexScore;
+    
+    @Column(name="is_available")
+    private boolean isAvailable=true;
+    
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
@@ -51,6 +57,9 @@ public class Car {
     
     @OneToMany(mappedBy = "car")
     private List<CarImage> carImages;
+    
+    @OneToMany(mappedBy = "car")
+    private List<CarMaintenance> carMaintenances;
     
     
     

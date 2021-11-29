@@ -23,6 +23,8 @@ import com.etiya.rentACarSpring.business.requests.UpdateCarRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.entities.complexTypes.CarDetail;
+import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
+
 
 
 @RestController
@@ -56,9 +58,9 @@ public class CarsController {
 		return this.carService.getAll();
 	}
 	
-	@GetMapping("detailedCar")
-	public DataResult<List<CarDetail>> getDetailedCar() {
-		return this.carService.getCarWithBrandAndColorDetails();
+	@GetMapping("detailedCars")
+	public DataResult<List<CarDetail>> getDetailedCars() {
+		return this.carService.getCarsWithDetails();
 	}
 	
 	@GetMapping("getByModelYear")
@@ -70,5 +72,16 @@ public class CarsController {
 	public DataResult<List<CarSearchListDto>> getByBrandName(@RequestParam String brandName) {
 		return this.carService.getByBrandName(brandName);
 	}
+	
+	@GetMapping("getOneCarWithDetails")
+	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {
+		return this.carService.getOneCarWithDetails(carId);
+	}
+	
+	@GetMapping("getCarsWithBrandAndColorDetails")
+	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails(){
+		return this.carService.getCarsWithBrandAndColorDetails();
+	}
+	
 
 }

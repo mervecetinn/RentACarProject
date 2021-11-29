@@ -31,8 +31,12 @@ public class CarImage {
 	@Column(name="id")
 	private int id;
 	
+	@Column(name="image")
+	private byte[] image;
+	
+	@JsonIgnore
 	@Column(name="image_path")
-	private String imagePath;
+	private String path;
 	
 	@CreationTimestamp
 	@Column(name="date")

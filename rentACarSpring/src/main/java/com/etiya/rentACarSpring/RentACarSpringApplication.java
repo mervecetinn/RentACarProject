@@ -2,6 +2,7 @@ package com.etiya.rentACarSpring;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
+import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -54,6 +56,13 @@ public class RentACarSpringApplication {
 		}
 		
 		ErrorDataResult<Object> error=new ErrorDataResult<Object>(validationErrors,"Validation Errors");
+		return error;
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleNoSuchElementException(NoSuchElementException exception) {
+		ErrorResult error=new ErrorResult("Kayıt bulunamadı.");
 		return error;
 	}
 

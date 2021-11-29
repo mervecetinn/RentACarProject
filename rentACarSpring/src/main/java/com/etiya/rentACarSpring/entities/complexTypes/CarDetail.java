@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.entities.complexTypes;
 
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,25 @@ public class CarDetail {
 		
 	   
 		private String description;
+		
+		
+		private byte[] image;
+
+
+		public CarDetail(int id, String brandName, String colorName, int modelYear, double dailyPrice,
+				String description) {
+			super();
+			this.id = id;
+			this.brandName = brandName;
+			this.colorName = colorName;
+			this.modelYear = modelYear;
+			this.dailyPrice = dailyPrice;
+			this.description = description;
+		}
+
+
+			
+		
 	    
 	    
 }

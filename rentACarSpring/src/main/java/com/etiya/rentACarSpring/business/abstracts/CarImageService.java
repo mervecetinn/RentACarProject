@@ -15,8 +15,8 @@ import com.etiya.rentACarSpring.entities.CarImage;
 import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
 
 public interface CarImageService {
-	Result add(CreateCarImageRequest createCarImageRequest,MultipartFile file) throws IOException;
-	Result update(UpdateCarImageRequest updateCarImageRequest,MultipartFile file) throws IOException;
+	Result add(CreateCarImageRequest createCarImageRequest) throws IOException;
+	Result update(UpdateCarImageRequest updateCarImageRequest) throws IOException;
 	Result delete(DeleteCarImageRequest deleteCarImageRequest);
 	DataResult<List<CarImageSearchListDto>> getAll();
 	

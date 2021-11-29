@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.etiya.rentACarSpring.business.abstracts.CarImageService;
-import com.etiya.rentACarSpring.business.dtos.CarImageSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateCarImageRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteCarImageRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateCarImageRequest;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
+
 
 @RestController
 @RequestMapping("api/carImages")
@@ -32,14 +31,17 @@ public class CarImagesController {
 		this.carImageService = carImageService;
 	}
 	
+	
 	@PostMapping("add")
-	public Result add(CreateCarImageRequest createCarImageRequest,@RequestParam("image") MultipartFile file) throws IOException {
-		return this.carImageService.add(createCarImageRequest,file);
-	}
+    public Result add(@RequestParam("carId") int carId,@RequestParam("image") MultipartFile file) throws IOException {
+		CreateCarImageRequest createCarImageRequest=new CreateCarImageRequest(carId,file);
+        return this.carImageService.add(createCarImageRequest);
+    }
 	
 	@PutMapping("update")
-	public Result update(UpdateCarImageRequest updateCarImageRequest,@RequestParam("image") MultipartFile file) throws IOException {
-		return this.carImageService.update(updateCarImageRequest,file);
+	public Result update(@RequestParam("imageId") int imageId,@RequestParam("image") MultipartFile file) throws IOException {
+		UpdateCarImageRequest updateCarImageRequest=new UpdateCarImageRequest(imageId,file);
+		return this.carImageService.update(updateCarImageRequest);
 	}
 	
 	@DeleteMapping("delete")

@@ -3,6 +3,7 @@ package com.etiya.rentACarSpring.business.abstracts;
 import java.util.List;
 
 import com.etiya.rentACarSpring.business.dtos.BrandSearchListDto;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateBrandRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteBrandRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateBrandRequest;
@@ -17,4 +18,9 @@ public interface BrandService {
 	Result delete(DeleteBrandRequest deleteBrandRequest);
 
 	DataResult<List<BrandSearchListDto>> getAll();
+	
+	DataResult<List<CarSearchListDto>> getCarsOfRelatedBrand(int brandId);
+	
+	
+	
 }

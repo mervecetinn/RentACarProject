@@ -12,52 +12,71 @@ import com.etiya.rentACarSpring.business.requests.DeleteUserRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateUserRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
-import com.etiya.rentACarSpring.dataAccess.abstracts.UserDao;
-import com.etiya.rentACarSpring.entities.User;
+import com.etiya.rentACarSpring.dataAccess.abstracts.ApplicationUserDao;
+import com.etiya.rentACarSpring.entities.ApplicationUser;
+
 
 @Service
 public class UserManager implements UserService {
 
-	private UserDao userDao;
+	private ApplicationUserDao applicationUserDao;
 	private ModelMapperService modelMapperService;
 	
 	@Autowired
-	public UserManager(UserDao userDao,ModelMapperService modelMapperService) {
-		this.userDao = userDao;
+	public UserManager(ApplicationUserDao applicationUserDao,ModelMapperService modelMapperService) {
+		this.applicationUserDao = applicationUserDao;
 		this.modelMapperService=modelMapperService;
 	}
 
 	@Override
 	public Result add(CreateUserRequest createUserRequest) {
-		User user = modelMapperService.forRequest().map(createUserRequest, User.class);
-		this.userDao.save(user);
+		ApplicationUser user = modelMapperService.forRequest().map(createUserRequest, ApplicationUser.class);
+		this.applicationUserDao.save(user);
 		return new SuccessResult();
 	}
 
 	@Override
 	public Result update(UpdateUserRequest updateUserRequest) {
-		User user = modelMapperService.forRequest().map(updateUserRequest, User.class);
-		this.userDao.save(user);
+		ApplicationUser user = modelMapperService.forRequest().map(updateUserRequest, ApplicationUser.class);
+		this.applicationUserDao.save(user);
 		return new SuccessResult();
 	}
 
 	@Override
 	public Result delete(DeleteUserRequest deleteUserRequest) {
-		this.userDao.deleteById(deleteUserRequest.getId());
+		this.applicationUserDao.deleteById(deleteUserRequest.getId());
 		return new SuccessResult();
 	}
 
 	@Override
 	public DataResult<List<UserSearchListDto>> getAll() {
-		List<User> result = this.userDao.findAll();
+		List<ApplicationUser> result = this.applicationUserDao.findAll();
 		List<UserSearchListDto> response = result.stream()
 				.map(user -> modelMapperService.forDto().map(user, UserSearchListDto.class))
 				.collect(Collectors.toList());
 		
 		return new SuccessDataResult<List<UserSearchListDto>>(response) ;
 	}
+
+	@Override
+	public DataResult<ApplicationUser> getByEmail(String email) {
+		ApplicationUser user=this.applicationUserDao.getByEmail(email);
+		if(user==null) {
+			return new ErrorDataResult<ApplicationUser>(null);
+		}
+		return new SuccessDataResult<ApplicationUser>(user);
+		
+	}
+
+	@Override
+	public DataResult<ApplicationUser> getByUserId(int id) {
+		ApplicationUser user=this.applicationUserDao.getById(id);
+		return new SuccessDataResult<ApplicationUser>(user);
+	}
+
 
 }

@@ -1,13 +1,14 @@
 package com.etiya.rentACarSpring.business.concretes;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.etiya.rentACarSpring.business.abstracts.FindexScoreCheckService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
+import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.dtos.RentalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateRentalRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteRentalRequest;
@@ -20,6 +21,7 @@ import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.RentalDao;
+import com.etiya.rentACarSpring.entities.ApplicationUser;
 import com.etiya.rentACarSpring.entities.Rental;
 
 @Service
@@ -27,23 +29,29 @@ public class RentalManager implements RentalService {
 
 	private RentalDao rentalDao;
 	private ModelMapperService modelMapperService;
+	private FindexScoreCheckService findexScoreCheckService;
+	private UserService userService;
 	
 	@Autowired
-	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService) {
+	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService,UserService userService,FindexScoreCheckService findexScoreCheckService) {
 		super();
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
+		this.userService=userService;
+		this.findexScoreCheckService=findexScoreCheckService;
 	}
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-		Result result=BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()));
+		Result result=BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),this.findexScoreCheckService.checkFindexScore(createRentalRequest));
 		
 		if(result!=null) {
 			return result;
 		}
 		
+		ApplicationUser user=this.userService.getByUserId(createRentalRequest.getUserId()).getData();
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+		rental.setApplicationUser(user);
 		this.rentalDao.save(rental);
 		return new SuccessResult();
 	}

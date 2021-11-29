@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.etiya.rentACarSpring.business.abstracts.BrandService;
 import com.etiya.rentACarSpring.business.dtos.BrandSearchListDto;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateBrandRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteBrandRequest;
 import com.etiya.rentACarSpring.business.requests.UpdateBrandRequest;
@@ -51,5 +52,12 @@ public class BrandsController {
 	public DataResult<List<BrandSearchListDto>> getAll(){
 		return this.brandService.getAll();
 	}
+	
+	@GetMapping("getCarsOfRelatedBrand")
+	public DataResult<List<CarSearchListDto>> getCarsOfRelatedBrand(int brandId){
+		return this.brandService.getCarsOfRelatedBrand(brandId);
+	}
+	
+	
 
 }

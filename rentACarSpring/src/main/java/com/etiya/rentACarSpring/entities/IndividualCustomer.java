@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.ForeignKey;
 
 import lombok.AllArgsConstructor;
@@ -25,16 +27,16 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = true,exclude = {"id"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name="individual_customers")
-public class IndividualCustomer extends User {
+public class IndividualCustomer{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "individual_customer_id")
+	private int individualCustomerId;
 
     @Column(name="first_name")
     private String firstName;
@@ -46,9 +48,12 @@ public class IndividualCustomer extends User {
     @Column(name="birthday")
     private LocalDateTime birthday;
     
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,optional = false)
-    @JoinColumn(foreignKey = @ForeignKey(name="USER_IND_FK"),name = "user_id",nullable = false)
-    private User user;
+    @Column(name="findex_score")
+    private int findexScore;
+    
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private ApplicationUser applicationUser;
 
    
     

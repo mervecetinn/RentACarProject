@@ -13,10 +13,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCarImageRequest {
+	
+	@JsonIgnore
+	private int id;
+	
 	private int carId;
 
-	@JsonIgnore
-	private String imagePath;
+	private MultipartFile imageFile;
 
+	public CreateCarImageRequest(int carId, MultipartFile file) {
+		this.carId=carId;
+		this.imageFile=file;
+	}
 	
 }

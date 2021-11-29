@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.abstracts.ColorService;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.business.requests.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.DeleteColorRequest;
@@ -20,13 +22,15 @@ import com.etiya.rentACarSpring.entities.Color;
 
 @Service
 public class ColorManager implements ColorService {
-	
+
 	private ColorDao colorDao;
 	private ModelMapperService modelMapperService;
+	private CarService carService;
 
-	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService) {
+	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService, CarService carService) {
 		this.colorDao = colorDao;
 		this.modelMapperService = modelMapperService;
+		this.carService = carService;
 	}
 
 	@Override
@@ -34,7 +38,7 @@ public class ColorManager implements ColorService {
 		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
 		this.colorDao.save(color);
 		return new SuccessResult("Color added.");
-		
+
 	}
 
 	@Override
@@ -42,15 +46,15 @@ public class ColorManager implements ColorService {
 		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		this.colorDao.save(color);
 		return new SuccessResult("Color updated.");
-		
+
 	}
 
 	@Override
 	public Result delete(DeleteColorRequest deleteColorRequest) {
-		
+
 		this.colorDao.deleteById(deleteColorRequest.getId());
 		return new SuccessResult("Color deleted.");
-		
+
 	}
 
 	@Override
@@ -59,8 +63,15 @@ public class ColorManager implements ColorService {
 		List<ColorSearchListDto> response = result.stream()
 				.map(color -> modelMapperService.forDto().map(color, ColorSearchListDto.class))
 				.collect(Collectors.toList());
-		
+
 		return new SuccessDataResult<List<ColorSearchListDto>>(response);
+	}
+
+	@Override
+	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId) {
+		List<CarSearchListDto> result = this.carService.getByColorId(colorId).getData();
+
+		return new SuccessDataResult<List<CarSearchListDto>>(result);
 	}
 
 }
