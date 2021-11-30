@@ -27,33 +27,25 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	private IndividualCustomerDao individualCustomerDao;
 	private ModelMapperService modelMapperService;
-	private AuthService authService;
 
 	@Autowired
 	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
-			ModelMapperService modelMapperService,AuthService authService) {
+			ModelMapperService modelMapperService) {
 		super();
 		this.individualCustomerDao = individualCustomerDao;
 		this.modelMapperService = modelMapperService;
-		this.authService=authService;
 
 	}
 
 	@Override
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
-		Result result=this.authService.individualCustomerRegister(createIndividualCustomerRequest);
-		
-		if(result!=null) {
-			return result;
-		}
-		
+
 		ApplicationUser user = new ApplicationUser();
 		user.setEmail(createIndividualCustomerRequest.getEmail());
 		user.setPassword(createIndividualCustomerRequest.getPassword());
 		IndividualCustomer individualCustomer = modelMapperService.forRequest().map(createIndividualCustomerRequest,
 				IndividualCustomer.class);
 		individualCustomer.setApplicationUser(user);
-		individualCustomer.setFindexScore((int)(Math.random() *1900));
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult();
 	}
@@ -83,7 +75,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	@Override
 	public DataResult<IndividualCustomer> getById(int id) {
-		IndividualCustomer ic=this.individualCustomerDao.getById(id);
+		IndividualCustomer ic = this.individualCustomerDao.getById(id);
 		return new SuccessDataResult<IndividualCustomer>(ic);
 	}
 

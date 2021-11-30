@@ -36,7 +36,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) {
  
-		Result result=BusinessRules.run(checkIfCarIsAvailableForMaintenance(createCarMaintenanceRequest.getCarId()));
+		Result result=BusinessRules.run(checkIfCarOnRent(createCarMaintenanceRequest.getCarId()));
 		
 		if(result!=null) {
 			return result;
@@ -44,8 +44,6 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		Car car=this.carService.getById(createCarMaintenanceRequest.getCarId()).getData();
 		CarMaintenance carMaintenance=modelMapperService.forRequest().map(createCarMaintenanceRequest, CarMaintenance.class);
 		carMaintenance.setCar(car);
-		car.setAvailable(false);
-		
 		this.carMaintenanceDao.save(carMaintenance);
 		
 		
@@ -60,16 +58,23 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	@Override
 	public Result delete(DeleteCarMaintenanceRequest deleteMaintenanceCarRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		this.carMaintenanceDao.deleteById(deleteMaintenanceCarRequest.getId());
+		return new SuccessResult();
+	}
+	
+	private Result checkIfCarOnRent(int carId) {
+		if(this.carService.getCarIfItIsOnRent(carId).isSuccess()) {
+			return new ErrorResult("Car is on rent now.");
+		}
+		return new SuccessResult();
 	}
 
-	private Result checkIfCarIsAvailableForMaintenance(int carId) {
-		boolean carIsAvailable = this.carService.getById(carId).getData().isAvailable();
-		if(carIsAvailable) {
-			return new SuccessResult();
-		}
-		return new ErrorResult("Car is not available for maintenance");
-	}
+//	private Result checkIfCarIsAvailableForMaintenance(int carId) {
+//		boolean carIsAvailable = this.carService.getById(carId).getData().isAvailable();
+//		if(carIsAvailable) {
+//			return new SuccessResult();
+//		}
+//		return new ErrorResult("Car is not available for maintenance");
+//	}
 
 }

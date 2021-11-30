@@ -48,9 +48,6 @@ public class IndividualCustomer{
     @Column(name="birthday")
     private LocalDateTime birthday;
     
-    @Column(name="findex_score")
-    private int findexScore;
-    
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private ApplicationUser applicationUser;

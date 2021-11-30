@@ -1,18 +1,20 @@
 package com.etiya.rentACarSpring.business.concretes;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.etiya.rentACarSpring.business.abstracts.FindexScoreCheckService;
+
+import com.etiya.rentACarSpring.business.abstracts.CarService;
+import com.etiya.rentACarSpring.business.abstracts.CustomerFindexScoreService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.dtos.RentalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateRentalRequest;
+import com.etiya.rentACarSpring.core.entities.concretes.User;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
@@ -29,27 +31,31 @@ public class RentalManager implements RentalService {
 
 	private RentalDao rentalDao;
 	private ModelMapperService modelMapperService;
-	private FindexScoreCheckService findexScoreCheckService;
+	private CustomerFindexScoreService customerFindexScoreService;
 	private UserService userService;
-	
+	private CarService carService;
+
 	@Autowired
-	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService,UserService userService,FindexScoreCheckService findexScoreCheckService) {
+	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, UserService userService,
+			CustomerFindexScoreService customerFindexScoreService, CarService carService) {
 		super();
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
-		this.userService=userService;
-		this.findexScoreCheckService=findexScoreCheckService;
+		this.userService = userService;
+		this.customerFindexScoreService = customerFindexScoreService;
+		this.carService = carService;
+
 	}
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-		Result result=BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),this.findexScoreCheckService.checkFindexScore(createRentalRequest));
-		
-		if(result!=null) {
+		Result result = BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(), createRentalRequest.getCarId()));
+
+		if (result != null) {
 			return result;
 		}
-		
-		ApplicationUser user=this.userService.getByUserId(createRentalRequest.getUserId()).getData();
+
+		ApplicationUser user = this.userService.getByUserId(createRentalRequest.getUserId()).getData();
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 		rental.setApplicationUser(user);
 		this.rentalDao.save(rental);
@@ -75,17 +81,39 @@ public class RentalManager implements RentalService {
 		List<RentalSearchListDto> response = result.stream()
 				.map(rental -> modelMapperService.forDto().map(rental, RentalSearchListDto.class))
 				.collect(Collectors.toList());
-		
-		return new SuccessDataResult<List<RentalSearchListDto>>(response) ;
+
+		return new SuccessDataResult<List<RentalSearchListDto>>(response);
 	}
-	
+
 	private Result checkReturnDateExists(int carId) {
-		Rental rental=this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
-		if(rental!=null) {
+		Rental rental = this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
+		if (rental != null) {
 			return new ErrorResult("Araba teslim edilmedi.");
 		}
 		return new SuccessResult("Araba kiralandı");
-		
+
+	}
+
+	private Result checkCustomerFindexScoreIsEnough(int userId, int carId) {
+		int carFindexScore = this.carService.getById(carId).getData().getMinFindexScore();
+		int customerFindexScore = 0;
+		ApplicationUser user = this.userService.getByUserId(userId).getData();
+		if (user == null) {
+			return new ErrorResult();
+		}
+
+		if (user.getIndividualCustomer()!=null) {
+			customerFindexScore = this.customerFindexScoreService.getFindexScoreOfIndividualCustomer();
+		}
+		if (user.getCorporateCustomer()!=null) {
+			customerFindexScore = this.customerFindexScoreService.getFindexScoreOfCorporateCustomer();
+		}
+
+		if (customerFindexScore >= carFindexScore) {
+			return new SuccessResult();
+		}
+		return new ErrorResult("Your findex score is not enough for this car!" + "your findex score: "
+				+ customerFindexScore + " car findex score: " + carFindexScore);
 	}
 
 }

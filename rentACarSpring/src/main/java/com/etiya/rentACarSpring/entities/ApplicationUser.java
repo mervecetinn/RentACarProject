@@ -27,6 +27,9 @@ public class ApplicationUser extends User {
     @OneToOne(mappedBy = "applicationUser")
 	private IndividualCustomer individualCustomer;
     
+    @OneToOne(mappedBy = "applicationUser")
+	private CorporateCustomer corporateCustomer;
+    
     @OneToMany(mappedBy = "applicationUser")
     private List<Rental> rentals;
     
