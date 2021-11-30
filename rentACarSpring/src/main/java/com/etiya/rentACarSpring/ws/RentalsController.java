@@ -32,7 +32,7 @@ public class RentalsController {
 	}
 	
 	@PostMapping("add")
-	public Result add(@RequestBody CreateRentalRequest createRentalRequest) {
+	public Result add(@RequestBody @Valid CreateRentalRequest createRentalRequest) {
 		return this.rentalService.add(createRentalRequest);
 	}
 	

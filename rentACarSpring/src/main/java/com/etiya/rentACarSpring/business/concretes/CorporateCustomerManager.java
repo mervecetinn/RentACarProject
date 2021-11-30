@@ -8,8 +8,10 @@ import com.etiya.rentACarSpring.business.abstracts.CorporateCustomerService;
 import com.etiya.rentACarSpring.business.dtos.CorporateCustomerSearchListDto;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCorporateCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCorporateCustomerRequest;
+import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
@@ -31,7 +33,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 	@Override
 	public Result save(CorporateCustomer corporateCustomer) {
-
+		
 		this.corporateCustomerDao.save(corporateCustomer);
 
 		return new SuccessResult();
@@ -59,5 +61,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 		return new SuccessDataResult<List<CorporateCustomerSearchListDto>>(response);
 	}
+	
+	
 
 }

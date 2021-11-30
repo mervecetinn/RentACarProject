@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class IndividualCustomer{
     private String lastName;
 
     @Column(name="birthday")
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

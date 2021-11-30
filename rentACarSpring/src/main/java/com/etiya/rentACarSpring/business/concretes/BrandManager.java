@@ -32,17 +32,17 @@ public class BrandManager implements BrandService {
 	private CarService carService;
 
 	@Autowired
-	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService,CarService carService) {
+	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, CarService carService) {
 		this.brandDao = brandDao;
 		this.modelMapperService = modelMapperService;
-		this.carService=carService;
+		this.carService = carService;
 	}
 
 	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
-		Result result=BusinessRules.run(checkIfBrandAlreadyExists(createBrandRequest.getName()));
-		
-		if(result!=null) {
+		Result result = BusinessRules.run(checkIfBrandAlreadyExists(createBrandRequest.getName()));
+
+		if (result != null) {
 			return result;
 		}
 		Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
@@ -53,15 +53,26 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public Result update(UpdateBrandRequest updateBrandRequest) {
+		Result result = BusinessRules.run(checkBrandIsNotExists(updateBrandRequest.getId()),
+				checkIfBrandAlreadyExists(updateBrandRequest.getName()));
+		if (result != null) {
+			return result;
+		}
+
 		Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		this.brandDao.save(brand);
-		return new SuccessResult("Brand updated."); 
+		return new SuccessResult("Brand updated.");
 
 	}
 
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandRequest) {
-		
+		Result result = BusinessRules.run(checkBrandIsNotExists(deleteBrandRequest.getId()),
+				checkIfBrandHasNotAnyCar(deleteBrandRequest.getId()));
+		if (result != null) {
+			return result;
+		}
+
 		brandDao.deleteById(deleteBrandRequest.getId());
 		return new SuccessResult("Brand deleted.");
 	}
@@ -72,26 +83,50 @@ public class BrandManager implements BrandService {
 		List<BrandSearchListDto> response = result.stream()
 				.map(brand -> modelMapperService.forDto().map(brand, BrandSearchListDto.class))
 				.collect(Collectors.toList());
-		
+
 		return new SuccessDataResult<List<BrandSearchListDto>>(response);
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getCarsOfRelatedBrand(int brandId) {
-		
-		List<CarSearchListDto> result= this.carService.getByBrandId(brandId).getData();
-		
+
+		List<CarSearchListDto> result = this.carService.getByBrandId(brandId).getData();
+
 		return new SuccessDataResult<List<CarSearchListDto>>(result);
 	}
-	
+
+	@Override
+	public Result checkBrandIsNotExists(int brandId) {
+		if (!this.brandDao.existsById(brandId)) {
+			return new ErrorResult("Böyle bir marka yok.");
+
+		}
+		return new SuccessResult();
+
+	}
+
+//	private Result checkIfBrandAlreadyExists(String brandName) {
+//		Brand brand=this.brandDao.getByName(brandName);
+//		if(brand!=null) {
+//			return new ErrorResult("");
+//		}
+//		return new SuccessResult();
+//	}
+
 	private Result checkIfBrandAlreadyExists(String brandName) {
-		Brand brand=this.brandDao.getByName(brandName);
-		if(brand!=null) {
+		if (this.brandDao.existsByName(brandName)) {
 			return new ErrorResult("Bu marka zaten mevcut!");
 		}
 		return new SuccessResult();
+
 	}
 
-	
+	private Result checkIfBrandHasNotAnyCar(int brandId) {
+		List<CarSearchListDto> carsInRelevantBrand = this.carService.getByBrandId(brandId).getData();
+		if (carsInRelevantBrand.size() > 0) {
+			return new ErrorResult("Bu markaya sahip arabalar mevcut! Öncelikle onları silmelisiniz.");
+		}
+		return new SuccessResult();
+	}
 
 }

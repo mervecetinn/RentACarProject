@@ -59,7 +59,7 @@ public class RentACarSpringApplication {
 		return error;
 	}
 	
-	@ExceptionHandler
+	@ExceptionHandler(NoSuchElementException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleNoSuchElementException(NoSuchElementException exception) {
 		ErrorResult error=new ErrorResult("Kayıt bulunamadı.");

@@ -38,9 +38,11 @@ public interface CarService {
 	
 	DataResult<Car> getById(int id);
 	
-	DataResult<CarSearchListDto> getCarIfItIsOnRent(int id);
+	Result getCarIfItIsOnRent(int id);
 	
 	DataResult<CarSearchListDto> getCarIfItIsOnMaintenance(int id);
+	
+	Result ifExistsByCarId(int id);
 	
 	
 }

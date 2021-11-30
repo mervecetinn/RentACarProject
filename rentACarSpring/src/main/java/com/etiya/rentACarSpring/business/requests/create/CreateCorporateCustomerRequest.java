@@ -1,5 +1,8 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,9 +15,13 @@ public class CreateCorporateCustomerRequest {
 	@JsonIgnore
 	private int corporateCustomerId;
 	
+	@NotNull
+	@Size(min=3,max=30)
 	private String companyName;
 	
-	private String texNumper;
+	@NotNull
+	@Size(min=10,max=10)
+	private String taxNumber;
 
 	
 }

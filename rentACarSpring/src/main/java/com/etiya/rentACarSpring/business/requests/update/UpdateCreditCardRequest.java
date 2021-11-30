@@ -17,12 +17,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCreditCardRequest {
 	
+	@NotNull
 	private int id;
 
-	@CreditCardNumber
+	@NotNull
 	private String cardNumber;
 	
 	@NotNull
+	@Size(min=4,max=40)
 	private String cardHolderName;
 	
 	@NotNull

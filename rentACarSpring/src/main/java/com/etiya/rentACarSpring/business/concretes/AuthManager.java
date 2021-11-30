@@ -50,7 +50,7 @@ public class AuthManager implements AuthService {
 
 	@Override
 	public Result individualCustomerRegister(RegisterIndividualCustomerRequest registerIndividualCustomerRequest) {
-		Result result=BusinessRules.run(checkIfUserAlreadyExists(registerIndividualCustomerRequest.getEmail()));
+		Result result=BusinessRules.run(checkIfUserAlreadyExists(registerIndividualCustomerRequest.getEmail()),checkEmailFormat(registerIndividualCustomerRequest.getEmail()));
 		
 		if(result!=null) {
 			return result;
@@ -64,13 +64,11 @@ public class AuthManager implements AuthService {
 	@Override
 	public DataResult<RegisterCorporateCustomerRequest> corporateCustomerRegister(
 			RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
-		Result result = BusinessRules.run(checkIfUserAlreadyExists(registerCorporateCustomerRequest.getEmail()),
-				checkIfPasswordsMatch(registerCorporateCustomerRequest.getPassword(),
-						registerCorporateCustomerRequest.getPasswordRepeat()));
+		Result result = BusinessRules.run(checkIfUserAlreadyExists(registerCorporateCustomerRequest.getEmail()),checkEmailFormat(registerCorporateCustomerRequest.getEmail()));
 
 		if (result != null) {
 			return new ErrorDataResult<RegisterCorporateCustomerRequest>(null,
-					"Üzgünüz, kayıt işleminiz gerçekleştirilemedi.");
+					result.getMessage());
 
 		}
 
@@ -92,22 +90,19 @@ public class AuthManager implements AuthService {
 		if (this.userService.getByEmail(email).isSuccess()) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("Kullanıcı bulunamadı.");
+		return new ErrorResult();
 
 	}
 
 	private Result checkIfUserExistsAndPasswordTrue(String email,String password) {
 		ApplicationUser user=this.userService.getByEmail(email).getData();
-		if(!checkIfUserExists(email).isSuccess()) {
-			return new ErrorResult(checkIfUserExists(email).getMessage());
+		if(checkIfUserExists(email).isSuccess()&&user.getPassword().equals(password)) {
+			
+			return new SuccessResult();
 		}
-			if(user.getPassword().equals(password)) {
-				return new SuccessResult();
-			}
-			return new ErrorResult("Şifre yanlış.");
-		}
-		
-		
+		return new ErrorResult("Kullanıcı adı veya şifre hatalı");
+			
+	}
 	
 	private Result checkIfUserAlreadyExists(String email) {
 		if(this.userService.getByEmail(email).isSuccess()) {
@@ -116,11 +111,20 @@ public class AuthManager implements AuthService {
 		return new SuccessResult();
 	}
 	
-	private Result checkIfPasswordsMatch(String password,String passwordRepeat) {
-		if(password.equals(passwordRepeat)) {
+	private Result checkEmailFormat(String email) {
+		String pattern = "^[A-Za-z0-9+_.-]+@(.+)$";
+		if (email.matches(pattern)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("Şifreler eşleşmiyor.");
+		
+		return new ErrorResult("Email is not valid.");
+		
 	}
+//	private Result checkIfPasswordsMatch(String password,String passwordRepeat) {
+//		if(password.equals(passwordRepeat)) {
+//			return new SuccessResult();
+//		}
+//		return new ErrorResult("Şifreler eşleşmiyor.");
+//	}
 
 }

@@ -44,7 +44,7 @@ public class CarsController {
 	}
 	
 	@PutMapping("update")
-	public Result update(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
+	public Result update(@RequestBody(required = false) @Valid  UpdateCarRequest updateCarRequest) {
 		return this.carService.update(updateCarRequest);
 	}
 	

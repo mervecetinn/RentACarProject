@@ -11,5 +11,6 @@ import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
 public interface CarImageDao extends JpaRepository<CarImage, Integer> {
 
 	List<CarImage> getByCarId(int carId);
+	boolean existsById(int id);
 	
 }

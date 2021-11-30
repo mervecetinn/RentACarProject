@@ -21,6 +21,8 @@ public interface BrandService {
 	
 	DataResult<List<CarSearchListDto>> getCarsOfRelatedBrand(int brandId);
 	
+	 Result checkBrandIsNotExists(int brandId);
+	
 	
 	
 }

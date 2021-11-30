@@ -15,6 +15,7 @@ import com.etiya.rentACarSpring.business.requests.update.UpdateIndividualCustome
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
+import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
@@ -40,6 +41,10 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
 
+		Result result= BusinessRules.run(checkEmailFormat(createIndividualCustomerRequest.getEmail()));
+		if(result!=null) {
+			return result;
+		}
 		ApplicationUser user = new ApplicationUser();
 		user.setEmail(createIndividualCustomerRequest.getEmail());
 		user.setPassword(createIndividualCustomerRequest.getPassword());
@@ -60,7 +65,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
-		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getId());
+		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getIndividualCustomerId());
 		return new SuccessResult();
 	}
 
@@ -77,6 +82,16 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	public DataResult<IndividualCustomer> getById(int id) {
 		IndividualCustomer ic = this.individualCustomerDao.getById(id);
 		return new SuccessDataResult<IndividualCustomer>(ic);
+	}
+	
+	private Result checkEmailFormat(String email) {
+		String pattern = "^[A-Za-z0-9+_.-]+@(.+)$";
+		if (email.matches(pattern)) {
+			return new SuccessResult();
+		}
+		
+		return new ErrorResult("Email is not valid.");
+		
 	}
 
 }

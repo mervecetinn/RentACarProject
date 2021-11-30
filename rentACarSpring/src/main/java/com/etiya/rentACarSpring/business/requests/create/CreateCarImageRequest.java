@@ -1,6 +1,8 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,16 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateCarImageRequest {
 	
-	@JsonIgnore
-	private int id;
-	
+	@NotNull
 	private int carId;
 
+	@NotNull
 	private MultipartFile imageFile;
-
-	public CreateCarImageRequest(int carId, MultipartFile file) {
-		this.carId=carId;
-		this.imageFile=file;
-	}
 	
 }
