@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +24,8 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import javax.persistence.EntityNotFoundException;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -65,5 +69,27 @@ public class RentACarSpringApplication {
 		ErrorResult error=new ErrorResult("Kayıt bulunamadı.");
 		return error;
 	}
+
+	@ExceptionHandler(EntityNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public  ErrorResult handleEntityNotFoundException(EntityNotFoundException exception){
+		ErrorResult error=new ErrorResult("Böyle bir kayıt bulunmamaktadır.");
+		return  error;
+	}
+
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public  ErrorResult handleEmptyResultDataAccessException(EmptyResultDataAccessException exception){
+		ErrorResult error=new ErrorResult("Böyle bir kayıt zaten yok!");
+		return error;
+	}
+
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
+		return new ErrorResult("yanlış veri tipi girdiniz.");
+	}
+	
 
 }

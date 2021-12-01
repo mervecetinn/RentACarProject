@@ -14,7 +14,8 @@ import com.etiya.rentACarSpring.entities.complexTypes.CarDetail;
 public interface CarDao extends JpaRepository<Car, Integer> {
 
 	boolean existsById(int id);
-	
+
+
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
 			+ "(c.id,b.name,cl.name,c.modelYear,c.dailyPrice,c.description,cImg.image) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl Full Join c.carImages cImg")

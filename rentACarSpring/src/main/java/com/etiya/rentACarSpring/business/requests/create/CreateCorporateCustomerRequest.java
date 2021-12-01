@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCorporateCustomerRequest {
+
 	@JsonIgnore
 	private int corporateCustomerId;
 	

@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.ws;
 
+import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,6 +55,12 @@ public class InvoicesController {
 	@GetMapping("all")
 	public DataResult<List<InvoiceSearchListDto>> getAll() {
 		return this.invoiceService.getAll();
+
+	}
+
+	@GetMapping("allInvoicesOfRelevantCustomer")
+	public DataResult<List<CustomerInvoiceDetail>> getAllInvoicesOfRelevantCustomer(int customerId) {
+		return this.invoiceService.getAllInvoicesOfRelevantCustomer(customerId);
 
 	}
 

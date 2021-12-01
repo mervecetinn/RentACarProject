@@ -61,7 +61,7 @@ public class CarManager implements CarService {
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 
-		Result result = BusinessRules.run(ifExistsByCarId(deleteCarRequest.getId()));
+		Result result = BusinessRules.run(checkCarExists(deleteCarRequest.getId()));
 		if (result != null) {
 			return result;
 		}
@@ -160,7 +160,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public Result ifExistsByCarId(int id) {
+	public Result checkCarExists(int id) {
 		if (this.carDao.existsById(id)) {
 			return new SuccessResult();
 		}

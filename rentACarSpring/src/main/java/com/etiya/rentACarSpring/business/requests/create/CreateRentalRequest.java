@@ -27,7 +27,7 @@ public class CreateRentalRequest {
 	@NotNull
 	private LocalDateTime rentDate;
 
-	@NotNull
+
 	private LocalDateTime returnDate;
 
 }

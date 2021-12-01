@@ -57,14 +57,29 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	@Override
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
-		IndividualCustomer individualCustomer = modelMapperService.forRequest().map(updateIndividualCustomerRequest,
+		Result result= BusinessRules.run(checkIfIndivudualCustomerIsNotExists(updateIndividualCustomerRequest.getIndividualCustomerId()));
+		if(result!=null) {
+			return result;
+		}
+		ApplicationUser user;
+		IndividualCustomer individualCustomer=this.individualCustomerDao.getById(updateIndividualCustomerRequest.getIndividualCustomerId());
+		user=individualCustomer.getApplicationUser();
+		user.setPassword(updateIndividualCustomerRequest.getPassword());
+		individualCustomer = modelMapperService.forRequest().map(updateIndividualCustomerRequest,
 				IndividualCustomer.class);
+		user.setEmail(updateIndividualCustomerRequest.getEmail());
+		individualCustomer.setApplicationUser(user);
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult();
+
 	}
 
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
+		Result result= BusinessRules.run(checkIfIndivudualCustomerIsNotExists(deleteIndividualCustomerRequest.getIndividualCustomerId()));
+		if(result!=null) {
+			return result;
+		}
 		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getIndividualCustomerId());
 		return new SuccessResult();
 	}
@@ -92,6 +107,13 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		
 		return new ErrorResult("Email is not valid.");
 		
+	}
+
+	private Result checkIfIndivudualCustomerIsNotExists(int id){
+		if(!this.individualCustomerDao.existsByIndividualCustomerId(id)){
+			return new ErrorResult("Böyle bir bireysel müşteri yok.");
+		}
+		return new SuccessResult();
 	}
 
 }

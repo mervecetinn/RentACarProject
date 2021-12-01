@@ -3,6 +3,7 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
@@ -11,11 +12,6 @@ import com.etiya.rentACarSpring.business.requests.create.CreateUserRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteUserRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateUserRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.ApplicationUserDao;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
 
@@ -76,6 +72,14 @@ public class UserManager implements UserService {
 	public DataResult<ApplicationUser> getByUserId(int id) {
 		ApplicationUser user=this.applicationUserDao.getById(id);
 		return new SuccessDataResult<ApplicationUser>(user);
+	}
+
+	@Override
+	public Result checkUserExists(int userId) {
+		if(this.applicationUserDao.existsByUserId(userId)){
+			return new SuccessResult();
+		}
+		return new ErrorResult();
 	}
 
 

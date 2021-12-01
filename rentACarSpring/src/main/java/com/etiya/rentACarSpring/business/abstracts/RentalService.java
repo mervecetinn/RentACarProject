@@ -14,4 +14,6 @@ public interface RentalService {
 	Result update(UpdateRentalRequest updateRentalRequest);
 	Result delete(DeleteRentalRequest deleteRentalRequest);
 	DataResult<List<RentalSearchListDto>> getAll();
+	DataResult<Integer> getDayBetweenDatesOfRental(int rentalId);
+	DataResult<Integer> getDailyPriceOfRentedCar(int brandId);
 }

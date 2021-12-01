@@ -2,14 +2,7 @@ package com.etiya.rentACarSpring.entities;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,11 +26,6 @@ public class Invoice {
 	@Column(name="creation_date")
 	private Date creationDate;
 	
-	@Column(name="sta_date")
-	private Date startDateOfRental;
-	
-	@Column(name="rent_date")
-	private Date finishDateOfRental;
 	
 	@Column(name="count_of_rental_days")
 	private int countOfRentalDays;
@@ -45,8 +33,8 @@ public class Invoice {
 	@Column(name="invoice_amount")
 	private double invoiceAmount;
 	
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	private ApplicationUser applicationUser;
+	@OneToOne
+	@JoinColumn(name="rental_id")
+	private Rental rental;
 
 }

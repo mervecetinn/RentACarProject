@@ -17,4 +17,5 @@ public interface UserService {
 	DataResult<List<UserSearchListDto>> getAll();
 	DataResult<ApplicationUser> getByEmail(String email);
 	DataResult<ApplicationUser> getByUserId(int userId);
+    Result checkUserExists(int userId);
 }

@@ -42,7 +42,7 @@ public interface CarService {
 	
 	Result checkCarIsNotOnMaintenance(int id);
 	
-	Result ifExistsByCarId(int id);
+	Result checkCarExists(int id);
 	
 	
 }

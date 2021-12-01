@@ -49,7 +49,7 @@ public class IndividualCustomer{
     @Column(name="birthday")
     private LocalDate birthday;
     
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private ApplicationUser applicationUser;
 

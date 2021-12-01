@@ -36,7 +36,7 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result add(CreateCreditCardRequest createCreditCardRequest) {
-		Result result=BusinessRules.run(checkIfUserGiveConfirmationForSaveCreditCard());
+		Result result=BusinessRules.run(checkIfUserNotExists(createCreditCardRequest.getUserId()));
 		
 		if(result!=null) {
 			return result;
@@ -62,7 +62,10 @@ public class CreditCardManager implements CreditCardService {
 		return null;
 	}
 	
-	private Result checkIfUserGiveConfirmationForSaveCreditCard() {
+	private Result checkIfUserNotExists(int userId){
+		if(!this.userService.checkUserExists(userId).isSuccess()){
+			return  new ErrorResult("Böyle bir kullanıcı yok.");
+		}
 		return new SuccessResult();
 	}
 

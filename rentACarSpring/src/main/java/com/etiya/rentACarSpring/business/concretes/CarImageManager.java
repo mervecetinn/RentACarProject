@@ -122,7 +122,7 @@ public class CarImageManager implements CarImageService {
 	}
 
 	private Result checkIfCarIsNotExists(int carId) {
-		if (!this.carService.ifExistsByCarId(carId).isSuccess()) {
+		if (!this.carService.checkCarExists(carId).isSuccess()) {
 			return new ErrorResult("Böyle bir araba yok!");
 		}
 		return new SuccessResult();

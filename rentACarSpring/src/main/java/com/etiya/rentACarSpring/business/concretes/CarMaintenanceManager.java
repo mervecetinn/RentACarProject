@@ -36,7 +36,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) {
  
-		Result result=BusinessRules.run(checkCarIsNotOnRent(createCarMaintenanceRequest.getCarId()));
+		Result result=BusinessRules.run(checkCarIsNotOnRent(createCarMaintenanceRequest.getCarId()),checkIfCarIsNotExists(createCarMaintenanceRequest.getCarId()));
 		
 		if(result!=null) {
 			return result;
@@ -67,6 +67,14 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 			return new ErrorResult("Car is on rent.");
 		}
 		
+		return new SuccessResult();
+	}
+
+	private Result checkIfCarIsNotExists(int carId) {
+		if(!this.carService.checkCarExists(carId).isSuccess()) {
+			return new ErrorResult("Böyle bir araba yok.");
+		}
+
 		return new SuccessResult();
 	}
 

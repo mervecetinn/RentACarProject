@@ -3,6 +3,8 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import org.springframework.stereotype.Service;
 
 import com.etiya.rentACarSpring.business.abstracts.CarService;
@@ -13,10 +15,6 @@ import com.etiya.rentACarSpring.business.requests.create.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteColorRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateColorRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.ColorDao;
 import com.etiya.rentACarSpring.entities.Color;
 
@@ -43,6 +41,12 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public Result update(UpdateColorRequest updateColorRequest) {
+
+		Result result= BusinessRules.run(checkIfColorIsNotExists(updateColorRequest.getId()));
+		if(result!=null){
+			return result;
+		}
+
 		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		this.colorDao.save(color);
 		return new SuccessResult("Color updated.");
@@ -51,7 +55,10 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public Result delete(DeleteColorRequest deleteColorRequest) {
-
+		Result result= BusinessRules.run(checkIfColorIsNotExists(deleteColorRequest.getId()));
+        if(result!=null){
+			return result;
+		}
 		this.colorDao.deleteById(deleteColorRequest.getId());
 		return new SuccessResult("Color deleted.");
 
@@ -72,6 +79,13 @@ public class ColorManager implements ColorService {
 		List<CarSearchListDto> result = this.carService.getByColorId(colorId).getData();
 
 		return new SuccessDataResult<List<CarSearchListDto>>(result);
+	}
+
+	private Result checkIfColorIsNotExists(int colorId){
+		if(!this.colorDao.existsById(colorId)){
+			return new ErrorResult("Böyle bir renk yok");
+		}
+		return new SuccessResult();
 	}
 
 }

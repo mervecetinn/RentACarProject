@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IndividualCustomerSearchListDto {
-    private int id;
+    private int individualCustomerId;
 	
 	private String firstName;
 

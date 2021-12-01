@@ -7,6 +7,7 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteInvoiceRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateInvoiceRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
+import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 
 public interface InvoiceService {
 
@@ -14,4 +15,5 @@ public interface InvoiceService {
 	Result update(UpdateInvoiceRequest updateInvoiceRequest);
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
 	DataResult<List<InvoiceSearchListDto>> getAll();
+	DataResult<List<CustomerInvoiceDetail>> getAllInvoicesOfRelevantCustomer(int customerId);
 }
