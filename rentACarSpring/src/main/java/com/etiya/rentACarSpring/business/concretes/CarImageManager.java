@@ -74,7 +74,8 @@ public class CarImageManager implements CarImageService {
 
 	@Override
 	public Result update(UpdateCarImageRequest updateCarImageRequest) throws IOException {
-		Result result = BusinessRules.run(this.fileHelper.checkImageFile(updateCarImageRequest.getImageFile()),checkImageIsNotExists(updateCarImageRequest.getId()));
+		Result result = BusinessRules.run(this.fileHelper.checkImageFile(updateCarImageRequest.getImageFile()),
+				checkImageIsNotExists(updateCarImageRequest.getId()));
 		if (result != null) {
 			return result;
 		}
@@ -94,7 +95,7 @@ public class CarImageManager implements CarImageService {
 		if (result != null) {
 			return result;
 		}
-		
+
 		String imageInFolder = this.carImageDao.getById(deleteCarImageRequest.getId()).getPath();
 		this.fileHelper.deleteImage(imageInFolder);
 		this.carImageDao.deleteById(deleteCarImageRequest.getId());
@@ -126,7 +127,7 @@ public class CarImageManager implements CarImageService {
 		}
 		return new SuccessResult();
 	}
-	
+
 	private Result checkImageIsNotExists(int imageId) {
 		if (!this.carImageDao.existsById(imageId)) {
 			return new ErrorResult("Böyle bir resim yok.");

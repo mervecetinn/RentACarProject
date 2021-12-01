@@ -49,7 +49,9 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-		Result result = BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(), createRentalRequest.getCarId()));
+		Result result = BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),
+				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(), createRentalRequest.getCarId()),
+				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfCarIsNotExists(createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
@@ -102,10 +104,10 @@ public class RentalManager implements RentalService {
 			return new ErrorResult();
 		}
 
-		if (user.getIndividualCustomer()!=null) {
+		if (user.getIndividualCustomer() != null) {
 			customerFindexScore = this.customerFindexScoreService.getFindexScoreOfIndividualCustomer();
 		}
-		if (user.getCorporateCustomer()!=null) {
+		if (user.getCorporateCustomer() != null) {
 			customerFindexScore = this.customerFindexScoreService.getFindexScoreOfCorporateCustomer();
 		}
 
@@ -114,6 +116,21 @@ public class RentalManager implements RentalService {
 		}
 		return new ErrorResult("Your findex score is not enough for this car!" + "your findex score: "
 				+ customerFindexScore + " car findex score: " + carFindexScore);
+	}
+
+	private Result checkCarIsNotOnMaintenance(int carId) {
+		if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
+			return new ErrorResult("Araba bakımda.");
+		}
+		return new SuccessResult();
+	}
+	
+	private Result checkIfCarIsNotExists(int carId) {
+		if(!this.carService.ifExistsByCarId(carId).isSuccess()) {
+			return new ErrorResult("Böyle bir araba yok.");
+		}
+		
+		return new SuccessResult();
 	}
 
 }

@@ -58,10 +58,10 @@ public class CarsController {
 		return this.carService.getAll();
 	}
 	
-	@GetMapping("detailedCars")
-	public DataResult<List<CarDetail>> getDetailedCars() {
-		return this.carService.getCarsWithDetails();
-	}
+//	@GetMapping("detailedCars")
+//	public DataResult<List<CarDetail>> getDetailedCars() {
+//		return this.carService.getCarsWithDetails();
+//	}
 	
 	@GetMapping("getByModelYear")
 	public DataResult<List<CarSearchListDto>> getByModelYear(@RequestParam int modelYear) {

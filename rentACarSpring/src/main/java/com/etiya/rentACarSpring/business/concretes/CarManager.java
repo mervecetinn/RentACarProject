@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.etiya.rentACarSpring.business.abstracts.BrandService;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.constants.FilePathConfiguration;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
@@ -15,7 +13,6 @@ import com.etiya.rentACarSpring.business.requests.update.UpdateCarRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
@@ -29,22 +26,22 @@ public class CarManager implements CarService {
 
 	private CarDao carDao;
 	private ModelMapperService modelMapperService;
-	
 
 	@Autowired
 	public CarManager(CarDao carDao, ModelMapperService modelMapperService) {
 		this.carDao = carDao;
 		this.modelMapperService = modelMapperService;
-		
+
 	}
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
-		Result result=BusinessRules.run(checkIfBrandNotExists(createCarRequest.getBrandId()),checkIfColorNotExists(createCarRequest.getColorId()));
-		if(result!=null) {
+		Result result = BusinessRules.run(checkIfBrandNotExists(createCarRequest.getBrandId()),
+				checkIfColorNotExists(createCarRequest.getColorId()));
+		if (result != null) {
 			return result;
 		}
-		
+
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
 		car.setMinFindexScore((int) (Math.random() * 1900));
 
@@ -63,12 +60,11 @@ public class CarManager implements CarService {
 
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
-		
-		Result result=BusinessRules.run(ifExistsByCarId(deleteCarRequest.getId()));
-		if(result!=null) {
+
+		Result result = BusinessRules.run(ifExistsByCarId(deleteCarRequest.getId()));
+		if (result != null) {
 			return result;
 		}
-		
 
 		this.carDao.deleteById(deleteCarRequest.getId());
 		return new SuccessResult("Car deleted.");
@@ -77,7 +73,8 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getAll() {
-		List<Car> result = this.carDao.findAll();
+		// List<Car> result = this.carDao.findAll();
+		List<Car> result = this.carDao.findAllCarsWhichIsNotOnMaintenance();
 		List<CarSearchListDto> response = result.stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
@@ -146,46 +143,43 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public Result getCarIfItIsOnRent(int id) {
-		//CarSearchListDto carSearchListDto = this.carDao.getCarIfItIsOnRent(id).getData();
-		//if (carSearchListDto != null) {
-			return new SuccessResult();
-		//}
-		//return new ErrorResult();
-		
+	public Result checkCarIsNotOnRent(int id) {
+		if (this.carDao.getCarIfItIsOnRent(id).size() > 0) {
+			return new ErrorResult();
+		}
+		return new SuccessResult();
+
 	}
 
 	@Override
-	public DataResult<CarSearchListDto> getCarIfItIsOnMaintenance(int id) {
-		CarSearchListDto carSearchListDto = this.carDao.getCarIfItIsNotOnRent(id).getData();
-		
-		if (carSearchListDto != null) {
-			return new SuccessDataResult<CarSearchListDto>(null);
+	public Result checkCarIsNotOnMaintenance(int id) {
+		if (this.carDao.getCarIfItIsOnMaintenance(id).size() > 0) {
+			return new ErrorResult();
 		}
-		return new ErrorDataResult<CarSearchListDto>(null);
+		return new SuccessResult();
 	}
 
 	@Override
 	public Result ifExistsByCarId(int id) {
-		if(this.carDao.existsById(id)) {
+		if (this.carDao.existsById(id)) {
 			return new SuccessResult();
 		}
 		return new ErrorResult("Böyle bir araba zaten yok.");
 	}
-	
+
 	private Result checkIfBrandNotExists(int brandId) {
-		Object id=this.carDao.getOneBrandId(brandId);
-		
-		if(id!=null) {
+		Object id = this.carDao.getOneBrandId(brandId);
+
+		if (id != null) {
 			return new SuccessResult();
 		}
 		return new ErrorResult("Böyle bir marka yok.");
-		
+
 	}
-	
+
 	private Result checkIfColorNotExists(int colorId) {
-		Object id=this.carDao.getOneColorId(colorId);
-		if(id!=null) {
+		Object id = this.carDao.getOneColorId(colorId);
+		if (id != null) {
 			return new SuccessResult();
 		}
 		return new ErrorResult("Böyle bir renk yok.");
