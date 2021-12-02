@@ -72,6 +72,11 @@ public class CarsController {
 	public DataResult<List<CarSearchListDto>> getByBrandName(@RequestParam String brandName) {
 		return this.carService.getByBrandName(brandName);
 	}
+
+	@GetMapping("getByCityId")
+	public DataResult<List<CarSearchListDto>> getByCityId(int cityId){
+		return this.carService.getByCityId(cityId);
+	}
 	
 	@GetMapping("getOneCarWithDetails")
 	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {

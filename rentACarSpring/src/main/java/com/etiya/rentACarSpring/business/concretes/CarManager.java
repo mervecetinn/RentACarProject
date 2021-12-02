@@ -126,6 +126,13 @@ public class CarManager implements CarService {
 	}
 
 	@Override
+	public DataResult<List<CarSearchListDto>> getByCityId(int cityId) {
+		List<CarSearchListDto> result = this.carDao.getByCityId(cityId).stream()
+				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
+		return new SuccessDataResult<List<CarSearchListDto>>(result);
+	}
+
+	@Override
 	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {
 		List<CarDetail> result = this.carDao.getOneCarWithDetails(carId);
 		return new SuccessDataResult<List<CarDetail>>(result);

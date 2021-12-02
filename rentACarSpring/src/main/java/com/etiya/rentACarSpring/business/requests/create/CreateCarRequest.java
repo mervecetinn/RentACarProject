@@ -42,4 +42,8 @@ public class CreateCarRequest {
 	@NotNull
 	@Size(min = 2, max=100)
 	private String description;
+
+	@NotNull
+	@Range(min=1,message = "Geçerli bir id girin")
+	private int cityId;
 }
