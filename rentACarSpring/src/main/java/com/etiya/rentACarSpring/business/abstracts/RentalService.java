@@ -8,6 +8,7 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateRentalRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
+import com.etiya.rentACarSpring.entities.Rental;
 
 public interface RentalService {
 	Result add(CreateRentalRequest createRentalRequest);
@@ -17,4 +18,5 @@ public interface RentalService {
 	DataResult<Integer> getDayBetweenDatesOfRental(int rentalId);
 	DataResult<Integer> getDailyPriceOfRentedCar(int brandId);
 	Result checkCarIsReturnedToSameCity(int rentalId);
+	DataResult<Rental> getById(int rentalId);
 }

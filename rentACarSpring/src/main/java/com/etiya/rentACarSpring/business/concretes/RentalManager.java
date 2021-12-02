@@ -130,6 +130,11 @@ public class RentalManager implements RentalService {
 		return new ErrorResult();
 	}
 
+	@Override
+	public DataResult<Rental> getById(int rentalId) {
+		return new SuccessDataResult<Rental>(this.rentalDao.getById(rentalId));
+	}
+
 	private Result checkReturnDateExists(int carId) {
 		Rental rental = this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
 		if (rental != null) {

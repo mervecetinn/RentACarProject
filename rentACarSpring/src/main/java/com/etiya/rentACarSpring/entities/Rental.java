@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -42,5 +43,8 @@ public class Rental {
 
     @OneToOne(mappedBy = "rental")
     private Invoice invoice;
+
+    @OneToMany(mappedBy = "rental")
+    private List<RentalAdditional> rentalAdditionals;
 
 }
