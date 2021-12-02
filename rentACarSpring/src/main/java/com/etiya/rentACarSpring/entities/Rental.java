@@ -26,6 +26,12 @@ public class Rental {
     @Column(name = "return_date")
     private LocalDateTime returnDate;
 
+    @Column(name = "taken_kilometer")
+    private int takenKilometer;
+
+    @Column (name = "return_kilometer")
+    private int returnKilometer;
+
     @Column(name="taken_from_city_id")
     private int takenFromCityId;
 

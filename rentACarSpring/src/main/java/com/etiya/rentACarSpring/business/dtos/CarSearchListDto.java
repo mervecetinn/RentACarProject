@@ -11,6 +11,8 @@ public class CarSearchListDto {
 	private int id;
 
 	private int modelYear;
+
+	private int kilometer;
 	
 	private double dailyPrice;
 

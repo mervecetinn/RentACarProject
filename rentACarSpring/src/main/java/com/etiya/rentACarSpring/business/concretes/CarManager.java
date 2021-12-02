@@ -133,6 +133,19 @@ public class CarManager implements CarService {
 	}
 
 	@Override
+	public Result updateCarKilometer(int carId, int kilometer) {
+
+
+		Car car=this.carDao.getById(carId);
+		car.setKilometer(kilometer);
+
+		this.carDao.save(car);
+
+		return new SuccessResult("Arabanın  kilometresi güncellendi.");
+
+	}
+
+	@Override
 	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {
 		List<CarDetail> result = this.carDao.getOneCarWithDetails(carId);
 		return new SuccessDataResult<List<CarDetail>>(result);

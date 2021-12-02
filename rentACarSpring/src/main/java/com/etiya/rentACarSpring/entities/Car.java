@@ -30,6 +30,9 @@ public class Car {
     
     @Column(name="model_year")
 	private int modelYear;
+
+    @Column(name= "kilometers")
+    private int kilometer;
     
     @Column(name="daily_price")
    	private double dailyPrice;
@@ -63,6 +66,8 @@ public class Car {
 
     @OneToMany(mappedBy = "car")
     private List<CarDamage> carDamages;
+
+
     
 
 

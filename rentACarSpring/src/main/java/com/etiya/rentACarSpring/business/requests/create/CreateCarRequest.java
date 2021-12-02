@@ -34,6 +34,9 @@ public class CreateCarRequest {
 	@Range(min=1000,max=3000,message="Geçerli bir yıl giriniz.")
 	@NotNull
 	private int modelYear;
+
+	@NotNull
+	private int kilometer;
 	
 	@NotNull
 	@Min(100)

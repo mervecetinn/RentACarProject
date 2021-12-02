@@ -5,11 +5,9 @@ import com.etiya.rentACarSpring.business.dtos.AdditionalItemSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateAdditionalItemRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteAdditionalItemRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateAdditionalItemRequest;
+import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.dataAccess.abstracts.AdditionalItemDao;
 import com.etiya.rentACarSpring.entities.AdditionalItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,12 @@ public class AdditionalItemManager implements AdditionalItemService {
 
     @Override
     public Result add(CreateAdditionalItemRequest createAdditionalItemRequest) {
+        Result result= BusinessRules.run(checkIfAdditionalItemIsAlreadyExists(createAdditionalItemRequest.getName()));
+
+        if(result!=null){
+            return result;
+        }
+
         AdditionalItem additionalItem=modelMapperService.forRequest().map(createAdditionalItemRequest,AdditionalItem.class);
         this.additionalItemDao.save(additionalItem);
         return new SuccessResult();
@@ -64,5 +68,15 @@ public class AdditionalItemManager implements AdditionalItemService {
     @Override
     public DataResult<AdditionalItem> getById(int id) {
         return new SuccessDataResult<AdditionalItem>(this.additionalItemDao.getById(id));
+    }
+
+    private Result checkIfAdditionalItemIsAlreadyExists(String itemName){
+        List<AdditionalItem> items=this.additionalItemDao.findAll();
+        for(AdditionalItem item:items){
+            if(item.getName().equalsIgnoreCase(itemName)){
+                return new ErrorResult("Böyle bir ek hizmet zaten var.");
+            }
+        }
+        return new SuccessResult();
     }
 }

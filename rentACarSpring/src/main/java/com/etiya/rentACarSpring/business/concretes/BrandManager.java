@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,21 +106,16 @@ public class BrandManager implements BrandService {
 
 	}
 
-//	private Result checkIfBrandAlreadyExists(String brandName) {
-//		Brand brand=this.brandDao.getByName(brandName);
-//		if(brand!=null) {
-//			return new ErrorResult("");
-//		}
-//		return new SuccessResult();
-//	}
-
 	private Result checkIfBrandAlreadyExists(String brandName) {
-		if (this.brandDao.existsByName(brandName)) {
-			return new ErrorResult("Bu marka zaten mevcut!");
+		List<Brand> brands=this.brandDao.findAll();
+		for(Brand brand:brands){
+			if(brand.getName().equalsIgnoreCase(brandName.toLowerCase())){
+				return new ErrorResult("Böyle bir marka zaten mevcut!");
+			}
 		}
 		return new SuccessResult();
-
 	}
+
 
 	private Result checkIfBrandHasNotAnyCar(int brandId) {
 		List<CarSearchListDto> carsInRelevantBrand = this.carService.getByBrandId(brandId).getData();

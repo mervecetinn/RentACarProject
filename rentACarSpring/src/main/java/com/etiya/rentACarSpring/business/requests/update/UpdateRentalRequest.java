@@ -23,6 +23,10 @@ public class UpdateRentalRequest {
 
 	private LocalDateTime returnDate;
 
+	private int takenKilometer;
+
+	private int returnKilometer;
+
 	private int returnToCityId;
 
 	@NotNull

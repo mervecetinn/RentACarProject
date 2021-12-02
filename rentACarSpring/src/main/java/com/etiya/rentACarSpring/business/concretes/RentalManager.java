@@ -66,7 +66,11 @@ public class RentalManager implements RentalService {
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 		rental.setApplicationUser(user);
 		rental.setTakenFromCityId(this.carService.getById(createRentalRequest.getCarId()).getData().getCity().getId());
+		rental.setTakenKilometer(carService.getById(createRentalRequest.getCarId()).getData().getKilometer());
 		this.rentalDao.save(rental);
+		if (createRentalRequest.getReturnKilometer() > 0 && this.carService.getById(createRentalRequest.getCarId()).getData().getKilometer()<createRentalRequest.getReturnKilometer()){
+			this.carService.updateCarKilometer(createRentalRequest.getCarId(),createRentalRequest.getReturnKilometer());
+		}
 		return new SuccessResult();
 	}
 
@@ -83,11 +87,16 @@ public class RentalManager implements RentalService {
 		Rental rental=this.rentalDao.getById(updateRentalRequest.getRentalId());
 		user=rental.getApplicationUser();
 		car=rental.getCar();
+		if (updateRentalRequest.getReturnKilometer() > 0 && this.carService.getById(car.getId()).getData().getKilometer()<updateRentalRequest.getReturnKilometer()){
+			this.carService.updateCarKilometer(car.getId(),updateRentalRequest.getReturnKilometer());
+
+		}
 		//rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		rental.setApplicationUser(user);
 		rental.setCar(car);
 		rental.setReturnDate(updateRentalRequest.getReturnDate());
 		rental.setReturnToCityId(updateRentalRequest.getReturnToCityId());
+		rental.setReturnKilometer(updateRentalRequest.getReturnKilometer());
 		City city=this.cityService.getById(updateRentalRequest.getReturnToCityId()).getData();
 		car.setCity(city);
 		this.rentalDao.save(rental);

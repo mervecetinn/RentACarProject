@@ -21,22 +21,22 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 
 
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
-			+ "(c.id,b.name,cl.name,c.modelYear,c.dailyPrice,c.description,cImg.image) "
+			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description,cImg.image) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl Left Join c.carImages cImg")
 	List<CarDetail> getCarsWithDetails();
 	
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
-			+ "(c.id,b.name,cl.name,c.modelYear,c.dailyPrice,c.description,cImg.image) "
+			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description,cImg.image) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl Left Join c.carImages cImg where c.id=:carId")
 	List<CarDetail> getOneCarWithDetails(int carId);
 	
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
-			+ "(c.id,b.name,cl.name,c.modelYear,c.dailyPrice,c.description) "
+			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl")
 	List<CarDetail> getCarsWithBrandAndColorDetails();
 
 	
-	@Query("Select new com.etiya.rentACarSpring.business.dtos.CarSearchListDto(c.id,c.modelYear,c.dailyPrice,c.description) From Car c Inner Join c.brand b  where b.name=:brandName ")
+	@Query("Select new com.etiya.rentACarSpring.business.dtos.CarSearchListDto(c.id,c.modelYear,c.kilometer,c.dailyPrice,c.description) From Car c Inner Join c.brand b  where b.name=:brandName ")
 	List<CarSearchListDto> getByBrandName(String brandName);
 
 	

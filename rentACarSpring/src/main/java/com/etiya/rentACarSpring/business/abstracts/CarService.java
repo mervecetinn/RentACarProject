@@ -37,6 +37,8 @@ public interface CarService {
 	DataResult<List<CarSearchListDto>> getByColorId(int colorId);
 
 	DataResult<List<CarSearchListDto>> getByCityId(int cityId);
+
+	Result updateCarKilometer(int carId, int kilometer);
 	
 	DataResult<Car> getById(int id);
 	
@@ -45,6 +47,8 @@ public interface CarService {
 	Result checkCarIsNotOnMaintenance(int id);
 	
 	Result checkCarExists(int id);
+
+
 	
 	
 }
