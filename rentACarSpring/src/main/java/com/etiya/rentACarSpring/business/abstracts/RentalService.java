@@ -19,4 +19,5 @@ public interface RentalService {
 	DataResult<Integer> getDailyPriceOfRentedCar(int brandId);
 	Result checkCarIsReturnedToSameCity(int rentalId);
 	DataResult<Rental> getById(int rentalId);
+	Double getAdditionalItemsTotalPrice(int rentalId);
 }

@@ -95,8 +95,10 @@ public class InvoiceManager implements InvoiceService {
 	private double calculateTotalPrice(CreateInvoiceRequest createInvoiceRequest){
 		int countOfRentalDays=this.rentalService.getDayBetweenDatesOfRental(createInvoiceRequest.getRentalId()).getData();
 		double dailyPriceOfRentedCar=this.rentalService.getDailyPriceOfRentedCar(createInvoiceRequest.getRentalId()).getData();
-		double totalPrice=countOfRentalDays*dailyPriceOfRentedCar;
+		double additionalItemTotalPrice=this.rentalService.getAdditionalItemsTotalPrice(createInvoiceRequest.getRentalId());
+		double totalPrice=(countOfRentalDays*dailyPriceOfRentedCar)+additionalItemTotalPrice;
 		double additionalServicePrice=500;
+
 		if(!this.rentalService.checkCarIsReturnedToSameCity(createInvoiceRequest.getRentalId()).isSuccess()){
 			totalPrice=totalPrice+additionalServicePrice;
 		}

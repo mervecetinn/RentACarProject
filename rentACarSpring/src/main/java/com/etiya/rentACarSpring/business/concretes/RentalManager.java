@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.*;
+import com.etiya.rentACarSpring.business.requests.create.CreateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
-import com.etiya.rentACarSpring.entities.Car;
-import com.etiya.rentACarSpring.entities.City;
+import com.etiya.rentACarSpring.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,6 @@ import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.RentalDao;
-import com.etiya.rentACarSpring.entities.ApplicationUser;
-import com.etiya.rentACarSpring.entities.Rental;
 
 @Service
 public class RentalManager implements RentalService {
@@ -39,8 +37,8 @@ public class RentalManager implements RentalService {
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, UserService userService,
-			CustomerFindexScoreService customerFindexScoreService, CarService carService,CityService cityService,PaymentService paymentService) {
-		super();
+			CustomerFindexScoreService customerFindexScoreService, CarService carService,CityService cityService,
+						 PaymentService paymentService) {
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
 		this.userService = userService;
@@ -71,6 +69,7 @@ public class RentalManager implements RentalService {
 		if (createRentalRequest.getReturnKilometer() > 0 && this.carService.getById(createRentalRequest.getCarId()).getData().getKilometer()<createRentalRequest.getReturnKilometer()){
 			this.carService.updateCarKilometer(createRentalRequest.getCarId(),createRentalRequest.getReturnKilometer());
 		}
+
 		return new SuccessResult();
 	}
 
@@ -142,6 +141,17 @@ public class RentalManager implements RentalService {
 	@Override
 	public DataResult<Rental> getById(int rentalId) {
 		return new SuccessDataResult<Rental>(this.rentalDao.getById(rentalId));
+	}
+
+	@Override
+	public Double getAdditionalItemsTotalPrice(int rentalId){
+		List<Double> items=this.rentalDao.getAdditionalItemsOfRelevantRental(rentalId);
+		double additionalsTotalPrice=0;
+
+		for(Double item:items){
+			additionalsTotalPrice+=item;
+		}
+		return additionalsTotalPrice;
 	}
 
 	private Result checkReturnDateExists(int carId) {

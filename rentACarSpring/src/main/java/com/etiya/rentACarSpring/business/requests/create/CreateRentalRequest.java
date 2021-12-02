@@ -39,4 +39,6 @@ public class CreateRentalRequest {
 
 	private int returnKilometer;
 
+	private int additionalItemId;
+
 }
