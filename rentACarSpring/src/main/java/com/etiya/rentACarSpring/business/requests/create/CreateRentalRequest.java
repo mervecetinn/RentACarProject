@@ -24,10 +24,14 @@ public class CreateRentalRequest {
 	@NotNull
 	private int carId;
 
+	@JsonIgnore
+	private int takenFromCityId;
+
 	@NotNull
 	private LocalDateTime rentDate;
 
 
+	@JsonIgnore
 	private LocalDateTime returnDate;
 
 }

@@ -25,6 +25,12 @@ public class Rental {
     @Column(name = "return_date")
     private LocalDateTime returnDate;
 
+    @Column(name="taken_from_city_id")
+    private int takenFromCityId;
+
+    @Column(name="return_to_city_id")
+    private int returnToCityId;
+
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;

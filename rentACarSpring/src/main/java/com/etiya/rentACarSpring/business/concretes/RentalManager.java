@@ -3,14 +3,12 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.abstracts.*;
 import com.etiya.rentACarSpring.entities.Car;
+import com.etiya.rentACarSpring.entities.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.etiya.rentACarSpring.business.abstracts.CarService;
-import com.etiya.rentACarSpring.business.abstracts.CustomerFindexScoreService;
-import com.etiya.rentACarSpring.business.abstracts.RentalService;
-import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.dtos.RentalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalRequest;
@@ -35,16 +33,18 @@ public class RentalManager implements RentalService {
 	private CustomerFindexScoreService customerFindexScoreService;
 	private UserService userService;
 	private CarService carService;
+	private CityService cityService;
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, UserService userService,
-			CustomerFindexScoreService customerFindexScoreService, CarService carService) {
+			CustomerFindexScoreService customerFindexScoreService, CarService carService,CityService cityService) {
 		super();
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
 		this.userService = userService;
 		this.customerFindexScoreService = customerFindexScoreService;
 		this.carService = carService;
+		this.cityService=cityService;
 
 	}
 
@@ -61,6 +61,7 @@ public class RentalManager implements RentalService {
 		ApplicationUser user = this.userService.getByUserId(createRentalRequest.getUserId()).getData();
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 		rental.setApplicationUser(user);
+		rental.setTakenFromCityId(this.carService.getById(createRentalRequest.getCarId()).getData().getCity().getId());
 		this.rentalDao.save(rental);
 		return new SuccessResult();
 	}
@@ -81,9 +82,12 @@ public class RentalManager implements RentalService {
 		//rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		rental.setApplicationUser(user);
 		rental.setCar(car);
-		rental.setRentDate(updateRentalRequest.getRentDate());
 		rental.setReturnDate(updateRentalRequest.getReturnDate());
+		rental.setReturnToCityId(updateRentalRequest.getReturnToCityId());
+		City city=this.cityService.getById(updateRentalRequest.getReturnToCityId()).getData();
+		car.setCity(city);
 		this.rentalDao.save(rental);
+
 		return new SuccessResult();
 	}
 
@@ -165,5 +169,6 @@ public class RentalManager implements RentalService {
 		}
 		return  new SuccessResult();
 	}
+
 
 }

@@ -62,8 +62,6 @@ public class Car {
     @JoinColumn(name="city_id")
     private City city;
     
-    
-    
-    
+
 
 }

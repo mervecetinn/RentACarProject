@@ -17,11 +17,13 @@ public class UpdateRentalRequest {
 	@NotNull
 	private int rentalId;
 
-	@NotNull
+	@JsonIgnore
 	private LocalDateTime rentDate;
 
 
 	private LocalDateTime returnDate;
+
+	private int returnToCityId;
 
 	@NotNull
 	@JsonIgnore
