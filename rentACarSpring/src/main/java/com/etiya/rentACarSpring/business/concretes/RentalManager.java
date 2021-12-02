@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.*;
+import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
 import com.etiya.rentACarSpring.entities.Car;
 import com.etiya.rentACarSpring.entities.City;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,11 @@ public class RentalManager implements RentalService {
 	private UserService userService;
 	private CarService carService;
 	private CityService cityService;
+	private PaymentService paymentService;
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, UserService userService,
-			CustomerFindexScoreService customerFindexScoreService, CarService carService,CityService cityService) {
+			CustomerFindexScoreService customerFindexScoreService, CarService carService,CityService cityService,PaymentService paymentService) {
 		super();
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
@@ -45,14 +47,16 @@ public class RentalManager implements RentalService {
 		this.customerFindexScoreService = customerFindexScoreService;
 		this.carService = carService;
 		this.cityService=cityService;
+		this.paymentService=paymentService;
 
 	}
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
+		PayCreditCardRequest payCreditCardRequest=new PayCreditCardRequest();
 		Result result = BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),
 				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(), createRentalRequest.getCarId()),
-				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfCarIsNotExists(createRentalRequest.getCarId()),checkIfUserNotExists(createRentalRequest.getUserId()));
+				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfCarIsNotExists(createRentalRequest.getCarId()),checkIfUserNotExists(createRentalRequest.getUserId()),checkIfLimitIsInsufficient(payCreditCardRequest));
 
 		if (result != null) {
 			return result;
@@ -168,6 +172,13 @@ public class RentalManager implements RentalService {
 			return new  ErrorResult("Böyle bir kullanıcı yok");
 		}
 		return  new SuccessResult();
+	}
+
+	private Result checkIfLimitIsInsufficient(PayCreditCardRequest payCreditCardRequest){
+		if(!this.paymentService.payByCreditCard(payCreditCardRequest).isSuccess()){
+			return new ErrorResult("Limit is insufficient!");
+		}
+		return new SuccessResult();
 	}
 
 
