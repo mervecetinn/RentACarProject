@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Invoice {
 	private String invoiceNumber;
 	
 	@Column(name="creation_date")
-	private Date creationDate;
+	private LocalDate creationDate;
 	
 	
 	@Column(name="count_of_rental_days")

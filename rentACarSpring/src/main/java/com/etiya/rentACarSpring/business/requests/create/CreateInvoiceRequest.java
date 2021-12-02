@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ public class CreateInvoiceRequest {
 	//@NotNull
 	//private String invoiceNumber;
 	@NotNull
-    private Date creationDate;
+    private LocalDate creationDate;
 	
 	//@NotNull
 	//private Date startDateOfRental;

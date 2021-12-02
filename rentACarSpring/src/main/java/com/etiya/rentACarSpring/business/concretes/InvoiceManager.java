@@ -3,8 +3,10 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class InvoiceManager implements InvoiceService {
 		int dailyPriceOfRentedCar=this.rentalService.getDailyPriceOfRentedCar(createInvoiceRequest.getRentalId()).getData();
 		invoice.setCountOfRentalDays(countOfRentalDays);
 		invoice.setInvoiceAmount(countOfRentalDays*dailyPriceOfRentedCar);
-		invoice.setInvoiceNumber(createInviceNumber(createInvoiceRequest.getRentalId()).getData());
+		invoice.setInvoiceNumber(createInvoiceNumber(createInvoiceRequest.getRentalId()).getData());
 		this.invoiceDao.save(invoice);
 		return new SuccessResult();
 	}
@@ -71,10 +73,19 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public DataResult<List<CustomerInvoiceDetail>> getAllInvoicesOfRelevantCustomer(int customerId) {
 		List<CustomerInvoiceDetail> customerInvoiceDetails=this.invoiceDao.getAllInvoicesOfRelevantCustomer(customerId);
-		return new SuccessDataResult<List<CustomerInvoiceDetail>>(customerInvoiceDetails);
+		return new SuccessDataResult<>(customerInvoiceDetails);
 	}
 
-	private DataResult<String> createInviceNumber(int rentalId){
+	@Override
+	public DataResult<List<InvoiceSearchListDto>> getInvoicesByCreationDateBetweeen(LocalDate firstDate, LocalDate secondDate) {
+		List<InvoiceSearchListDto> result=this.invoiceDao.getInvoicesByCreationDateBetweeen(firstDate,secondDate).stream()
+				.map(invoice -> this.modelMapperService.forDto().map(invoice,InvoiceSearchListDto.class)).collect(Collectors.toList());
+
+		return new SuccessDataResult<>(result);
+	}
+
+
+	private DataResult<String> createInvoiceNumber(int rentalId){
 		//Date now=new Date();
 		LocalDate now=LocalDate.now();
 		int currentYear=now.getYear();

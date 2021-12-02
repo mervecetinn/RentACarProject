@@ -2,13 +2,8 @@ package com.etiya.rentACarSpring.ws;
 
 import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
 import com.etiya.rentACarSpring.business.abstracts.InvoiceService;
 import com.etiya.rentACarSpring.business.dtos.InvoiceSearchListDto;
@@ -18,6 +13,8 @@ import com.etiya.rentACarSpring.business.requests.update.UpdateInvoiceRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -62,6 +59,11 @@ public class InvoicesController {
 	public DataResult<List<CustomerInvoiceDetail>> getAllInvoicesOfRelevantCustomer(int customerId) {
 		return this.invoiceService.getAllInvoicesOfRelevantCustomer(customerId);
 
+	}
+
+	@GetMapping("allInvoicesBetweenRelavantDates")
+	public DataResult<List<InvoiceSearchListDto>> getAllByCreationDateBetween(@RequestParam("firstDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate firstDate ,@RequestParam("secondDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate secondDate){
+		return this.invoiceService.getInvoicesByCreationDateBetweeen(firstDate,secondDate);
 	}
 
 }
