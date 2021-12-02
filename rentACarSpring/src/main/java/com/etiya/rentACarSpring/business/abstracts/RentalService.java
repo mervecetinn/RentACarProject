@@ -16,4 +16,5 @@ public interface RentalService {
 	DataResult<List<RentalSearchListDto>> getAll();
 	DataResult<Integer> getDayBetweenDatesOfRental(int rentalId);
 	DataResult<Integer> getDailyPriceOfRentedCar(int brandId);
+	Result checkCarIsReturnedToSameCity(int rentalId);
 }

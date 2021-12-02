@@ -44,9 +44,8 @@ public class InvoiceManager implements InvoiceService {
 
 		Invoice invoice=this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		int countOfRentalDays=this.rentalService.getDayBetweenDatesOfRental(createInvoiceRequest.getRentalId()).getData();
-		int dailyPriceOfRentedCar=this.rentalService.getDailyPriceOfRentedCar(createInvoiceRequest.getRentalId()).getData();
 		invoice.setCountOfRentalDays(countOfRentalDays);
-		invoice.setInvoiceAmount(countOfRentalDays*dailyPriceOfRentedCar);
+		invoice.setInvoiceAmount(calculateTotalPrice(createInvoiceRequest));
 		invoice.setInvoiceNumber(createInvoiceNumber(createInvoiceRequest.getRentalId()).getData());
 		this.invoiceDao.save(invoice);
 		return new SuccessResult();
@@ -91,6 +90,18 @@ public class InvoiceManager implements InvoiceService {
 		int currentYear=now.getYear();
 		String invoiceNumber=currentYear+"FTR"+rentalId;
 		return new SuccessDataResult<>(invoiceNumber);
+	}
+
+	private double calculateTotalPrice(CreateInvoiceRequest createInvoiceRequest){
+		int countOfRentalDays=this.rentalService.getDayBetweenDatesOfRental(createInvoiceRequest.getRentalId()).getData();
+		double dailyPriceOfRentedCar=this.rentalService.getDailyPriceOfRentedCar(createInvoiceRequest.getRentalId()).getData();
+		double totalPrice=countOfRentalDays*dailyPriceOfRentedCar;
+		double additionalServicePrice=500;
+		if(!this.rentalService.checkCarIsReturnedToSameCity(createInvoiceRequest.getRentalId()).isSuccess()){
+			totalPrice=totalPrice+additionalServicePrice;
+		}
+		return totalPrice;
+
 	}
 
 

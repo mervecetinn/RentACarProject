@@ -121,6 +121,15 @@ public class RentalManager implements RentalService {
 		return new SuccessDataResult<>(this.rentalDao.getDailyPriceOfRentedCar(brandId));
 	}
 
+	@Override
+	public Result checkCarIsReturnedToSameCity(int rentalId) {
+		Rental rental=this.rentalDao.getById(rentalId);
+		if(rental.getTakenFromCityId()==rental.getReturnToCityId()){
+			return new SuccessResult();
+		}
+		return new ErrorResult();
+	}
+
 	private Result checkReturnDateExists(int carId) {
 		Rental rental = this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
 		if (rental != null) {

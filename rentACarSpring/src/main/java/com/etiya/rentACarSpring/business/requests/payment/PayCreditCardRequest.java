@@ -29,5 +29,5 @@ public class PayCreditCardRequest {
     @Size(min=3,max=3,message = "3 haneli olmalıdır.")
     private String cvv;
 
-    private double totalPrice=6000;
+    private double totalPrice=3000;
 }
