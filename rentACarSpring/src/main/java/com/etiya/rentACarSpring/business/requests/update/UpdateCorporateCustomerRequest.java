@@ -1,9 +1,11 @@
 package com.etiya.rentACarSpring.business.requests.update;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCorporateCustomerRequest {
 	
 	@NotNull
+	@Min(value = 1,message ="Lütfen bir kurumsal müşteri id girin")
 	private int corporateCustomerId;
 
 	@NotNull
@@ -25,10 +28,11 @@ public class UpdateCorporateCustomerRequest {
 	private String taxNumber;
 
 	@NotNull
+	@JsonIgnore
 	private int userId;
 
 	@NotNull
-	@Email
+	@Email(message = "Email düzeni hatalı.")
 	private String email;
 
 	@NotNull

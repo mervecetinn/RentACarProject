@@ -11,7 +11,7 @@ public interface AuthService {
 
 	Result login(LoginRequest loginRequest);
 	Result individualCustomerRegister(RegisterIndividualCustomerRequest registerIndividualCustomerRequest);
-	DataResult<RegisterCorporateCustomerRequest> corporateCustomerRegister
-	(RegisterCorporateCustomerRequest registerCorporateCustomerRequest);
+	Result corporateCustomerRegister(RegisterCorporateCustomerRequest registerCorporateCustomerRequest);
+
 	
 }

@@ -36,7 +36,7 @@ public class AuthsController {
 	}
 	
 	@PostMapping("Corporate Customer Register")
-	public DataResult<RegisterCorporateCustomerRequest>  corporateCustomerRegister 
+	public Result corporateCustomerRegister
 			(@RequestBody @Valid  RegisterCorporateCustomerRequest registerCorporateCustomerRequest){
 		return this.authService.corporateCustomerRegister(registerCorporateCustomerRequest);	
 	}

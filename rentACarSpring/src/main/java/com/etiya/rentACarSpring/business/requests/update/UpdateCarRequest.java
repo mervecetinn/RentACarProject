@@ -32,6 +32,7 @@ public class UpdateCarRequest {
 	private int modelYear;
 
 	@NotNull
+	@Min(value = 1,message ="Lütfen arabanın kilometresini girin")
 	private int kilometer;
 	
 	@NotNull
@@ -41,4 +42,12 @@ public class UpdateCarRequest {
 	@NotNull
 	@Size(min = 2, max=100)
 	private String description;
+
+	@NotNull
+	@Range(min=1,message = "Geçerli bir id girin")
+	private int cityId;
+
+	@NotNull
+	@Range(min=1,max=1900)
+	private int minFindexScore;
 }

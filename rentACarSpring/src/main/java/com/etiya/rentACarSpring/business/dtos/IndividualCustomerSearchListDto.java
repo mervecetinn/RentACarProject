@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.dtos;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -16,5 +17,5 @@ public class IndividualCustomerSearchListDto {
 
 	private String lastName;
 
-	private LocalDateTime birthday;
+	private LocalDate birthday;
 }

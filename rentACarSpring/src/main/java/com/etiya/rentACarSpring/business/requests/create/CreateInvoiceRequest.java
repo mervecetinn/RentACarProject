@@ -3,6 +3,7 @@ package com.etiya.rentACarSpring.business.requests.create;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,20 +19,10 @@ public class CreateInvoiceRequest {
 	@JsonIgnore
 	private int id;
 
-	//@NotNull
-	//private String invoiceNumber;
 	@NotNull
     private LocalDate creationDate;
-	
-	//@NotNull
-	//private Date startDateOfRental;
 
-	//@NotNull
-	//private Date finishDateOfRental;
-	
-	//private int countOfRentalDays;
-	
-	//private double invoiceAmount;
-	
+	@NotNull
+	@Min(value = 1,message = "Lütfen bir rental id girin.")
 	private int rentalId;
 }

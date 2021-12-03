@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,26 +63,17 @@ public class AuthManager implements AuthService {
 	}
 	
 	@Override
-	public DataResult<RegisterCorporateCustomerRequest> corporateCustomerRegister(
+	public Result corporateCustomerRegister(
 			RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
 		Result result = BusinessRules.run(checkIfUserAlreadyExists(registerCorporateCustomerRequest.getEmail()),checkEmailFormat(registerCorporateCustomerRequest.getEmail()));
 
 		if (result != null) {
-			return new ErrorDataResult<RegisterCorporateCustomerRequest>(null,
-					result.getMessage());
+			return result;
 
 		}
-
-		ApplicationUser user = new ApplicationUser();
-		user.setEmail(registerCorporateCustomerRequest.getEmail());
-		user.setPassword(registerCorporateCustomerRequest.getPassword());
-
-		CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(registerCorporateCustomerRequest,
-				CorporateCustomer.class);
-		corporateCustomer.setApplicationUser(user);
-		this.corporateCustomerService.save(corporateCustomer);
-
-		return new SuccessDataResult<RegisterCorporateCustomerRequest>(null,"Tebrikler, kayıt işleminiz başarıyla gerçekleşti.");
+		CreateCorporateCustomerRequest createCorporateCustomerRequest=this.modelMapperService.forRequest().map(registerCorporateCustomerRequest,CreateCorporateCustomerRequest.class);
+		this.corporateCustomerService.add(createCorporateCustomerRequest);
+		return new SuccessResult("Tebrikler, kayıt işleminiz başarıyla gerçekleşti.");
 
 	}
 

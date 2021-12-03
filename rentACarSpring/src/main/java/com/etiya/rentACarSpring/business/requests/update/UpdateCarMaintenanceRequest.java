@@ -2,6 +2,7 @@ package com.etiya.rentACarSpring.business.requests.update;
 
 import java.util.Date;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCarMaintenanceRequest {
 
 	@NotNull
+	@Min(value = 1,message ="Lütfen bir bakım id girin")
 	private int id;
 	
 	@NotNull
@@ -23,5 +25,6 @@ public class UpdateCarMaintenanceRequest {
 	private Date maintenanceFinishDate;
 	
 	@NotNull
+	@Min(value = 1,message ="Lütfen bir car id girin")
 	private int carId;
 }

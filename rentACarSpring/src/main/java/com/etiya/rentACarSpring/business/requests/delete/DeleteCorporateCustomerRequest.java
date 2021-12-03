@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.delete;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class DeleteCorporateCustomerRequest {
 	
 	@NotNull
+	@Min(value = 1,message = "Lütfen bir id giriniz.")
 	private int corporateCustomerId;
 	}
 

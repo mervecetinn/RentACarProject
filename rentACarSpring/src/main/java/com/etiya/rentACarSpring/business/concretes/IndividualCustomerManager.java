@@ -2,13 +2,13 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.etiya.rentACarSpring.business.abstracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.etiya.rentACarSpring.business.abstracts.AuthService;
 import com.etiya.rentACarSpring.business.abstracts.IndividualCustomerService;
 import com.etiya.rentACarSpring.business.dtos.IndividualCustomerSearchListDto;
-import com.etiya.rentACarSpring.business.requests.auth.RegisterIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.create.CreateIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateIndividualCustomerRequest;
@@ -28,13 +28,15 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	private IndividualCustomerDao individualCustomerDao;
 	private ModelMapperService modelMapperService;
+	private UserService userService;
 
 	@Autowired
 	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
-			ModelMapperService modelMapperService) {
+			ModelMapperService modelMapperService,UserService userService) {
 		super();
 		this.individualCustomerDao = individualCustomerDao;
 		this.modelMapperService = modelMapperService;
+		this.userService=userService;
 
 	}
 
@@ -51,6 +53,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		IndividualCustomer individualCustomer = modelMapperService.forRequest().map(createIndividualCustomerRequest,
 				IndividualCustomer.class);
 		individualCustomer.setApplicationUser(user);
+		this.userService.add(user);
 		this.individualCustomerDao.save(individualCustomer);
 		return new SuccessResult();
 	}
@@ -80,6 +83,9 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		if(result!=null) {
 			return result;
 		}
+		IndividualCustomer individualCustomer=this.individualCustomerDao.getById(deleteIndividualCustomerRequest.getIndividualCustomerId());
+		ApplicationUser user=individualCustomer.getApplicationUser();
+		this.userService.delete(user);
 		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getIndividualCustomerId());
 		return new SuccessResult();
 	}

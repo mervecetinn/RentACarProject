@@ -58,11 +58,7 @@ public class CarsController {
 		return this.carService.getAll();
 	}
 	
-//	@GetMapping("detailedCars")
-//	public DataResult<List<CarDetail>> getDetailedCars() {
-//		return this.carService.getCarsWithDetails();
-//	}
-	
+
 	@GetMapping("getByModelYear")
 	public DataResult<List<CarSearchListDto>> getByModelYear(@RequestParam int modelYear) {
 		return this.carService.getByModelYear(modelYear);
@@ -74,18 +70,23 @@ public class CarsController {
 	}
 
 	@GetMapping("getByCityId")
-	public DataResult<List<CarSearchListDto>> getByCityId(int cityId){
+	public DataResult<List<CarSearchListDto>> getByCityId(@RequestParam(required = true) int cityId){
 		return this.carService.getByCityId(cityId);
 	}
 	
 	@GetMapping("getOneCarWithDetails")
-	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {
+	public DataResult<List<CarDetail>> getOneCarWithDetails(@RequestParam(required = true) int carId) {
 		return this.carService.getOneCarWithDetails(carId);
 	}
-	
-	@GetMapping("getCarsWithBrandAndColorDetails")
+
+	/*@GetMapping("getCarsWithBrandAndColorDetails")
 	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails(){
 		return this.carService.getCarsWithBrandAndColorDetails();
+	}*/
+
+	@GetMapping("getCarsWithDetails")
+	public DataResult<List<CarDetail>> getCarsWithDetails(){
+		return this.carService.getCarsWithDetails();
 	}
 	
 

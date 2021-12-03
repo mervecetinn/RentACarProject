@@ -1,7 +1,6 @@
 package com.etiya.rentACarSpring.business.concretes;
 
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +9,6 @@ import com.etiya.rentACarSpring.business.requests.create.CreateCityRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCityRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCityRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.CityDao;
 import com.etiya.rentACarSpring.entities.City;
 
@@ -52,6 +49,14 @@ public class CityManager implements CityService {
 	@Override
 	public DataResult<City> getById(int cityId) {
 		return new SuccessDataResult<City>(this.cityDao.getById(cityId));
+	}
+
+	@Override
+	public Result checkCityExists(int id) {
+		if(this.cityDao.existsById(id)==true){
+			return  new SuccessResult();
+		}
+		return  new ErrorResult();
 	}
 
 }

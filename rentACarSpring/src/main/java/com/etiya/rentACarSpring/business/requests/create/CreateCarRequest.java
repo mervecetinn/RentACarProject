@@ -30,9 +30,9 @@ public class CreateCarRequest {
 	@NotNull
 	@Range(min=1,message = "Geçerli bir id girin")
 	private int colorId;
-	
-	@Range(min=1000,max=3000,message="Geçerli bir yıl giriniz.")
+
 	@NotNull
+	@Range(min=1000,max=3000,message="Geçerli bir yıl giriniz.")
 	private int modelYear;
 
 	@NotNull
@@ -49,4 +49,8 @@ public class CreateCarRequest {
 	@NotNull
 	@Range(min=1,message = "Geçerli bir id girin")
 	private int cityId;
+
+	@NotNull
+	@Range(min=1,max=1900)
+	private int minFindexScore;
 }

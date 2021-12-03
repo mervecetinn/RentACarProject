@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,6 +24,14 @@ public class CreateCorporateCustomerRequest {
 	@NotNull
 	@Size(min=10,max=10)
 	private String taxNumber;
+
+	@Email
+	@NotNull
+	private String email;
+
+	@NotNull
+	@Size(min=8,max=20)
+	private String password;
 
 	
 }

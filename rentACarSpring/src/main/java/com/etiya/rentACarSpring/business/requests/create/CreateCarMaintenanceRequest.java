@@ -2,6 +2,7 @@ package com.etiya.rentACarSpring.business.requests.create;
 
 import java.util.Date;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,5 +31,6 @@ public class CreateCarMaintenanceRequest {
 	private Date maintenanceFinishDate;
 
 	@NotNull
+	@Min(value = 1,message = "Lütfen bir car id girin.")
 	private int carId;
 }

@@ -2,6 +2,8 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.etiya.rentACarSpring.business.abstracts.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
@@ -26,25 +28,25 @@ public class CarManager implements CarService {
 
 	private CarDao carDao;
 	private ModelMapperService modelMapperService;
+	private CityService cityService;
 
 	@Autowired
-	public CarManager(CarDao carDao, ModelMapperService modelMapperService) {
+	public CarManager(CarDao carDao, ModelMapperService modelMapperService,CityService cityService ) {
 		this.carDao = carDao;
 		this.modelMapperService = modelMapperService;
+		this.cityService=cityService;
 
 	}
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
 		Result result = BusinessRules.run(checkIfBrandNotExists(createCarRequest.getBrandId()),
-				checkIfColorNotExists(createCarRequest.getColorId()));
+				checkIfColorNotExists(createCarRequest.getColorId()),checkIfCityIsNotExists(createCarRequest.getCityId()));
 		if (result != null) {
 			return result;
 		}
 
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
-		car.setMinFindexScore((int) (Math.random() * 1900));
-
 		this.carDao.save(car);
 		return new SuccessResult("Car added.");
 
@@ -73,8 +75,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getAll() {
-		// List<Car> result = this.carDao.findAll();
-		List<Car> result = this.carDao.findAllCarsWhichIsNotOnMaintenance();
+		List<Car> result = this.carDao.findAll();
 		List<CarSearchListDto> response = result.stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
@@ -203,6 +204,13 @@ public class CarManager implements CarService {
 			return new SuccessResult();
 		}
 		return new ErrorResult("Böyle bir renk yok.");
+	}
+
+	private Result checkIfCityIsNotExists(int cityId){
+		if(!this.cityService.checkCityExists(cityId).isSuccess()){
+			return new ErrorResult("Kayıtlı böyle bir şehir yok.");
+		}
+		return new SuccessResult();
 	}
 
 }

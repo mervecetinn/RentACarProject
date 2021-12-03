@@ -26,6 +26,7 @@ public class CreateIndividualCustomerRequest{
 	private int userId;
 	
 	@NotNull
+	@Email(message = "Email düzeni hatalı.")
 	private String email;
 
 	@NotNull
@@ -39,11 +40,6 @@ public class CreateIndividualCustomerRequest{
 	@NotNull
 	@Size(min=2,max=20)
 	private String lastName;
-
-	//@NotNull
-	//@Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$",message = "Tarih, yıl-ay-gün şeklinde olmalıdır.")
-	//@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	//@JsonFormat(pattern = "yyyy/MM/dd")
 
 	@Past(message = "Date input is invalid for a birth date.")
 	private LocalDate birthday;

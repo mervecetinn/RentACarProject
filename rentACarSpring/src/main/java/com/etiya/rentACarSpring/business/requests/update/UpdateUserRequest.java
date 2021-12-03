@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.requests.update;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -13,10 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserRequest {
 	@NotNull
+	@Min(value = 1,message ="Lütfen bir user id girin")
 	private int id;
 	
 	@NotNull
-	@Email
+	@Email(message = "Email düzeni hatalı")
 	private String email;
 
 	@NotNull

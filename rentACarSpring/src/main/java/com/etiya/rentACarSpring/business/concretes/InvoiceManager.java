@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
+import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,6 @@ import com.etiya.rentACarSpring.business.requests.create.CreateInvoiceRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteInvoiceRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateInvoiceRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.InvoiceDao;
 import com.etiya.rentACarSpring.entities.Invoice;
 
@@ -41,6 +39,11 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result add(CreateInvoiceRequest createInvoiceRequest) {
+		Result result= BusinessRules.run(checkIfInvoiceNotExists(createInvoiceRequest.getRentalId()),checkIfReturnDateIsNull(createInvoiceRequest.getRentalId()));
+
+		if(result!=null){
+			return result;
+		}
 
 		Invoice invoice=this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		int countOfRentalDays=this.rentalService.getDayBetweenDatesOfRental(createInvoiceRequest.getRentalId()).getData();
@@ -95,7 +98,7 @@ public class InvoiceManager implements InvoiceService {
 	private double calculateTotalPrice(CreateInvoiceRequest createInvoiceRequest){
 		int countOfRentalDays=this.rentalService.getDayBetweenDatesOfRental(createInvoiceRequest.getRentalId()).getData();
 		double dailyPriceOfRentedCar=this.rentalService.getDailyPriceOfRentedCar(createInvoiceRequest.getRentalId()).getData();
-		double additionalItemTotalPrice=this.rentalService.getAdditionalItemsTotalPrice(createInvoiceRequest.getRentalId());
+		double additionalItemTotalPrice=this.rentalService.getAdditionalItemsTotalPrice(createInvoiceRequest.getRentalId())*countOfRentalDays;
 		double totalPrice=(countOfRentalDays*dailyPriceOfRentedCar)+additionalItemTotalPrice;
 		double additionalServicePrice=500;
 
@@ -104,6 +107,20 @@ public class InvoiceManager implements InvoiceService {
 		}
 		return totalPrice;
 
+	}
+
+	private Result checkIfInvoiceNotExists(int rentalId){
+		if(!this.invoiceDao.existsInvoiceByRental_Id(rentalId)){
+			return new SuccessResult();
+		}
+		return new ErrorResult("Fatura zaten var.");
+	}
+
+	private Result checkIfReturnDateIsNull(int rentalId){
+		if(this.rentalService.getById(rentalId).getData().getReturnDate()==null){
+			return new ErrorResult("Fatura kesmeden önce aracın dönüş tarihini girin.");
+		}
+		return new SuccessResult();
 	}
 
 

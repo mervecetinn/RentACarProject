@@ -34,7 +34,7 @@ public class CorporateCustomer {
 	@Column(name = "tax_number")
 	private String taxNumber;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "user_id")
 	private ApplicationUser applicationUser;
 }

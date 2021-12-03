@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.delete;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -11,5 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteColorRequest {
 	@NotNull
+	@Min(value = 1,message = "Lütfen bir id giriniz.")
 	private int id;
 }

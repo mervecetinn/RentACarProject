@@ -3,10 +3,7 @@ package com.etiya.rentACarSpring.business.requests.update;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -19,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class UpdateIndividualCustomerRequest {
 
 	@NotNull
+	@Min(value = 1,message ="Lütfen bir bireysel müşteri id girin")
 	private int individualCustomerId;
 	
 	@NotNull
@@ -26,7 +24,7 @@ public class UpdateIndividualCustomerRequest {
 	private int userId;
 	
 	@NotNull
-	@Email
+	@Email(message = "Email düzeni hatalı.")
 	private String email;
 
 	@NotNull

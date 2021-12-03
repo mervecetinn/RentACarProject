@@ -20,7 +20,7 @@ public class RentalAdditional {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "additional_items_id")
+    @JoinColumn(name = "additional_item_id")
     private AdditionalItem additionalItem;
 
     @ManyToOne

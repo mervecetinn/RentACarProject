@@ -6,22 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateInvoiceRequest {
 
+	@NotNull
+	@Min(value = 1,message ="Lütfen bir fatura id girin")
 	private int invoiceNumber;
-	
-    private Date creationDate;
-	
-	private Date startDateOfRental;
 
-	private Date finishDateOfRental;
-	
-	private int countOfRentalDays;
-	
-	private double invoiceAmount;
-	
-	private int userId;
+	@NotNull
+    private Date creationDate;
+
+	@NotNull
+	@Min(value = 1,message ="Lütfen bir rentali id girin")
+	private int rentalId;
 }

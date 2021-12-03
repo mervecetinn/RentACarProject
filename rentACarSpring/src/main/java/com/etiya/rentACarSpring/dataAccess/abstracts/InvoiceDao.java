@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface InvoiceDao extends JpaRepository<Invoice, Integer> {
 
+    boolean existsInvoiceByRental_Id(int rentalId);
+
 @Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail(u.userId,  i.invoiceNumber ,i.invoiceAmount,i.countOfRentalDays, r.car.id) From ApplicationUser u inner join u.rentals r inner join r.invoice i where u.userId=:userId")
 List<CustomerInvoiceDetail> getAllInvoicesOfRelevantCustomer(int userId);
 

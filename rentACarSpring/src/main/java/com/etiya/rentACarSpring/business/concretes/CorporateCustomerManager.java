@@ -2,6 +2,11 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.etiya.rentACarSpring.business.abstracts.UserService;
+import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
+import com.etiya.rentACarSpring.entities.ApplicationUser;
+import com.etiya.rentACarSpring.entities.IndividualCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CorporateCustomerService;
@@ -23,19 +28,28 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 	private CorporateCustomerDao corporateCustomerDao;
 	private ModelMapperService modelMapperService;
+	private UserService userService;
 
 	@Autowired
-	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, ModelMapperService modelMapperService) {
+	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, ModelMapperService modelMapperService,UserService userService) {
 		super();
 		this.corporateCustomerDao = corporateCustomerDao;
 		this.modelMapperService = modelMapperService;
+		this.userService=userService;
+
 	}
 
 	@Override
-	public Result save(CorporateCustomer corporateCustomer) {
-		
-		this.corporateCustomerDao.save(corporateCustomer);
+	public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) {
 
+		ApplicationUser user = new ApplicationUser();
+		user.setEmail(createCorporateCustomerRequest.getEmail());
+		user.setPassword(createCorporateCustomerRequest.getPassword());
+		CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(createCorporateCustomerRequest,
+				CorporateCustomer.class);
+		corporateCustomer.setApplicationUser(user);
+		this.userService.add(user);
+		this.corporateCustomerDao.save(corporateCustomer);
 		return new SuccessResult();
 	}
 
@@ -49,6 +63,9 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 	@Override
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
+		CorporateCustomer corporateCustomer=this.corporateCustomerDao.getById(deleteCorporateCustomerRequest.getCorporateCustomerId());
+		ApplicationUser user=corporateCustomer.getApplicationUser();
+		this.userService.delete(user);
 		this.corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getCorporateCustomerId());
 		return new SuccessResult();
 	}

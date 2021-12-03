@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -90,6 +92,20 @@ public class RentACarSpringApplication {
 	public ErrorResult handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
 		return new ErrorResult("yanlış veri tipi girdiniz.");
 	}
-	
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleDataIntegrityViolationException(DataIntegrityViolationException exception){
+		return new ErrorResult("Data Integrity Violation Exception Error");
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException exception){
+		return new ErrorResult("Invalid Data Access Api Usage Exception Error");
+	}
+
+
+
 
 }

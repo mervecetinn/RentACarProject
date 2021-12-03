@@ -8,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.dtos.UserSearchListDto;
-import com.etiya.rentACarSpring.business.requests.create.CreateUserRequest;
-import com.etiya.rentACarSpring.business.requests.delete.DeleteUserRequest;
-import com.etiya.rentACarSpring.business.requests.update.UpdateUserRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.dataAccess.abstracts.ApplicationUserDao;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
@@ -29,22 +26,22 @@ public class UserManager implements UserService {
 	}
 
 	@Override
-	public Result add(CreateUserRequest createUserRequest) {
-		ApplicationUser user = modelMapperService.forRequest().map(createUserRequest, ApplicationUser.class);
+	public Result add(ApplicationUser user) {
+
 		this.applicationUserDao.save(user);
 		return new SuccessResult();
 	}
 
 	@Override
-	public Result update(UpdateUserRequest updateUserRequest) {
-		ApplicationUser user = modelMapperService.forRequest().map(updateUserRequest, ApplicationUser.class);
+	public Result update(ApplicationUser user) {
+
 		this.applicationUserDao.save(user);
 		return new SuccessResult();
 	}
 
 	@Override
-	public Result delete(DeleteUserRequest deleteUserRequest) {
-		this.applicationUserDao.deleteById(deleteUserRequest.getId());
+	public Result delete(ApplicationUser user) {
+		this.applicationUserDao.deleteById(user.getUserId());
 		return new SuccessResult();
 	}
 

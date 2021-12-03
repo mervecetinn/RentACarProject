@@ -36,7 +36,7 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<CarDetail> getCarsWithBrandAndColorDetails();
 
 	
-	@Query("Select new com.etiya.rentACarSpring.business.dtos.CarSearchListDto(c.id,c.modelYear,c.kilometer,c.dailyPrice,c.description) From Car c Inner Join c.brand b  where b.name=:brandName ")
+	@Query("Select new com.etiya.rentACarSpring.business.dtos.CarSearchListDto(c.id,c.modelYear,c.kilometer,c.dailyPrice,c.description) From Car c Inner Join c.brand b  where lower(b.name) =lower(:brandName) ")
 	List<CarSearchListDto> getByBrandName(String brandName);
 
 	
