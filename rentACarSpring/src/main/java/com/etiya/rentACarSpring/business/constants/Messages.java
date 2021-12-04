@@ -4,7 +4,7 @@ package com.etiya.rentACarSpring.business.constants;
 public class Messages {
 
 
-    public static String DataAdded="veri eklendi.";
+    public static String DataAdded="Veri eklendi.";
     public static String DataDeleted="Veri silindi.";
     public static String DataUpdated="Veri güncellendi";
     public static String DataListed="Veri listelendi.";
