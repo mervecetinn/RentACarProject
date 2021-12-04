@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,6 @@ public class UpdateCarMaintenanceRequest {
 	private Date maintenanceFinishDate;
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir car id girin")
+	@JsonIgnore
 	private int carId;
 }

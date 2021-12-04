@@ -38,6 +38,8 @@ public interface CarService {
 
 	DataResult<List<CarSearchListDto>> getByCityId(int cityId);
 
+	DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance();
+
 	Result updateCarKilometer(int carId, int kilometer);
 	
 	DataResult<Car> getById(int id);

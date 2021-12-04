@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class BrandManager implements BrandService {
 		}
 		Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		this.brandDao.save(brand);
-		return new SuccessResult("Brand added.");
+		return new SuccessResult(Messages.DataAdded);
 
 	}
 
@@ -62,7 +63,7 @@ public class BrandManager implements BrandService {
 
 		Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		this.brandDao.save(brand);
-		return new SuccessResult("Brand updated.");
+		return new SuccessResult(Messages.DataUpdated);
 
 	}
 
@@ -75,7 +76,7 @@ public class BrandManager implements BrandService {
 		}
 
 		brandDao.deleteById(deleteBrandRequest.getId());
-		return new SuccessResult("Brand deleted.");
+		return new SuccessResult(Messages.DataDeleted);
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result checkBrandIsNotExists(int brandId) {
 		if (!this.brandDao.existsById(brandId)) {
-			return new ErrorResult("Böyle bir marka yok.");
+			return new ErrorResult(Messages.BrandIsNotFound);
 
 		}
 		return new SuccessResult();
@@ -110,7 +111,7 @@ public class BrandManager implements BrandService {
 		List<Brand> brands=this.brandDao.findAll();
 		for(Brand brand:brands){
 			if(brand.getName().equalsIgnoreCase(brandName.toLowerCase())){
-				return new ErrorResult("Böyle bir marka zaten mevcut!");
+				return new ErrorResult(Messages.BrandAlreadyExists);
 			}
 		}
 		return new SuccessResult();
@@ -120,7 +121,7 @@ public class BrandManager implements BrandService {
 	private Result checkIfBrandHasNotAnyCar(int brandId) {
 		List<CarSearchListDto> carsInRelevantBrand = this.carService.getByBrandId(brandId).getData();
 		if (carsInRelevantBrand.size() > 0) {
-			return new ErrorResult("Bu markaya sahip arabalar mevcut! Öncelikle onları silmelisiniz.");
+			return new ErrorResult(Messages.BrandCanNotBeDeletedBeforeItsCars);
 		}
 		return new SuccessResult();
 	}

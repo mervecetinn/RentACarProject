@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
+import com.etiya.rentACarSpring.business.dtos.IndividualCustomerSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.*;
+import com.etiya.rentACarSpring.entities.IndividualCustomer;
 import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,25 +54,30 @@ public class InvoiceManager implements InvoiceService {
 		invoice.setInvoiceAmount(calculateTotalPrice(createInvoiceRequest));
 		invoice.setInvoiceNumber(createInvoiceNumber(createInvoiceRequest.getRentalId()).getData());
 		this.invoiceDao.save(invoice);
-		return new SuccessResult();
+		return new SuccessResult(Messages.InvoiceIsCreated);
 	}
 
 	@Override
 	public Result update(UpdateInvoiceRequest updateInvoiceRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		Invoice invoice=this.invoiceDao.getById(updateInvoiceRequest.getId());
+		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
+		this.invoiceDao.save(invoice);
+		return new SuccessResult(Messages.DataUpdated);
 	}
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		this.invoiceDao.deleteById(deleteInvoiceRequest.getId());
+		return new SuccessResult(Messages.DataDeleted);
 	}
 
 	@Override
 	public DataResult<List<InvoiceSearchListDto>> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Invoice> result = this.invoiceDao.findAll();
+		List<InvoiceSearchListDto> response = result.stream().map(invoice -> modelMapperService
+				.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
+
+		return new SuccessDataResult<List<InvoiceSearchListDto>>(response);
 	}
 
 	@Override
@@ -113,12 +121,12 @@ public class InvoiceManager implements InvoiceService {
 		if(!this.invoiceDao.existsInvoiceByRental_Id(rentalId)){
 			return new SuccessResult();
 		}
-		return new ErrorResult("Fatura zaten var.");
+		return new ErrorResult(Messages.InvoiceIsAlreadyExists);
 	}
 
 	private Result checkIfReturnDateIsNull(int rentalId){
 		if(this.rentalService.getById(rentalId).getData().getReturnDate()==null){
-			return new ErrorResult("Fatura kesmeden önce aracın dönüş tarihini girin.");
+			return new ErrorResult(Messages.MustBeEnteredReturnDateBeforeCreatInvoice);
 		}
 		return new SuccessResult();
 	}

@@ -3,6 +3,7 @@ package com.etiya.rentACarSpring.business.concretes;
 import com.etiya.rentACarSpring.business.abstracts.AdditionalItemService;
 import com.etiya.rentACarSpring.business.abstracts.RentalAdditionalService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateRentalAdditionalRequest;
@@ -36,7 +37,7 @@ public class RentalAdditionalManager implements RentalAdditionalService {
         RentalAdditional rentalAdditional=this.modelMapperService.forRequest().map(createRentalAdditionalRequest,RentalAdditional.class);
         this.rentalAdditionalDao.save(rentalAdditional);
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.DataAdded);
     }
 
     @Override
@@ -46,12 +47,12 @@ public class RentalAdditionalManager implements RentalAdditionalService {
         rentalAdditional.setAdditionalItem(this.additionalItemService.getById(updateRentalAdditionalRequest.getAdditionalItemId()).getData());
         this.rentalAdditionalDao.save(rentalAdditional);
 
-        return  new SuccessResult();
+        return  new SuccessResult(Messages.DataUpdated);
     }
 
     @Override
     public Result delete(DeleteRentalAdditionalRequest deleteRentalAdditionalRequest) {
         this.rentalAdditionalDao.deleteById(deleteRentalAdditionalRequest.getId());
-        return new SuccessResult();
+        return new SuccessResult(Messages.DataDeleted);
     }
 }

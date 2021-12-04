@@ -14,5 +14,5 @@ public class DeleteInvoiceRequest {
 
 	@NotNull
 	@Min(value = 1,message = "Lütfen bir id giriniz.")
-	private int invoiceNumber;
+	private int id;
 }

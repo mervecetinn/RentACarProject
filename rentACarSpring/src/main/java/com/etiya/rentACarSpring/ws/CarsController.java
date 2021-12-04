@@ -2,9 +2,11 @@ package com.etiya.rentACarSpring.ws;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +71,17 @@ public class CarsController {
 		return this.carService.getByBrandName(brandName);
 	}
 
+	@GetMapping("getByBrandId")
+	public DataResult<List<CarSearchListDto>> getByBrandId(int brandId) {
+
+		return this.carService.getByBrandId(brandId);
+	}
+
+	@GetMapping("getByColorId")
+	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId){
+		return this.carService.getByColorId(colorId);
+	}
+
 	@GetMapping("getByCityId")
 	public DataResult<List<CarSearchListDto>> getByCityId(@RequestParam(required = true) int cityId){
 		return this.carService.getByCityId(cityId);
@@ -88,6 +101,11 @@ public class CarsController {
 	public DataResult<List<CarDetail>> getCarsWithDetails(){
 		return this.carService.getCarsWithDetails();
 	}
-	
+
+	@GetMapping("getCarsNotOnMaintenance")
+	public DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance(){
+		return this.carService.getCarsNotOnMaintenance();
+	}
+
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -69,7 +70,7 @@ public class CarImageManager implements CarImageService {
 				.uploadImage(createCarImageRequest.getCarId(), createCarImageRequest.getImageFile()).getData()));
 		carImage.setImage(createCarImageRequest.getImageFile().getBytes());
 		this.carImageDao.save(carImage);
-		return new SuccessResult("Resim başarıyla eklendi");
+		return new SuccessResult(Messages.ImageUploaded);
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class CarImageManager implements CarImageService {
 		// CarImage carImage =
 		// modelMapperService.forRequest().map(updateCarImageRequest, CarImage.class);
 		this.carImageDao.save(carImage);
-		return new SuccessResult();
+		return new SuccessResult(Messages.ImageUpdated);
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class CarImageManager implements CarImageService {
 		this.fileHelper.deleteImage(imageInFolder);
 		this.carImageDao.deleteById(deleteCarImageRequest.getId());
 
-		return new SuccessResult();
+		return new SuccessResult(Messages.ImageDeleted);
 	}
 
 	@Override
@@ -116,21 +117,21 @@ public class CarImageManager implements CarImageService {
 	private Result checkIfCountOfCarImagesExceededTheLimit(int carId) {
 		int countOfCarImages = this.carImageDao.getByCarId(carId).size();
 		if (countOfCarImages >= 5) {
-			return new ErrorResult("Bir arabaya ait en fazla 5 resim eklenebilir.");
+			return new ErrorResult(Messages.ImageLimitOfCarCanNotBeExceeded);
 		}
 		return new SuccessResult();
 	}
 
 	private Result checkIfCarIsNotExists(int carId) {
 		if (!this.carService.checkCarExists(carId).isSuccess()) {
-			return new ErrorResult("Böyle bir araba yok!");
+			return new ErrorResult(Messages.CarIsNotFound);
 		}
 		return new SuccessResult();
 	}
 
 	private Result checkImageIsNotExists(int imageId) {
 		if (!this.carImageDao.existsById(imageId)) {
-			return new ErrorResult("Böyle bir resim yok.");
+			return new ErrorResult(Messages.ImageIsNotFound);
 
 		}
 		return new SuccessResult();

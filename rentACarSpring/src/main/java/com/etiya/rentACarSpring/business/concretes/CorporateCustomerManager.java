@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.UserService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
 import com.etiya.rentACarSpring.entities.IndividualCustomer;
@@ -50,7 +51,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		corporateCustomer.setApplicationUser(user);
 		this.userService.add(user);
 		this.corporateCustomerDao.save(corporateCustomer);
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataAdded);
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(corporateCustomerRequest,
 				CorporateCustomer.class);
 		this.corporateCustomerDao.save(corporateCustomer);
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataUpdated);
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		ApplicationUser user=corporateCustomer.getApplicationUser();
 		this.userService.delete(user);
 		this.corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getCorporateCustomerId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataDeleted);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.*;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
 import com.etiya.rentACarSpring.entities.*;
@@ -53,7 +54,7 @@ public class RentalManager implements RentalService {
 	public Result add(CreateRentalRequest createRentalRequest) {
 		PayCreditCardRequest payCreditCardRequest=new PayCreditCardRequest();
 		Result result = BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),
-				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(), createRentalRequest.getCarId()),
+				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(),createRentalRequest.getCarId()),
 				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfCarIsNotExists(createRentalRequest.getCarId()),checkIfUserNotExists(createRentalRequest.getUserId()),checkIfLimitIsInsufficient(payCreditCardRequest));
 
 		if (result != null) {
@@ -70,7 +71,7 @@ public class RentalManager implements RentalService {
 			this.carService.updateCarKilometer(createRentalRequest.getCarId(),createRentalRequest.getReturnKilometer());
 		}
 
-		return new SuccessResult();
+		return new SuccessResult(Messages.RentedIsSuccessful);
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class RentalManager implements RentalService {
 		car.setCity(city);
 		this.rentalDao.save(rental);
 
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataUpdated);
 	}
 
 	@Override
@@ -157,9 +158,9 @@ public class RentalManager implements RentalService {
 	private Result checkReturnDateExists(int carId) {
 		Rental rental = this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
 		if (rental != null) {
-			return new ErrorResult("Araba teslim edilmedi.");
+			return new ErrorResult(Messages.CarIsOnRent);
 		}
-		return new SuccessResult("Araba kiralandı");
+		return new SuccessResult();
 
 	}
 
@@ -181,20 +182,20 @@ public class RentalManager implements RentalService {
 		if (customerFindexScore >= carFindexScore) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("Your findex score is not enough for this car!" + "your findex score: "
-				+ customerFindexScore + " car findex score: " + carFindexScore);
+		return new ErrorResult(Messages.FindexScoreIsNotEnough);
 	}
+
 
 	private Result checkCarIsNotOnMaintenance(int carId) {
 		if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
-			return new ErrorResult("Araba bakımda.");
+			return new ErrorResult(Messages.CarIsOnMaintenance);
 		}
 		return new SuccessResult();
 	}
 	
 	private Result checkIfCarIsNotExists(int carId) {
 		if(!this.carService.checkCarExists(carId).isSuccess()) {
-			return new ErrorResult("Böyle bir araba yok.");
+			return new ErrorResult(Messages.CarIsNotFound);
 		}
 		
 		return new SuccessResult();
@@ -202,14 +203,14 @@ public class RentalManager implements RentalService {
 
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
-			return new  ErrorResult("Böyle bir kullanıcı yok");
+			return new  ErrorResult(Messages.UserIsNotFound);
 		}
 		return  new SuccessResult();
 	}
 
 	private Result checkIfLimitIsInsufficient(PayCreditCardRequest payCreditCardRequest){
 		if(!this.paymentService.payByCreditCard(payCreditCardRequest).isSuccess()){
-			return new ErrorResult("Limit is insufficient!");
+			return new ErrorResult(Messages.LimitIsInsufficient);
 		}
 		return new SuccessResult();
 	}

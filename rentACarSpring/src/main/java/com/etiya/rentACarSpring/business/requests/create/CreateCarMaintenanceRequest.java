@@ -21,13 +21,9 @@ public class CreateCarMaintenanceRequest {
 	private int id;
 
 	@NotNull
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	@JsonFormat(pattern = "yyyy/MM/dd")
 	private Date maintenanceStartDate;
 
-	@NotNull
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	@JsonFormat(pattern = "yyyy/MM/dd")
+
 	private Date maintenanceFinishDate;
 
 	@NotNull

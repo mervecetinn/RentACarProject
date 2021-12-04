@@ -55,10 +55,6 @@ public class ColorsController {
 	public DataResult<List<ColorSearchListDto>> getAll(){
 		return this.colorService.getAll();
 	}
-	
-	@GetMapping("getCarsOfRelatedColor")
-	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId){
-		return this.colorService.getCarsOfRelatedColor(colorId);
-	}
+
 
 }

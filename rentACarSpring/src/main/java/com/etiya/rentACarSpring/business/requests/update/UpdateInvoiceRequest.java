@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +17,11 @@ public class UpdateInvoiceRequest {
 
 	@NotNull
 	@Min(value = 1,message ="Lütfen bir fatura id girin")
-	private int invoiceNumber;
+	private int id;
+
+	@NotNull
+	@Size(min=8)
+	private String invoiceNumber;
 
 	@NotNull
     private Date creationDate;

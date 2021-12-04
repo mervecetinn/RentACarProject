@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.CityService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
@@ -30,13 +31,16 @@ public class CarManager implements CarService {
 	private ModelMapperService modelMapperService;
 	private CityService cityService;
 
+
+
 	@Autowired
-	public CarManager(CarDao carDao, ModelMapperService modelMapperService,CityService cityService ) {
+	public CarManager(CarDao carDao, ModelMapperService modelMapperService,CityService cityService) {
 		this.carDao = carDao;
 		this.modelMapperService = modelMapperService;
 		this.cityService=cityService;
 
 	}
+
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
@@ -48,7 +52,7 @@ public class CarManager implements CarService {
 
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
 		this.carDao.save(car);
-		return new SuccessResult("Car added.");
+		return new SuccessResult(Messages.DataAdded);
 
 	}
 
@@ -56,7 +60,7 @@ public class CarManager implements CarService {
 	public Result update(UpdateCarRequest updateCarRequest) {
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		this.carDao.save(car);
-		return new SuccessResult("Car updated.");
+		return new SuccessResult(Messages.DataUpdated);
 
 	}
 
@@ -69,7 +73,7 @@ public class CarManager implements CarService {
 		}
 
 		this.carDao.deleteById(deleteCarRequest.getId());
-		return new SuccessResult("Car deleted.");
+		return new SuccessResult(Messages.DataDeleted);
 
 	}
 
@@ -107,7 +111,7 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<List<CarSearchListDto>> getByBrandName(String brandName) {
 		List<CarSearchListDto> result = this.carDao.getByBrandName(brandName);
-		return new SuccessDataResult<List<CarSearchListDto>>(result, "Cars are listed with color and brand names.");
+		return new SuccessDataResult<List<CarSearchListDto>>(result, Messages.DataListed);
 	}
 
 	@Override
@@ -134,6 +138,15 @@ public class CarManager implements CarService {
 	}
 
 	@Override
+	public DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance() {
+		List<Car> result = this.carDao.findAllCarsWhichIsNotOnMaintenance();
+		List<CarSearchListDto> response = result.stream()
+				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
+
+		return new SuccessDataResult<List<CarSearchListDto>>(response);
+	}
+
+	@Override
 	public Result updateCarKilometer(int carId, int kilometer) {
 
 
@@ -142,7 +155,7 @@ public class CarManager implements CarService {
 
 		this.carDao.save(car);
 
-		return new SuccessResult("Arabanın  kilometresi güncellendi.");
+		return new SuccessResult(Messages.CarKilometerUpdated);
 
 	}
 
@@ -162,6 +175,7 @@ public class CarManager implements CarService {
 	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails() {
 		return new SuccessDataResult<List<CarDetail>>(this.carDao.getCarsWithBrandAndColorDetails());
 	}
+
 
 	@Override
 	public Result checkCarIsNotOnRent(int id) {
@@ -185,7 +199,7 @@ public class CarManager implements CarService {
 		if (this.carDao.existsById(id)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("Böyle bir araba zaten yok.");
+		return new ErrorResult(Messages.CarIsNotFound);
 	}
 
 	private Result checkIfBrandNotExists(int brandId) {
@@ -194,7 +208,7 @@ public class CarManager implements CarService {
 		if (id != null) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("Böyle bir marka yok.");
+		return new ErrorResult(Messages.BrandIsNotFound);
 
 	}
 
@@ -203,12 +217,12 @@ public class CarManager implements CarService {
 		if (id != null) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("Böyle bir renk yok.");
+		return new ErrorResult(Messages.ColorIsNotFound);
 	}
 
 	private Result checkIfCityIsNotExists(int cityId){
 		if(!this.cityService.checkCityExists(cityId).isSuccess()){
-			return new ErrorResult("Kayıtlı böyle bir şehir yok.");
+			return new ErrorResult(Messages.CityIsNotFound);
 		}
 		return new SuccessResult();
 	}

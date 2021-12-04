@@ -1,6 +1,10 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.business.dtos.CitySearchListDto;
+import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.results.*;
+import com.etiya.rentACarSpring.entities.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +15,9 @@ import com.etiya.rentACarSpring.business.requests.update.UpdateCityRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.dataAccess.abstracts.CityDao;
 import com.etiya.rentACarSpring.entities.City;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CityManager implements CityService {
@@ -29,7 +36,7 @@ public class CityManager implements CityService {
 	public Result add(CreateCityRequest createCityRequest) {
 		City city=this.modelMapperService.forRequest().map(createCityRequest, City.class);
 		this.cityDao.save(city);
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataAdded);
 	}
 
 	@Override
@@ -37,13 +44,23 @@ public class CityManager implements CityService {
 		City city=this.cityDao.getById(updateCityRequest.getId());
 		city.setName(updateCityRequest.getName());
 		this.cityDao.save(city);
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataUpdated);
 	}
 
 	@Override
 	public Result delete(DeleteCityRequest deleteCityRequest) {
 		this.cityDao.deleteById(deleteCityRequest.getId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataDeleted);
+	}
+
+	@Override
+	public DataResult<List<CitySearchListDto>> getAll() {
+		List<City> result = this.cityDao.findAll();
+		List<CitySearchListDto> response = result.stream()
+				.map(city -> modelMapperService.forDto().map(city, CitySearchListDto.class))
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<List<CitySearchListDto>>(response);
 	}
 
 	@Override

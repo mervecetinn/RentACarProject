@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,24 +48,29 @@ public class CreditCardManager implements CreditCardService {
 		CreditCard creditCard=this.modelMapperService.forRequest().map(createCreditCardRequest, CreditCard.class);
 		creditCard.setApplicationUser(user);
 		this.creditCardDao.save(creditCard);
-		return new SuccessResult("Credit card is added.");
+		return new SuccessResult(Messages.DataAdded);
 	}
 
 	@Override
 	public Result update(UpdateCreditCardRequest updateCreditCardRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		CreditCard creditCard=this.creditCardDao.getById(updateCreditCardRequest.getId());
+		ApplicationUser user=creditCard.getApplicationUser();
+		CreditCard updatedCreditCard=this.modelMapperService.forRequest().map(updateCreditCardRequest,CreditCard.class);
+		updatedCreditCard.setApplicationUser(user);
+		this.creditCardDao.save(updatedCreditCard);
+		return new SuccessResult(Messages.DataUpdated);
+
 	}
 
 	@Override
 	public Result delete(DeleteCreditCardRequest deleteCreditCardRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		this.creditCardDao.deleteById(deleteCreditCardRequest.getId());
+		return new SuccessResult(Messages.DataDeleted);
 	}
 	
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
-			return  new ErrorResult("Böyle bir kullanıcı yok.");
+			return  new ErrorResult(Messages.UserIsNotFound);
 		}
 		return new SuccessResult();
 	}

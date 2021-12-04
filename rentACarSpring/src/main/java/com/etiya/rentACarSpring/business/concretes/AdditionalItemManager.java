@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import com.etiya.rentACarSpring.business.abstracts.AdditionalItemService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.AdditionalItemSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateAdditionalItemRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteAdditionalItemRequest;
@@ -38,7 +39,7 @@ public class AdditionalItemManager implements AdditionalItemService {
 
         AdditionalItem additionalItem=modelMapperService.forRequest().map(createAdditionalItemRequest,AdditionalItem.class);
         this.additionalItemDao.save(additionalItem);
-        return new SuccessResult();
+        return new SuccessResult(Messages.DataAdded);
     }
 
     @Override
@@ -48,13 +49,13 @@ public class AdditionalItemManager implements AdditionalItemService {
         additionalItem.setName(updateAdditionalItemRequest.getName());
         this.additionalItemDao.save(additionalItem);
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.DataUpdated);
     }
 
     @Override
     public Result delete(DeleteAdditionalItemRequest deleteAdditionalItemRequest) {
         this.additionalItemDao.deleteById(deleteAdditionalItemRequest.getId());
-        return new SuccessResult();
+        return new SuccessResult(Messages.DataDeleted);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class AdditionalItemManager implements AdditionalItemService {
         List<AdditionalItem> items=this.additionalItemDao.findAll();
         for(AdditionalItem item:items){
             if(item.getName().equalsIgnoreCase(itemName)){
-                return new ErrorResult("Böyle bir ek hizmet zaten var.");
+                return new ErrorResult(Messages.AdditionalItemAlreadyExists);
             }
         }
         return new SuccessResult();

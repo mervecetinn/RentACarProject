@@ -18,6 +18,5 @@ public interface ColorService {
 	Result delete(DeleteColorRequest deleteColorRequest);
 
 	DataResult<List<ColorSearchListDto>> getAll();
-	
-	DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId);
+
 }

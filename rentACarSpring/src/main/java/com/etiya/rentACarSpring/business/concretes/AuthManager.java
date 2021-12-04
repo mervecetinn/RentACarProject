@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class AuthManager implements AuthService {
 		if(result!=null) {
 			return result;
 		}
-		return new SuccessResult("Login işlemi başarılı.");
+		return new SuccessResult(Messages.LoginIsSuccessful);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class AuthManager implements AuthService {
 		
 		CreateIndividualCustomerRequest createIndividualCustomerRequest=this.modelMapperService.forRequest().map(registerIndividualCustomerRequest, CreateIndividualCustomerRequest.class);
 		this.individualCustomerService.add(createIndividualCustomerRequest);
-		return new SuccessResult();
+		return new SuccessResult(Messages.RegisterSuccessfull);
 	}
 	
 	@Override
@@ -73,7 +74,7 @@ public class AuthManager implements AuthService {
 		}
 		CreateCorporateCustomerRequest createCorporateCustomerRequest=this.modelMapperService.forRequest().map(registerCorporateCustomerRequest,CreateCorporateCustomerRequest.class);
 		this.corporateCustomerService.add(createCorporateCustomerRequest);
-		return new SuccessResult("Tebrikler, kayıt işleminiz başarıyla gerçekleşti.");
+		return new SuccessResult(Messages.RegisterSuccessfull);
 
 	}
 
@@ -92,13 +93,13 @@ public class AuthManager implements AuthService {
 			
 			return new SuccessResult();
 		}
-		return new ErrorResult("Kullanıcı adı veya şifre hatalı");
+		return new ErrorResult(Messages.UserNameOrPasswordWrong);
 			
 	}
 	
 	private Result checkIfUserAlreadyExists(String email) {
 		if(this.userService.getByEmail(email).isSuccess()) {
-			return new ErrorResult("Bu emaile sahip kullanıcı bulunmaktadır.");
+			return new ErrorResult(Messages.UserAlreadyExists);
 		}
 		return new SuccessResult();
 	}
@@ -109,7 +110,7 @@ public class AuthManager implements AuthService {
 			return new SuccessResult();
 		}
 		
-		return new ErrorResult("Email is not valid.");
+		return new ErrorResult(Messages.EmailIsNotValid);
 		
 	}
 //	private Result checkIfPasswordsMatch(String password,String passwordRepeat) {

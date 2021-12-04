@@ -3,6 +3,7 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class ColorManager implements ColorService {
 	public Result add(CreateColorRequest createColorRequest) {
 		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
 		this.colorDao.save(color);
-		return new SuccessResult("Color added.");
+		return new SuccessResult(Messages.DataAdded);
 
 	}
 
@@ -49,7 +50,7 @@ public class ColorManager implements ColorService {
 
 		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		this.colorDao.save(color);
-		return new SuccessResult("Color updated.");
+		return new SuccessResult(Messages.DataUpdated);
 
 	}
 
@@ -60,7 +61,7 @@ public class ColorManager implements ColorService {
 			return result;
 		}
 		this.colorDao.deleteById(deleteColorRequest.getId());
-		return new SuccessResult("Color deleted.");
+		return new SuccessResult(Messages.DataDeleted);
 
 	}
 
@@ -74,16 +75,9 @@ public class ColorManager implements ColorService {
 		return new SuccessDataResult<List<ColorSearchListDto>>(response);
 	}
 
-	@Override
-	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId) {
-		List<CarSearchListDto> result = this.carService.getByColorId(colorId).getData();
-
-		return new SuccessDataResult<List<CarSearchListDto>>(result);
-	}
-
 	private Result checkIfColorIsNotExists(int colorId){
 		if(!this.colorDao.existsById(colorId)){
-			return new ErrorResult("Böyle bir renk yok");
+			return new ErrorResult(Messages.ColorIsNotFound);
 		}
 		return new SuccessResult();
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.rentACarSpring.business.abstracts.UserService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		individualCustomer.setApplicationUser(user);
 		this.userService.add(user);
 		this.individualCustomerDao.save(individualCustomer);
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataAdded);
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		user.setEmail(updateIndividualCustomerRequest.getEmail());
 		individualCustomer.setApplicationUser(user);
 		this.individualCustomerDao.save(individualCustomer);
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataUpdated);
 
 	}
 
@@ -87,7 +88,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		ApplicationUser user=individualCustomer.getApplicationUser();
 		this.userService.delete(user);
 		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getIndividualCustomerId());
-		return new SuccessResult();
+		return new SuccessResult(Messages.DataDeleted);
 	}
 
 	@Override
@@ -111,13 +112,13 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 			return new SuccessResult();
 		}
 		
-		return new ErrorResult("Email is not valid.");
+		return new ErrorResult(Messages.EmailIsNotValid);
 		
 	}
 
 	private Result checkIfIndivudualCustomerIsNotExists(int id){
 		if(!this.individualCustomerDao.existsByIndividualCustomerId(id)){
-			return new ErrorResult("Böyle bir bireysel müşteri yok.");
+			return new ErrorResult(Messages.IndividualCustomerIsNotFound);
 		}
 		return new SuccessResult();
 	}
