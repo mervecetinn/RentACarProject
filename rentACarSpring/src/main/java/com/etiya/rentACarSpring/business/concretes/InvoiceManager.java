@@ -62,13 +62,13 @@ public class InvoiceManager implements InvoiceService {
 		Invoice invoice=this.invoiceDao.getById(updateInvoiceRequest.getId());
 		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
 		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(Messages.InvoiceIsUpdated);
 	}
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
 		this.invoiceDao.deleteById(deleteInvoiceRequest.getId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(Messages.InvoiceIsDeleted);
 	}
 
 	@Override

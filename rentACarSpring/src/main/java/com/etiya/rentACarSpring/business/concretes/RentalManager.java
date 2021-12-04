@@ -164,21 +164,22 @@ public class RentalManager implements RentalService {
 
 	}
 
-	private Result checkCustomerFindexScoreIsEnough(int userId, int carId) {
+
+	private int getCustomerFindexScore(int userId){
+		int customerFindexScore=0;
+		ApplicationUser user=this.userService.getByUserId(userId).getData();
+		if(user.getIndividualCustomer()!=null){
+			customerFindexScore=this.customerFindexScoreService.getFindexScoreOfIndividualCustomer();
+		}
+		if(user.getCorporateCustomer()!=null){
+			customerFindexScore=this.customerFindexScoreService.getFindexScoreOfCorporateCustomer();
+		}
+		return customerFindexScore;
+	}
+
+	private Result checkCustomerFindexScoreIsEnough(int userId,int carId){
 		int carFindexScore = this.carService.getById(carId).getData().getMinFindexScore();
-		int customerFindexScore = 0;
-		ApplicationUser user = this.userService.getByUserId(userId).getData();
-		if (user == null) {
-			return new ErrorResult();
-		}
-
-		if (user.getIndividualCustomer() != null) {
-			customerFindexScore = this.customerFindexScoreService.getFindexScoreOfIndividualCustomer();
-		}
-		if (user.getCorporateCustomer() != null) {
-			customerFindexScore = this.customerFindexScoreService.getFindexScoreOfCorporateCustomer();
-		}
-
+		int customerFindexScore=getCustomerFindexScore(userId);
 		if (customerFindexScore >= carFindexScore) {
 			return new SuccessResult();
 		}

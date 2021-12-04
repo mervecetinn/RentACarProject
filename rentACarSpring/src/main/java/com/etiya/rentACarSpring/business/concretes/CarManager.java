@@ -52,7 +52,7 @@ public class CarManager implements CarService {
 
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
 		this.carDao.save(car);
-		return new SuccessResult(Messages.DataAdded);
+		return new SuccessResult(Messages.CarAdded);
 
 	}
 
@@ -60,7 +60,7 @@ public class CarManager implements CarService {
 	public Result update(UpdateCarRequest updateCarRequest) {
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		this.carDao.save(car);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(Messages.CarUpdated);
 
 	}
 
@@ -73,7 +73,7 @@ public class CarManager implements CarService {
 		}
 
 		this.carDao.deleteById(deleteCarRequest.getId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(Messages.CarDeleted);
 
 	}
 
@@ -83,7 +83,7 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> response = result.stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(response);
+		return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CarsListed);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class CarManager implements CarService {
 			}
 		}
 
-		return new SuccessDataResult<List<CarDetail>>(result);
+		return new SuccessDataResult<List<CarDetail>>(result,Messages.CarsListed);
 
 	}
 
@@ -105,13 +105,13 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> result = this.carDao.getByModelYear(modelYear).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(result, "Cars listed.");
+		return new SuccessDataResult<List<CarSearchListDto>>(result, Messages.CarsListed);
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getByBrandName(String brandName) {
 		List<CarSearchListDto> result = this.carDao.getByBrandName(brandName);
-		return new SuccessDataResult<List<CarSearchListDto>>(result, Messages.DataListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(result, Messages.CarsListed);
 	}
 
 	@Override
@@ -120,21 +120,21 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> result = this.carDao.getByBrandId(brandId).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(result);
+		return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CarsListed);
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getByColorId(int colorId) {
 		List<CarSearchListDto> result = this.carDao.getByColorId(colorId).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CarSearchListDto>>(result);
+		return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CarsListed);
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getByCityId(int cityId) {
 		List<CarSearchListDto> result = this.carDao.getByCityId(cityId).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CarSearchListDto>>(result);
+		return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CarsListed);
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> response = result.stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(response);
+		return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CarsListed);
 	}
 
 	@Override

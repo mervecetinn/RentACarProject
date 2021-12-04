@@ -8,6 +8,10 @@ public class Messages {
     public static String DataDeleted="Veri silindi.";
     public static String DataUpdated="Veri güncellendi";
     public static String DataListed="Veri listelendi.";
+    public static String CarAdded="Araba eklendi.";
+    public static String CarUpdated="Araba güncellendi.";
+    public static String CarDeleted="Araba silindi.";
+    public static String CarsListed="Arabalar listelendi.";
     public static String LoginIsSuccessful="Giriş başarılı.";
     public static String UserNameOrPasswordWrong="Kullanıcı adı veya şifre hatalı.";
     public static String UserAlreadyExists="Kullanıcı zaten var";
@@ -39,7 +43,8 @@ public class Messages {
     public static String RentedIsSuccessful="Kiralama işlemi başarılı.";
     public static String LimitIsInsufficient="Limit yetersiz.";
     public static String InvoiceIsUpdated="Fatura güncellendi.";
-    public static  String FindexScoreIsNotEnough="Bu araba için findex puanınız yeterli değil.";
+    public static String InvoiceIsDeleted="Fatura silindi.";
+    public static String FindexScoreIsNotEnough="Bu araba için findex puanınız yeterli değil.";
     public static String CarMaintenanceUpdated="Araç bakım kaydı güncellendi";
     public static String CarMaintenanceDeleted="Araç bakım kaydı silindi.";
     public static String CarMaintenanceAdded="Araç bakım kaydı eklendi.";
