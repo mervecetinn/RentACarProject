@@ -3,21 +3,19 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
-import com.etiya.rentACarSpring.entities.IndividualCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CorporateCustomerService;
 import com.etiya.rentACarSpring.business.dtos.CorporateCustomerSearchListDto;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCorporateCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCorporateCustomerRequest;
-import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
@@ -30,13 +28,15 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	private CorporateCustomerDao corporateCustomerDao;
 	private ModelMapperService modelMapperService;
 	private UserService userService;
+	private MessageService messageService;
 
 	@Autowired
-	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, ModelMapperService modelMapperService,UserService userService) {
+	public CorporateCustomerManager(CorporateCustomerDao corporateCustomerDao, ModelMapperService modelMapperService,UserService userService,MessageService messageService) {
 		super();
 		this.corporateCustomerDao = corporateCustomerDao;
 		this.modelMapperService = modelMapperService;
 		this.userService=userService;
+		this.messageService=messageService;
 
 	}
 
@@ -51,7 +51,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		corporateCustomer.setApplicationUser(user);
 		this.userService.add(user);
 		this.corporateCustomerDao.save(corporateCustomer);
-		return new SuccessResult(Messages.DataAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.CorporateCustomerAdded));
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(corporateCustomerRequest,
 				CorporateCustomer.class);
 		this.corporateCustomerDao.save(corporateCustomer);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.CorporateCustomerUpdated));
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		ApplicationUser user=corporateCustomer.getApplicationUser();
 		this.userService.delete(user);
 		this.corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getCorporateCustomerId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.CorporateCustomerDeleted));
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		List<CorporateCustomerSearchListDto> response = result.stream().map(individualCustomer -> modelMapperService
 				.forDto().map(individualCustomer, CorporateCustomerSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CorporateCustomerSearchListDto>>(response);
+		return new SuccessDataResult<List<CorporateCustomerSearchListDto>>(response,this.messageService.getMessage(Messages.CorporateCustomersListed));
 	}
 	
 	

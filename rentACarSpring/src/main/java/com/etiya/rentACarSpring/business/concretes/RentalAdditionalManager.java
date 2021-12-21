@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import com.etiya.rentACarSpring.business.abstracts.AdditionalItemService;
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.RentalAdditionalService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.constants.Messages;
@@ -21,13 +22,16 @@ public class RentalAdditionalManager implements RentalAdditionalService {
     private ModelMapperService modelMapperService;
     private RentalService rentalService;
     private AdditionalItemService additionalItemService;
+    private MessageService messageService;
 
     @Autowired
-    public RentalAdditionalManager(RentalAdditionalDao rentalAdditionalDao,ModelMapperService modelMapperService,RentalService rentalService,AdditionalItemService additionalItemService){
+    public RentalAdditionalManager(RentalAdditionalDao rentalAdditionalDao,ModelMapperService modelMapperService,
+                                   RentalService rentalService,AdditionalItemService additionalItemService,MessageService messageService){
         this.rentalAdditionalDao=rentalAdditionalDao;
         this.modelMapperService=modelMapperService;
         this.rentalService=rentalService;
         this.additionalItemService=additionalItemService;
+        this.messageService=messageService;
     }
 
 
@@ -37,7 +41,7 @@ public class RentalAdditionalManager implements RentalAdditionalService {
         RentalAdditional rentalAdditional=this.modelMapperService.forRequest().map(createRentalAdditionalRequest,RentalAdditional.class);
         this.rentalAdditionalDao.save(rentalAdditional);
 
-        return new SuccessResult(Messages.DataAdded);
+        return new SuccessResult(this.messageService.getMessage(Messages.RentalAdditionalAdded));
     }
 
     @Override
@@ -47,12 +51,12 @@ public class RentalAdditionalManager implements RentalAdditionalService {
         rentalAdditional.setAdditionalItem(this.additionalItemService.getById(updateRentalAdditionalRequest.getAdditionalItemId()).getData());
         this.rentalAdditionalDao.save(rentalAdditional);
 
-        return  new SuccessResult(Messages.DataUpdated);
+        return  new SuccessResult(this.messageService.getMessage(Messages.RentalAdditionalUpdated));
     }
 
     @Override
     public Result delete(DeleteRentalAdditionalRequest deleteRentalAdditionalRequest) {
         this.rentalAdditionalDao.deleteById(deleteRentalAdditionalRequest.getId());
-        return new SuccessResult(Messages.DataDeleted);
+        return new SuccessResult(this.messageService.getMessage(Messages.RentalAdditionalDeleted));
     }
 }

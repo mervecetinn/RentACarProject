@@ -31,7 +31,7 @@ public class Car {
     @Column(name="model_year")
 	private int modelYear;
 
-    @Column(name= "kilometers")
+    @Column(name= "kilometer")
     private int kilometer;
     
     @Column(name="daily_price")

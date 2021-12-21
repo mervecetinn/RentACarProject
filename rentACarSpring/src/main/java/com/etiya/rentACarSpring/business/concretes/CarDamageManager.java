@@ -1,9 +1,9 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import com.etiya.rentACarSpring.business.abstracts.CarDamageService;
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.CarDamageSearchListDto;
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateCarDamageRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCarDamageRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCarDamageRequest;
@@ -16,7 +16,6 @@ import com.etiya.rentACarSpring.dataAccess.abstracts.CarDamageDao;
 import com.etiya.rentACarSpring.entities.CarDamage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,18 +24,20 @@ public class CarDamageManager implements CarDamageService {
 
     private CarDamageDao carDamageDao;
     private ModelMapperService modelMapperService;
+    private MessageService messageService;
 
     @Autowired
-    public CarDamageManager(CarDamageDao carDamageDao,ModelMapperService modelMapperService){
+    public CarDamageManager(CarDamageDao carDamageDao,ModelMapperService modelMapperService,MessageService messageService){
         this.carDamageDao=carDamageDao;
         this.modelMapperService=modelMapperService;
+        this.messageService=messageService;
     }
 
     @Override
     public Result add(CreateCarDamageRequest createCarDamageRequest) {
         CarDamage carDamage=this.modelMapperService.forRequest().map(createCarDamageRequest,CarDamage.class);
         this.carDamageDao.save(carDamage);
-        return  new SuccessResult(Messages.DataAdded);
+        return  new SuccessResult(this.messageService.getMessage(Messages.CarDamageAdded));
     }
 
     @Override
@@ -44,13 +45,13 @@ public class CarDamageManager implements CarDamageService {
         CarDamage carDamage=this.carDamageDao.getById(updateCarDamageRequest.getId());
         carDamage.setDamageInformation(updateCarDamageRequest.getDamageInformation());
         this.carDamageDao.save(carDamage);
-        return new SuccessResult(Messages.DataUpdated);
+        return new SuccessResult(this.messageService.getMessage(Messages.CarDamageUpdated));
     }
 
     @Override
     public Result delete(DeleteCarDamageRequest deleteCarDamageRequest) {
         this.carDamageDao.deleteById(deleteCarDamageRequest.getId());
-        return new SuccessResult(Messages.DataDeleted);
+        return new SuccessResult(this.messageService.getMessage(Messages.CarDamageDeleted));
     }
 
     @Override
@@ -59,6 +60,6 @@ public class CarDamageManager implements CarDamageService {
         List<CarDamageSearchListDto> response=result.stream()
                 .map(carDamage -> modelMapperService.forDto().map(carDamage,CarDamageSearchListDto.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<CarDamageSearchListDto>>(response);
+        return new SuccessDataResult<List<CarDamageSearchListDto>>(response,this.messageService.getMessage(Messages.CarDamagesListed));
     }
 }

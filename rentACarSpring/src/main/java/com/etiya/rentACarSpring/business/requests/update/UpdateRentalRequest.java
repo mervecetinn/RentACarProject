@@ -25,7 +25,8 @@ public class UpdateRentalRequest {
 
 	private LocalDateTime returnDate;
 
-	private int takenKilometer;
+	@JsonIgnore
+	private int initialKilometer;
 
 	private int returnKilometer;
 

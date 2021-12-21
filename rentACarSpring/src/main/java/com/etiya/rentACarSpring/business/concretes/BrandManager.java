@@ -1,13 +1,12 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
-
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.dataAccess.abstracts.MessageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.BrandService;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.dtos.BrandSearchListDto;
@@ -24,7 +23,6 @@ import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.BrandDao;
 import com.etiya.rentACarSpring.entities.Brand;
-import com.etiya.rentACarSpring.entities.Car;
 
 @Service
 public class BrandManager implements BrandService {
@@ -32,13 +30,16 @@ public class BrandManager implements BrandService {
 	private BrandDao brandDao;
 	private ModelMapperService modelMapperService;
 	private CarService carService;
+	private MessageService messageService;
 
 	@Autowired
-	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, CarService carService) {
+	public BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, CarService carService,MessageService messageService) {
 		this.brandDao = brandDao;
 		this.modelMapperService = modelMapperService;
 		this.carService = carService;
+		this.messageService=messageService;
 	}
+
 
 	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
@@ -49,7 +50,7 @@ public class BrandManager implements BrandService {
 		}
 		Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		this.brandDao.save(brand);
-		return new SuccessResult(Messages.DataAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.BrandAdded));
 
 	}
 
@@ -63,7 +64,7 @@ public class BrandManager implements BrandService {
 
 		Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		this.brandDao.save(brand);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.BrandUpdated));
 
 	}
 
@@ -76,7 +77,7 @@ public class BrandManager implements BrandService {
 		}
 
 		brandDao.deleteById(deleteBrandRequest.getId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.BrandDeleted));
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class BrandManager implements BrandService {
 				.map(brand -> modelMapperService.forDto().map(brand, BrandSearchListDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<BrandSearchListDto>>(response);
+		return new SuccessDataResult<List<BrandSearchListDto>>(response,this.messageService.getMessage(Messages.BrandsListed));
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result checkBrandIsNotExists(int brandId) {
 		if (!this.brandDao.existsById(brandId)) {
-			return new ErrorResult(Messages.BrandIsNotFound);
+			return new ErrorResult(this.messageService.getMessage(Messages.BrandNotFound));
 
 		}
 		return new SuccessResult();
@@ -111,7 +112,7 @@ public class BrandManager implements BrandService {
 		List<Brand> brands=this.brandDao.findAll();
 		for(Brand brand:brands){
 			if(brand.getName().equalsIgnoreCase(brandName.toLowerCase())){
-				return new ErrorResult(Messages.BrandAlreadyExists);
+				return new ErrorResult(this.messageService.getMessage(Messages.BrandAlreadyExists));
 			}
 		}
 		return new SuccessResult();
@@ -121,7 +122,7 @@ public class BrandManager implements BrandService {
 	private Result checkIfBrandHasNotAnyCar(int brandId) {
 		List<CarSearchListDto> carsInRelevantBrand = this.carService.getByBrandId(brandId).getData();
 		if (carsInRelevantBrand.size() > 0) {
-			return new ErrorResult(Messages.BrandCanNotBeDeletedBeforeItsCars);
+			return new ErrorResult(this.messageService.getMessage(Messages.BrandCanNotBeDeletedBeforeItsCars));
 		}
 		return new SuccessResult();
 	}

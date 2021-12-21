@@ -8,11 +8,11 @@ import com.etiya.rentACarSpring.core.utilities.results.Result;
 
 public interface FileHelper {
 	
-	DataResult<String> uploadImage(int carId, MultipartFile file) throws IOException;
+	DataResult<String> uploadFile(int carId, MultipartFile file) throws IOException;
 
-	DataResult<String> updateImage(MultipartFile file, String imagePath) throws IOException;
+	DataResult<String> updateFile(MultipartFile file, String filePath) throws IOException;
 
-	Result deleteImage(String imagePath);
+	Result deleteFile(String imagePath);
 
-	Result checkImageFile(MultipartFile file);
+	Result checkFile(MultipartFile file);
 }

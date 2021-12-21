@@ -3,14 +3,13 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.abstracts.ColorService;
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteColorRequest;
@@ -25,18 +24,20 @@ public class ColorManager implements ColorService {
 	private ColorDao colorDao;
 	private ModelMapperService modelMapperService;
 	private CarService carService;
+	private MessageService messageService;
 
-	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService, CarService carService) {
+	public ColorManager(ColorDao colorDao, ModelMapperService modelMapperService, CarService carService,MessageService messageService) {
 		this.colorDao = colorDao;
 		this.modelMapperService = modelMapperService;
 		this.carService = carService;
+		this.messageService=messageService;
 	}
 
 	@Override
 	public Result add(CreateColorRequest createColorRequest) {
 		Color color = modelMapperService.forRequest().map(createColorRequest, Color.class);
 		this.colorDao.save(color);
-		return new SuccessResult(Messages.DataAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.ColorAdded));
 
 	}
 
@@ -50,7 +51,7 @@ public class ColorManager implements ColorService {
 
 		Color color = modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		this.colorDao.save(color);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.ColorUpdated));
 
 	}
 
@@ -61,7 +62,7 @@ public class ColorManager implements ColorService {
 			return result;
 		}
 		this.colorDao.deleteById(deleteColorRequest.getId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.ColorDeleted));
 
 	}
 
@@ -72,12 +73,12 @@ public class ColorManager implements ColorService {
 				.map(color -> modelMapperService.forDto().map(color, ColorSearchListDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ColorSearchListDto>>(response);
+		return new SuccessDataResult<List<ColorSearchListDto>>(response,this.messageService.getMessage(Messages.ColorsListed));
 	}
 
 	private Result checkIfColorIsNotExists(int colorId){
 		if(!this.colorDao.existsById(colorId)){
-			return new ErrorResult(Messages.ColorIsNotFound);
+			return new ErrorResult(this.messageService.getMessage(Messages.ColorIsNotFound));
 		}
 		return new SuccessResult();
 	}

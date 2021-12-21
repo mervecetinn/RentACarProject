@@ -1,13 +1,11 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.CarMaintenanceSearchListDto;
-import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.results.*;
-import com.etiya.rentACarSpring.entities.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.CarMaintenanceService;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.requests.create.CreateCarMaintenanceRequest;
@@ -18,7 +16,6 @@ import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.dataAccess.abstracts.CarMaintenanceDao;
 import com.etiya.rentACarSpring.entities.Car;
 import com.etiya.rentACarSpring.entities.CarMaintenance;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,14 +25,16 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	private CarMaintenanceDao carMaintenanceDao;
 	private ModelMapperService modelMapperService;
 	private CarService carService;
+	private MessageService messageService;
 
 	@Autowired
 	public CarMaintenanceManager(CarMaintenanceDao carMaintenanceDao, ModelMapperService modelMapperService,
-			CarService carService) {
+			CarService carService,MessageService messageService) {
 		super();
 		this.carMaintenanceDao = carMaintenanceDao;
 		this.modelMapperService = modelMapperService;
 		this.carService = carService;
+		this.messageService=messageService;
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		this.carMaintenanceDao.save(carMaintenance);
 		
 		
-		return new SuccessResult(Messages.CarMaintenanceAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarMaintenanceAdded));
 	}
 
 	@Override
@@ -63,13 +62,13 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		CarMaintenance updatedCarMaintenance=this.modelMapperService.forRequest().map(updateCarMaintenanceRequest,CarMaintenance.class);
 		updatedCarMaintenance.setCar(carMaintenance.getCar());
 		this.carMaintenanceDao.save(updatedCarMaintenance);
-		return new SuccessResult(Messages.CarMaintenanceUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarMaintenanceUpdated));
 	}
 
 	@Override
 	public Result delete(DeleteCarMaintenanceRequest deleteMaintenanceCarRequest) {
 		this.carMaintenanceDao.deleteById(deleteMaintenanceCarRequest.getId());
-		return new SuccessResult(Messages.CarMaintenanceDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarMaintenanceDeleted));
 	}
 
 	@Override
@@ -79,12 +78,12 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 				.map(carMaintenance -> modelMapperService.forDto().map(carMaintenance, CarMaintenanceSearchListDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarMaintenanceSearchListDto>>(response);
+		return new SuccessDataResult<List<CarMaintenanceSearchListDto>>(response,this.messageService.getMessage(Messages.CarMaintenancesListed));
 	}
 
 	private Result checkCarIsNotOnRent(int carId) {
 		if(!this.carService.checkCarIsNotOnRent(carId).isSuccess()) {
-			return new ErrorResult(Messages.CarIsOnRent);
+			return new ErrorResult(this.messageService.getMessage(Messages.CarIsOnRent));
 		}
 		
 		return new SuccessResult();
@@ -92,14 +91,14 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	private Result checkIfCarIsNotExists(int carId) {
 		if(!this.carService.checkCarExists(carId).isSuccess()) {
-			return new ErrorResult(Messages.CarIsNotFound);
+			return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
 		}
 
 		return new SuccessResult();
 	}
 	private Result checkCarIsNotOnMaintenance(int carId) {
 		if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
-			return new ErrorResult(Messages.CarIsAlreadyOnMaintenance);
+			return new ErrorResult(this.messageService.getMessage(Messages.CarIsAlreadyOnMaintenance));
 		}
 		return new SuccessResult();
 	}

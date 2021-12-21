@@ -2,13 +2,13 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.etiya.rentACarSpring.business.abstracts.CityService;
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
-import com.etiya.rentACarSpring.business.constants.FilePathConfiguration;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateCarRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCarRequest;
@@ -30,17 +30,18 @@ public class CarManager implements CarService {
 	private CarDao carDao;
 	private ModelMapperService modelMapperService;
 	private CityService cityService;
-
-
+	private Environment environment;
+	private MessageService messageService;
 
 	@Autowired
-	public CarManager(CarDao carDao, ModelMapperService modelMapperService,CityService cityService) {
+	public CarManager(CarDao carDao, ModelMapperService modelMapperService,CityService cityService,Environment environment,MessageService messageService) {
 		this.carDao = carDao;
 		this.modelMapperService = modelMapperService;
 		this.cityService=cityService;
+		this.environment=environment;
+		this.messageService=messageService;
 
 	}
-
 
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
@@ -52,7 +53,7 @@ public class CarManager implements CarService {
 
 		Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
 		this.carDao.save(car);
-		return new SuccessResult(Messages.CarAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarAdded));
 
 	}
 
@@ -60,7 +61,7 @@ public class CarManager implements CarService {
 	public Result update(UpdateCarRequest updateCarRequest) {
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		this.carDao.save(car);
-		return new SuccessResult(Messages.CarUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarUpdated));
 
 	}
 
@@ -73,7 +74,7 @@ public class CarManager implements CarService {
 		}
 
 		this.carDao.deleteById(deleteCarRequest.getId());
-		return new SuccessResult(Messages.CarDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarDeleted));
 
 	}
 
@@ -83,7 +84,7 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> response = result.stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(response,this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
@@ -91,11 +92,11 @@ public class CarManager implements CarService {
 		List<CarDetail> result = this.carDao.getCarsWithDetails();
 		for (CarDetail carDetail : result) {
 			if (carDetail.getImage() == null) {
-				carDetail.setImage(FilePathConfiguration.defaultImagePath.getBytes());
+				carDetail.setImage(this.environment.getProperty("defaultImagePath").getBytes());
 			}
 		}
 
-		return new SuccessDataResult<List<CarDetail>>(result,Messages.CarsListed);
+		return new SuccessDataResult<List<CarDetail>>(result,this.messageService.getMessage(Messages.CarsListed));
 
 	}
 
@@ -105,13 +106,13 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> result = this.carDao.getByModelYear(modelYear).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(result, Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(result, this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getByBrandName(String brandName) {
 		List<CarSearchListDto> result = this.carDao.getByBrandName(brandName);
-		return new SuccessDataResult<List<CarSearchListDto>>(result, Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(result, this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
@@ -120,21 +121,21 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> result = this.carDao.getByBrandId(brandId).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(result,this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getByColorId(int colorId) {
 		List<CarSearchListDto> result = this.carDao.getByColorId(colorId).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(result,this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getByCityId(int cityId) {
 		List<CarSearchListDto> result = this.carDao.getByCityId(cityId).stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(result,this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
@@ -143,19 +144,17 @@ public class CarManager implements CarService {
 		List<CarSearchListDto> response = result.stream()
 				.map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CarsListed);
+		return new SuccessDataResult<List<CarSearchListDto>>(response,this.messageService.getMessage(Messages.CarsListed));
 	}
 
 	@Override
 	public Result updateCarKilometer(int carId, int kilometer) {
 
-
 		Car car=this.carDao.getById(carId);
 		car.setKilometer(kilometer);
-
 		this.carDao.save(car);
 
-		return new SuccessResult(Messages.CarKilometerUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.CarKilometerUpdated));
 
 	}
 
@@ -199,7 +198,7 @@ public class CarManager implements CarService {
 		if (this.carDao.existsById(id)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Messages.CarIsNotFound);
+		return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
 	}
 
 	private Result checkIfBrandNotExists(int brandId) {
@@ -208,7 +207,7 @@ public class CarManager implements CarService {
 		if (id != null) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Messages.BrandIsNotFound);
+		return new ErrorResult(this.messageService.getMessage(Messages.BrandNotFound));
 
 	}
 
@@ -217,12 +216,12 @@ public class CarManager implements CarService {
 		if (id != null) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Messages.ColorIsNotFound);
+		return new ErrorResult(this.messageService.getMessage(Messages.ColorIsNotFound));
 	}
 
 	private Result checkIfCityIsNotExists(int cityId){
 		if(!this.cityService.checkCityExists(cityId).isSuccess()){
-			return new ErrorResult(Messages.CityIsNotFound);
+			return new ErrorResult(this.messageService.getMessage(Messages.CityIsNotFound));
 		}
 		return new SuccessResult();
 	}

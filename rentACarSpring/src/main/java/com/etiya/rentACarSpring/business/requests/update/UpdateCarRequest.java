@@ -32,7 +32,7 @@ public class UpdateCarRequest {
 	private int modelYear;
 
 	@NotNull
-	@Min(value = 1,message ="Lütfen arabanın kilometresini girin")
+	@Min(value = 0,message ="Lütfen arabanın kilometresini girin")
 	private int kilometer;
 	
 	@NotNull

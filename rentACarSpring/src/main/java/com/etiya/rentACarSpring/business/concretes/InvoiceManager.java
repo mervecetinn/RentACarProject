@@ -1,21 +1,17 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.constants.Messages;
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
-import com.etiya.rentACarSpring.business.dtos.IndividualCustomerSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.*;
-import com.etiya.rentACarSpring.entities.IndividualCustomer;
 import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.InvoiceService;
 import com.etiya.rentACarSpring.business.dtos.InvoiceSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateInvoiceRequest;
@@ -31,13 +27,15 @@ public class InvoiceManager implements InvoiceService {
 	private InvoiceDao invoiceDao;
 	private ModelMapperService modelMapperService;
 	private RentalService rentalService;
+	private MessageService messageService;
 
 	@Autowired
-	public InvoiceManager(InvoiceDao invoiceDao,ModelMapperService modelMapperService,RentalService rentalService) {
+	public InvoiceManager(InvoiceDao invoiceDao,ModelMapperService modelMapperService,RentalService rentalService,MessageService messageService) {
 		super();
 		this.invoiceDao = invoiceDao;
 		this.modelMapperService=modelMapperService;
 		this.rentalService=rentalService;
+		this.messageService=messageService;
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class InvoiceManager implements InvoiceService {
 		invoice.setInvoiceAmount(calculateTotalPrice(createInvoiceRequest));
 		invoice.setInvoiceNumber(createInvoiceNumber(createInvoiceRequest.getRentalId()).getData());
 		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.InvoiceIsCreated);
+		return new SuccessResult(this.messageService.getMessage(Messages.InvoiceCreated));
 	}
 
 	@Override
@@ -62,13 +60,13 @@ public class InvoiceManager implements InvoiceService {
 		Invoice invoice=this.invoiceDao.getById(updateInvoiceRequest.getId());
 		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
 		this.invoiceDao.save(invoice);
-		return new SuccessResult(Messages.InvoiceIsUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.InvoiceUpdated));
 	}
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
 		this.invoiceDao.deleteById(deleteInvoiceRequest.getId());
-		return new SuccessResult(Messages.InvoiceIsDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.InvoiceDeleted));
 	}
 
 	@Override
@@ -77,7 +75,7 @@ public class InvoiceManager implements InvoiceService {
 		List<InvoiceSearchListDto> response = result.stream().map(invoice -> modelMapperService
 				.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<InvoiceSearchListDto>>(response);
+		return new SuccessDataResult<List<InvoiceSearchListDto>>(response,this.messageService.getMessage(Messages.InvoicesListed));
 	}
 
 	@Override
@@ -121,12 +119,12 @@ public class InvoiceManager implements InvoiceService {
 		if(!this.invoiceDao.existsInvoiceByRental_Id(rentalId)){
 			return new SuccessResult();
 		}
-		return new ErrorResult(Messages.InvoiceIsAlreadyExists);
+		return new ErrorResult(this.messageService.getMessage(Messages.InvoiceIsAlreadyExists));
 	}
 
 	private Result checkIfReturnDateIsNull(int rentalId){
 		if(this.rentalService.getById(rentalId).getData().getReturnDate()==null){
-			return new ErrorResult(Messages.MustBeEnteredReturnDateBeforeCreatInvoice);
+			return new ErrorResult(this.messageService.getMessage(Messages.ReturnDateMustBeEnteredBeforeCreatInvoice));
 		}
 		return new SuccessResult();
 	}

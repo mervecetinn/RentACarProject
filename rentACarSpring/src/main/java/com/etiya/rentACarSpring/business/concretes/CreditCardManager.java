@@ -1,10 +1,9 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import com.etiya.rentACarSpring.business.abstracts.CreditCardService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.requests.create.CreateCreditCardRequest;
@@ -25,14 +24,16 @@ public class CreditCardManager implements CreditCardService {
 	private CreditCardDao creditCardDao;
 	private ModelMapperService modelMapperService;
 	private UserService userService;
+	private MessageService messageService;
 	
     @Autowired
 	public CreditCardManager(CreditCardDao creditCardDao, ModelMapperService modelMapperService,
-			UserService userService) {
+			UserService userService,MessageService messageService) {
 		super();
 		this.creditCardDao = creditCardDao;
 		this.modelMapperService = modelMapperService;
 		this.userService = userService;
+		this.messageService=messageService;
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class CreditCardManager implements CreditCardService {
 		CreditCard creditCard=this.modelMapperService.forRequest().map(createCreditCardRequest, CreditCard.class);
 		creditCard.setApplicationUser(user);
 		this.creditCardDao.save(creditCard);
-		return new SuccessResult(Messages.DataAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.CreditCardAdded));
 	}
 
 	@Override
@@ -58,19 +59,19 @@ public class CreditCardManager implements CreditCardService {
 		CreditCard updatedCreditCard=this.modelMapperService.forRequest().map(updateCreditCardRequest,CreditCard.class);
 		updatedCreditCard.setApplicationUser(user);
 		this.creditCardDao.save(updatedCreditCard);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.CreditCardUpdated));
 
 	}
 
 	@Override
 	public Result delete(DeleteCreditCardRequest deleteCreditCardRequest) {
 		this.creditCardDao.deleteById(deleteCreditCardRequest.getId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.CreditCardDeleted));
 	}
 	
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
-			return  new ErrorResult(Messages.UserIsNotFound);
+			return  new ErrorResult(this.messageService.getMessage(Messages.UserIsNotFound));
 		}
 		return new SuccessResult();
 	}

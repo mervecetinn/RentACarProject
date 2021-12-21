@@ -1,28 +1,21 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import com.etiya.rentACarSpring.business.abstracts.*;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.etiya.rentACarSpring.business.abstracts.AuthService;
-import com.etiya.rentACarSpring.business.abstracts.CorporateCustomerService;
-import com.etiya.rentACarSpring.business.abstracts.IndividualCustomerService;
-import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.requests.auth.LoginRequest;
 import com.etiya.rentACarSpring.business.requests.auth.RegisterCorporateCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.auth.RegisterIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.create.CreateIndividualCustomerRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
-import com.etiya.rentACarSpring.entities.CorporateCustomer;
+
 
 @Service
 public class AuthManager implements AuthService {
@@ -30,14 +23,18 @@ public class AuthManager implements AuthService {
 	private IndividualCustomerService individualCustomerService;
 	private CorporateCustomerService corporateCustomerService;
 	private ModelMapperService modelMapperService;
+	private MessageService messageService;
 
 	@Autowired
-	public AuthManager(UserService userService,IndividualCustomerService individualCustomerService,CorporateCustomerService corporateCustomerService,ModelMapperService modelMapperService) {
+	public AuthManager(UserService userService,IndividualCustomerService individualCustomerService,
+					   CorporateCustomerService corporateCustomerService,ModelMapperService modelMapperService,
+					   MessageService messageService) {
 		super();
 		this.userService = userService;
 		this.individualCustomerService=individualCustomerService;
 		this.corporateCustomerService=corporateCustomerService;
 		this.modelMapperService=modelMapperService;
+		this.messageService=messageService;
 	}
 
 	@Override
@@ -47,7 +44,7 @@ public class AuthManager implements AuthService {
 		if(result!=null) {
 			return result;
 		}
-		return new SuccessResult(Messages.LoginIsSuccessful);
+		return new SuccessResult(this.messageService.getMessage(Messages.LoginSuccessful));
 	}
 
 	@Override
@@ -60,7 +57,7 @@ public class AuthManager implements AuthService {
 		
 		CreateIndividualCustomerRequest createIndividualCustomerRequest=this.modelMapperService.forRequest().map(registerIndividualCustomerRequest, CreateIndividualCustomerRequest.class);
 		this.individualCustomerService.add(createIndividualCustomerRequest);
-		return new SuccessResult(Messages.RegisterSuccessfull);
+		return new SuccessResult(this.messageService.getMessage(Messages.RegisterSuccessful));
 	}
 	
 	@Override
@@ -74,7 +71,7 @@ public class AuthManager implements AuthService {
 		}
 		CreateCorporateCustomerRequest createCorporateCustomerRequest=this.modelMapperService.forRequest().map(registerCorporateCustomerRequest,CreateCorporateCustomerRequest.class);
 		this.corporateCustomerService.add(createCorporateCustomerRequest);
-		return new SuccessResult(Messages.RegisterSuccessfull);
+		return new SuccessResult(this.messageService.getMessage(Messages.RegisterSuccessful));
 
 	}
 
@@ -93,13 +90,13 @@ public class AuthManager implements AuthService {
 			
 			return new SuccessResult();
 		}
-		return new ErrorResult(Messages.UserNameOrPasswordWrong);
+		return new ErrorResult(this.messageService.getMessage(Messages.UserNameOrPasswordWrong));
 			
 	}
 	
 	private Result checkIfUserAlreadyExists(String email) {
 		if(this.userService.getByEmail(email).isSuccess()) {
-			return new ErrorResult(Messages.UserAlreadyExists);
+			return new ErrorResult(this.messageService.getMessage(Messages.UserAlreadyExists));
 		}
 		return new SuccessResult();
 	}
@@ -110,14 +107,14 @@ public class AuthManager implements AuthService {
 			return new SuccessResult();
 		}
 		
-		return new ErrorResult(Messages.EmailIsNotValid);
+		return new ErrorResult(this.messageService.getMessage(Messages.EmailNotValid));
 		
 	}
 //	private Result checkIfPasswordsMatch(String password,String passwordRepeat) {
 //		if(password.equals(passwordRepeat)) {
 //			return new SuccessResult();
 //		}
-//		return new ErrorResult("Şifreler eşleşmiyor.");
+//		return new ErrorResult(this.messageService.getMessage(Messages.PasswordsNotMatch));
 //	}
 
 }

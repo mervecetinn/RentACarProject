@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @AllArgsConstructor
@@ -38,7 +39,7 @@ public class CarImage {
 	@Column(name="image_path")
 	private String path;
 	
-	@CreationTimestamp
+	@UpdateTimestamp
 	@Column(name="date")
 	private LocalDateTime date;
 	

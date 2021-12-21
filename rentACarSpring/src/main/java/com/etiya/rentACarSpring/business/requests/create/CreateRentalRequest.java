@@ -38,9 +38,7 @@ public class CreateRentalRequest {
 	private LocalDateTime returnDate;
 
 	@JsonIgnore
-	private int takenKilometer;
-
-	private int returnKilometer;
+	private int initialKilometer;
 
 
 }

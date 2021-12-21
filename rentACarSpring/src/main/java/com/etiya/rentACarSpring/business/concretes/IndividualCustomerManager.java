@@ -3,11 +3,11 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.IndividualCustomerService;
 import com.etiya.rentACarSpring.business.dtos.IndividualCustomerSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateIndividualCustomerRequest;
@@ -30,14 +30,16 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	private IndividualCustomerDao individualCustomerDao;
 	private ModelMapperService modelMapperService;
 	private UserService userService;
+	private MessageService messageService;
 
 	@Autowired
 	public IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
-			ModelMapperService modelMapperService,UserService userService) {
+			ModelMapperService modelMapperService,UserService userService,MessageService messageService) {
 		super();
 		this.individualCustomerDao = individualCustomerDao;
 		this.modelMapperService = modelMapperService;
 		this.userService=userService;
+		this.messageService=messageService;
 
 	}
 
@@ -56,7 +58,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		individualCustomer.setApplicationUser(user);
 		this.userService.add(user);
 		this.individualCustomerDao.save(individualCustomer);
-		return new SuccessResult(Messages.DataAdded);
+		return new SuccessResult(this.messageService.getMessage(Messages.IndividualCustomerAdded));
 	}
 
 	@Override
@@ -74,7 +76,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		user.setEmail(updateIndividualCustomerRequest.getEmail());
 		individualCustomer.setApplicationUser(user);
 		this.individualCustomerDao.save(individualCustomer);
-		return new SuccessResult(Messages.DataUpdated);
+		return new SuccessResult(this.messageService.getMessage(Messages.IndividualCustomerUpdated));
 
 	}
 
@@ -88,7 +90,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		ApplicationUser user=individualCustomer.getApplicationUser();
 		this.userService.delete(user);
 		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getIndividualCustomerId());
-		return new SuccessResult(Messages.DataDeleted);
+		return new SuccessResult(this.messageService.getMessage(Messages.IndividualCustomerDeleted));
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		List<IndividualCustomerSearchListDto> response = result.stream().map(individualCustomer -> modelMapperService
 				.forDto().map(individualCustomer, IndividualCustomerSearchListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response);
+		return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response,this.messageService.getMessage(Messages.IndividualCustomersListed));
 	}
 
 	@Override
@@ -112,13 +114,13 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 			return new SuccessResult();
 		}
 		
-		return new ErrorResult(Messages.EmailIsNotValid);
+		return new ErrorResult(this.messageService.getMessage(Messages.EmailNotValid));
 		
 	}
 
 	private Result checkIfIndivudualCustomerIsNotExists(int id){
 		if(!this.individualCustomerDao.existsByIndividualCustomerId(id)){
-			return new ErrorResult(Messages.IndividualCustomerIsNotFound);
+			return new ErrorResult(this.messageService.getMessage(Messages.IndividualCustomerIsNotFound));
 		}
 		return new SuccessResult();
 	}

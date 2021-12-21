@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.concretes;
 
 import com.etiya.rentACarSpring.business.abstracts.AdditionalItemService;
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.AdditionalItemSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateAdditionalItemRequest;
@@ -21,11 +22,13 @@ import java.util.stream.Collectors;
 public class AdditionalItemManager implements AdditionalItemService {
     private AdditionalItemDao additionalItemDao;
     private ModelMapperService modelMapperService;
+    private MessageService messageService;
 
     @Autowired
-    public AdditionalItemManager(AdditionalItemDao additionalItemDao,ModelMapperService modelMapperService){
+    public AdditionalItemManager(AdditionalItemDao additionalItemDao,ModelMapperService modelMapperService, MessageService messageService){
         this.additionalItemDao=additionalItemDao;
         this.modelMapperService=modelMapperService;
+        this.messageService=messageService;
     }
 
 
@@ -39,7 +42,7 @@ public class AdditionalItemManager implements AdditionalItemService {
 
         AdditionalItem additionalItem=modelMapperService.forRequest().map(createAdditionalItemRequest,AdditionalItem.class);
         this.additionalItemDao.save(additionalItem);
-        return new SuccessResult(Messages.DataAdded);
+        return new SuccessResult(this.messageService.getMessage(Messages.AdditionalItemAdded));
     }
 
     @Override
@@ -49,13 +52,13 @@ public class AdditionalItemManager implements AdditionalItemService {
         additionalItem.setName(updateAdditionalItemRequest.getName());
         this.additionalItemDao.save(additionalItem);
 
-        return new SuccessResult(Messages.DataUpdated);
+        return new SuccessResult(this.messageService.getMessage(Messages.AdditionalItemUpdated));
     }
 
     @Override
     public Result delete(DeleteAdditionalItemRequest deleteAdditionalItemRequest) {
         this.additionalItemDao.deleteById(deleteAdditionalItemRequest.getId());
-        return new SuccessResult(Messages.DataDeleted);
+        return new SuccessResult(this.messageService.getMessage(Messages.AdditionalItemDeleted));
     }
 
     @Override
@@ -63,7 +66,7 @@ public class AdditionalItemManager implements AdditionalItemService {
         List<AdditionalItem> result=this.additionalItemDao.findAll();
         List<AdditionalItemSearchListDto> response=result.stream()
                 .map(additionalItem -> modelMapperService.forDto().map(additionalItem,AdditionalItemSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<AdditionalItemSearchListDto>>(response);
+        return new SuccessDataResult<List<AdditionalItemSearchListDto>>(response,this.messageService.getMessage(Messages.AdditionalItemsListed));
     }
 
     @Override
@@ -75,7 +78,7 @@ public class AdditionalItemManager implements AdditionalItemService {
         List<AdditionalItem> items=this.additionalItemDao.findAll();
         for(AdditionalItem item:items){
             if(item.getName().equalsIgnoreCase(itemName)){
-                return new ErrorResult(Messages.AdditionalItemAlreadyExists);
+                return new ErrorResult(this.messageService.getMessage(Messages.AdditionalItemAlreadyExists));
             }
         }
         return new SuccessResult();

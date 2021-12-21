@@ -2,11 +2,14 @@ package com.etiya.rentACarSpring.core.utilities.helpers;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
+
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
+import com.etiya.rentACarSpring.business.constants.Messages;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.etiya.rentACarSpring.business.constants.FilePathConfiguration;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
@@ -15,11 +18,18 @@ import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 
 @Service
 public class ImageFileHelper implements FileHelper {
+	@Value("${mainPath}")
+	private String mainPath;
 
-	private static String mainPath = FilePathConfiguration.mainPath;
+	private MessageService messageService;
+
+	@Autowired
+	public ImageFileHelper(MessageService messageService){
+		this.messageService=messageService;
+	}
 
 	@Override
-	public DataResult<String> uploadImage(int carId, MultipartFile file) throws IOException {
+	public DataResult<String> uploadFile(int carId, MultipartFile file) throws IOException {
 
 		String carImagesFolderName=this.createCarImagesFolderName(carId);
 		String carImageFileName = this.createImageFileName(file);
@@ -37,10 +47,10 @@ public class ImageFileHelper implements FileHelper {
 	}
 
 	@Override
-	public DataResult<String> updateImage(MultipartFile file, String imagePath) throws IOException {
+	public DataResult<String> updateFile(MultipartFile file, String imagePath) throws IOException {
 
 		String carImagesFolderPath = getFolderPathOfFile(imagePath);
-		this.deleteImage(imagePath);
+		this.deleteFile(imagePath);
 		String updatedCarImageFileName = this.createImageFileName(file);
 
 		File updatedCarImageFile = new File(carImagesFolderPath + "\\" + updatedCarImageFileName);
@@ -54,7 +64,7 @@ public class ImageFileHelper implements FileHelper {
 	}
 
 	@Override
-	public Result deleteImage(String imagePath) {
+	public Result deleteFile(String imagePath) {
 		if (!imagePath.isEmpty() && !imagePath.isBlank()) {
 			File deletedImage = new File(imagePath);
 			deletedImage.delete();
@@ -64,12 +74,12 @@ public class ImageFileHelper implements FileHelper {
 	}
 
 	@Override
-	public Result checkImageFile(MultipartFile file) {
+	public Result checkFile(MultipartFile file) {
 		if (!checkFileExtensionIsValid(file).isSuccess()) {
-			return new ErrorResult("File type is not valid.");
+			return new ErrorResult(this.messageService.getMessage(Messages.FileTypeNotValid));
 		}
 		if (!checkImageIsNotNull(file).isSuccess()) {
-			return new ErrorResult("File is not selected.");
+			return new ErrorResult(this.messageService.getMessage(Messages.FileNotSelected));
 		}
 		return new SuccessResult();
 	}
@@ -100,7 +110,7 @@ public class ImageFileHelper implements FileHelper {
 
 	private Result checkImageIsNotNull(MultipartFile file) {
 		if (file == null || file.isEmpty() || file.getSize() == 0) {
-			return new ErrorResult("File is not selected");
+			return new ErrorResult(this.messageService.getMessage(Messages.FileNotSelected));
 		}
 		return new SuccessResult();
 	}
@@ -110,7 +120,7 @@ public class ImageFileHelper implements FileHelper {
 				|| getFileExtension(file).equals(".jpeg")) {
 			return new SuccessResult();
 		}
-		return new ErrorResult("File is not valid");
+		return new ErrorResult(this.messageService.getMessage(Messages.FileTypeNotValid));
 	}
 
 	private String getFolderPathOfFile(String imagePath) {
