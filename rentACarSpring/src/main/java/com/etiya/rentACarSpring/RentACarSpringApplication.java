@@ -1,8 +1,7 @@
 package com.etiya.rentACarSpring;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -46,6 +47,21 @@ public class RentACarSpringApplication {
 	public ModelMapper getModelMapper() {
 		ModelMapper modelMapper=new ModelMapper();
 		return modelMapper;
+	}
+
+	@Bean("localeResolver")
+	public LocaleResolver acceptHeaderLocaleResolver() {
+		AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
+
+		resolver.setDefaultLocale(Locale.ENGLISH);
+		resolver.setSupportedLocales(Arrays.asList(
+				Locale.GERMAN,
+				Locale.US,
+				Locale.FRENCH
+
+		));
+
+		return resolver;
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -93,7 +109,7 @@ public class RentACarSpringApplication {
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleDataIntegrityViolationException(DataIntegrityViolationException exception){
-		return new ErrorResult("Data Integrity Violation Exception Error");
+		return new ErrorResult("Başka tablolarla bağlantısı olan öğeleri silemezsiniz.");
 	}
 
 	@ExceptionHandler
@@ -101,6 +117,8 @@ public class RentACarSpringApplication {
 	public ErrorResult handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException exception){
 		return new ErrorResult("Invalid Data Access Api Usage Exception Error");
 	}
+
+
 
 
 

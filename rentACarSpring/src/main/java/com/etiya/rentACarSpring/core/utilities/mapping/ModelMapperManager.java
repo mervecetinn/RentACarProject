@@ -1,5 +1,7 @@
 package com.etiya.rentACarSpring.core.utilities.mapping;
 
+import org.modelmapper.Condition;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -88,8 +88,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		}
 		IndividualCustomer individualCustomer=this.individualCustomerDao.getById(deleteIndividualCustomerRequest.getIndividualCustomerId());
 		ApplicationUser user=individualCustomer.getApplicationUser();
-		this.userService.delete(user);
 		this.individualCustomerDao.deleteById(deleteIndividualCustomerRequest.getIndividualCustomerId());
+		this.userService.delete(user);
 		return new SuccessResult(this.messageService.getMessage(Messages.IndividualCustomerDeleted));
 	}
 

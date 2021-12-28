@@ -57,8 +57,13 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	@Query(value="select * from cars c left join   (select * from car_maintenances m  where m.maintenance_finish_date is null) a\n" +
 			"on c.id=a.car_id where a.id  is null",nativeQuery = true)
 	List<Car> findAllCarsWhichIsNotOnMaintenance();
-	
-	
-	
-	
+
+
+	@Query(value = "select * from cars c where c.id in\n" +
+			"(select distinct c.id from cars c inner join car_maintenances cm on c.id=cm.car_id) or c.id in\n" +
+			"(select distinct c.id from cars c inner join rentals r on c.id=r.car_id) or c.id in\n" +
+			"(select distinct c.id from cars c inner join car_damage_informations cdi on c.id=cdi.car_id) or c.id in\n" +
+			"(select distinct c.id from cars c inner join car_images ci on c.id=ci.car_id)",nativeQuery = true)
+	List<Car> getCarsWhichHasRecordAnotherTable();
+
 }

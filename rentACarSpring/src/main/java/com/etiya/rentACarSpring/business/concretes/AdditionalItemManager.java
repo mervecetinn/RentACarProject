@@ -4,6 +4,7 @@ import com.etiya.rentACarSpring.business.abstracts.AdditionalItemService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.AdditionalItemSearchListDto;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateAdditionalItemRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteAdditionalItemRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateAdditionalItemRequest;
@@ -12,6 +13,7 @@ import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.dataAccess.abstracts.AdditionalItemDao;
 import com.etiya.rentACarSpring.entities.AdditionalItem;
+import com.etiya.rentACarSpring.entities.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class AdditionalItemManager implements AdditionalItemService {
 
     @Override
     public Result add(CreateAdditionalItemRequest createAdditionalItemRequest) {
-        Result result= BusinessRules.run(checkIfAdditionalItemIsAlreadyExists(createAdditionalItemRequest.getName()));
+        Result result= BusinessRules.run(checkIfAdditionalItemIsAlreadyExists(createAdditionalItemRequest.getName()),checkIfAdditionalItemHasNotAnyRentalAdditional(createAdditionalItemRequest.getId()));
 
         if(result!=null){
             return result;
@@ -57,6 +59,10 @@ public class AdditionalItemManager implements AdditionalItemService {
 
     @Override
     public Result delete(DeleteAdditionalItemRequest deleteAdditionalItemRequest) {
+        Result result = BusinessRules.run(checkIfAdditionalItemHasNotAnyRentalAdditional(deleteAdditionalItemRequest.getId()));
+        if (result != null) {
+            return result;
+        }
         this.additionalItemDao.deleteById(deleteAdditionalItemRequest.getId());
         return new SuccessResult(this.messageService.getMessage(Messages.AdditionalItemDeleted));
     }
@@ -83,4 +89,17 @@ public class AdditionalItemManager implements AdditionalItemService {
         }
         return new SuccessResult();
     }
-}
+
+    private Result checkIfAdditionalItemHasNotAnyRentalAdditional(int additionalItemId){
+       List<AdditionalItem> result=this.additionalItemDao.getByRentalAdditionalsIsNotNull();
+        for(AdditionalItem additionalItem:result){
+            if(additionalItem.getId()==additionalItemId){
+                return new ErrorResult(this.messageService.getMessage(Messages.AdditionalItemCanNotDelete));
+            }
+        }
+        return new SuccessResult();
+        }
+
+    }
+
+

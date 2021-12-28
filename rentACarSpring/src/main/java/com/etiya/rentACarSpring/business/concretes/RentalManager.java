@@ -80,7 +80,6 @@ public class RentalManager implements RentalService {
 		ApplicationUser user;
 		Car car;
 		Rental rental=this.rentalDao.getById(updateRentalRequest.getRentalId());
-		System.out.println(rental.getId());
 		user=rental.getApplicationUser();
 		car=rental.getCar();
 		//rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
@@ -99,6 +98,10 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result delete(DeleteRentalRequest deleteRentalRequest) {
+		Result result = BusinessRules.run(checkIfRentalHasNotAnyRentalAdditional(deleteRentalRequest.getId()));
+		if (result != null) {
+			return result;
+		}
 		this.rentalDao.deleteById(deleteRentalRequest.getId());
 		return new SuccessResult(this.messageService.getMessage(Messages.RentalDeleted));
 	}
@@ -212,6 +215,16 @@ public class RentalManager implements RentalService {
 		int carId=rentalDao.getById(rentalId).getCar().getId();
 		if(this.carService.getById(carId).getData().getKilometer()>returnKilometer){
 			return new ErrorResult(this.messageService.getMessage(Messages.ReturnKilometerCanNotBeLessThanInitialKilometer));
+		}
+		return new SuccessResult();
+	}
+
+	private Result checkIfRentalHasNotAnyRentalAdditional(int rentalId){
+		List<Rental> result=this.rentalDao.getByRentalAdditionalsIsNotNull();
+		for(Rental rental:result){
+			if(rental.getId()==rentalId){
+				return new ErrorResult(this.messageService.getMessage(Messages.RentalCanNotDelete));
+			}
 		}
 		return new SuccessResult();
 	}

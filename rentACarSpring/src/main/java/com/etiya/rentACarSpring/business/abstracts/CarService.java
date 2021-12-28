@@ -40,8 +40,6 @@ public interface CarService {
 
 	DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance();
 
-	Result updateCarKilometer(int carId, int kilometer);
-	
 	DataResult<Car> getById(int id);
 	
 	Result checkCarIsNotOnRent(int id);

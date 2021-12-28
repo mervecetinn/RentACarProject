@@ -6,27 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="messages")
-public class Message {
+@Table(name="languages")
+public class Language {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private int id;
+    @Column(name="language_id")
+    private int languageId;
 
-    @Column(name = "message_content")
-    private String messageContent;
+    @Column(name="name")
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "language_id")
-    private Language language;
-
-    @ManyToOne
-    @JoinColumn(name="message_key_id")
-    private MessageKey messageKey;
+    @OneToMany(mappedBy = "language")
+    List<Message> messages;
 }

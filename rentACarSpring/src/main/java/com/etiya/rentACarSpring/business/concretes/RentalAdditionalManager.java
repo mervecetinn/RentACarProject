@@ -5,16 +5,22 @@ import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.RentalAdditionalService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.business.dtos.RentalAdditionalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
+import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
+import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.RentalAdditionalDao;
 import com.etiya.rentACarSpring.entities.RentalAdditional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalAdditionalManager implements RentalAdditionalService {
@@ -58,5 +64,15 @@ public class RentalAdditionalManager implements RentalAdditionalService {
     public Result delete(DeleteRentalAdditionalRequest deleteRentalAdditionalRequest) {
         this.rentalAdditionalDao.deleteById(deleteRentalAdditionalRequest.getId());
         return new SuccessResult(this.messageService.getMessage(Messages.RentalAdditionalDeleted));
+    }
+
+    @Override
+    public DataResult<List<RentalAdditionalSearchListDto>> getAll() {
+        List<RentalAdditional> result=this.rentalAdditionalDao.findAll();
+        List<RentalAdditionalSearchListDto> response=result.stream()
+                .map(rentalAdditional -> this.modelMapperService.forDto().map(rentalAdditional,RentalAdditionalSearchListDto.class))
+                .collect(Collectors.toList());
+
+        return new SuccessDataResult<>(response);
     }
 }

@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.abstracts;
 
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
+import com.etiya.rentACarSpring.business.dtos.RentalAdditionalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateCarRequest;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCarRequest;
@@ -19,6 +20,8 @@ public interface RentalAdditionalService {
     Result update(UpdateRentalAdditionalRequest updateRentalAdditionalRequest);
 
     Result delete(DeleteRentalAdditionalRequest deleteRentalAdditionalRequest);
+
+    DataResult<List<RentalAdditionalSearchListDto>> getAll();
 
 
 

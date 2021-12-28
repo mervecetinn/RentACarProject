@@ -68,7 +68,7 @@ public class CarManager implements CarService {
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 
-		Result result = BusinessRules.run(checkCarExists(deleteCarRequest.getId()));
+		Result result = BusinessRules.run(checkCarExists(deleteCarRequest.getId()),checkIfCarCanNotDelete(deleteCarRequest.getId()));
 		if (result != null) {
 			return result;
 		}
@@ -147,16 +147,6 @@ public class CarManager implements CarService {
 		return new SuccessDataResult<List<CarSearchListDto>>(response,this.messageService.getMessage(Messages.CarsListed));
 	}
 
-	@Override
-	public Result updateCarKilometer(int carId, int kilometer) {
-
-		Car car=this.carDao.getById(carId);
-		car.setKilometer(kilometer);
-		this.carDao.save(car);
-
-		return new SuccessResult(this.messageService.getMessage(Messages.CarKilometerUpdated));
-
-	}
 
 	@Override
 	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {
@@ -221,9 +211,21 @@ public class CarManager implements CarService {
 
 	private Result checkIfCityIsNotExists(int cityId){
 		if(!this.cityService.checkCityExists(cityId).isSuccess()){
-			return new ErrorResult(this.messageService.getMessage(Messages.CityIsNotFound));
+			return new ErrorResult(this.messageService.getMessage(Messages.CityNotFound));
 		}
 		return new SuccessResult();
+	}
+
+	private Result checkIfCarCanNotDelete(int carId){
+
+		List<Car> result=this.carDao.getCarsWhichHasRecordAnotherTable();
+		for(Car car:result){
+			if(car.getId()==carId){
+				return new ErrorResult("Araba silinemez.");
+			}
+		}
+		return new SuccessResult();
+
 	}
 
 }

@@ -7,13 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CorporateCustomerSearchListDto {
-
-	private int corporateCustomerId;
-
-	private String companyName;
-
-	private String taxNumber;
-
-	private int userId;
+public class RentalAdditionalSearchListDto {
+    private int id;
+    private int additionalItemId;
+    private int rentalId;
 }

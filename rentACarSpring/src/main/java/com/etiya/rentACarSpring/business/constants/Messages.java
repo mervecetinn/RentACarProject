@@ -15,6 +15,7 @@ public class Messages {
     public static String ColorsListed="ColorsListed";
     public static String ColorAlreadyExists="ColorAlreadyExists";
     public static String ColorIsNotFound="ColorIsNotFound";
+    public static String ColorCanNotDelete="ColorCanNotDelete";
     public static String CarAdded="CarAdded";
     public static String CarUpdated="CarUpdated";
     public static String CarDeleted="CarDeleted";
@@ -29,7 +30,8 @@ public class Messages {
     public static String CityDeleted="CityDeleted";
     public static String CitiesListed="CitiesListed";
     public static String CityAlreadyExists="CityAlreadyExists";
-    public static String CityIsNotFound="CityIsNotFound";
+    public static String CityNotFound="CityNotFound";
+    public static String CityCanNotDelete="CityCanNotDelete";
     public static String ImageUploaded="ImageUploaded";
     public static String ImageUpdated="ImageUpdated";
     public static String ImageDeleted="ImageDeleted";
@@ -64,7 +66,7 @@ public class Messages {
     public static String InvoiceCreated="InvoiceIsCreated";
     public static String InvoiceUpdated="InvoiceIsUpdated";
     public static String InvoiceDeleted="InvoiceIsDeleted";
-    public static String InvoicesListed="InvoiceIsDeleted";
+    public static String InvoicesListed="InvoicesListed";
     public static String InvoiceIsAlreadyExists="InvoiceIsAlreadyExists";
     public static String ReturnDateMustBeEnteredBeforeCreatInvoice="ReturnDateMustBeEnteredBeforeCreatInvoice";
     public static String RentalIsSuccessful="RentalIsSuccessful";
@@ -80,13 +82,27 @@ public class Messages {
     public static String AdditionalItemUpdated="AdditionalItemUpdated";
     public static String AdditionalItemDeleted="AdditionalItemDeleted";
     public static String AdditionalItemsListed="AdditionalItemsListed";
-    public static String AdditionalItemAlreadyExists=" AdditionalItemAlreadyExists";
+    public static String AdditionalItemAlreadyExists="AdditionalItemAlreadyExists";
+    public static String AdditionalItemCanNotDelete="AdditionalItemCanNotDelete";
     public static String RentalAdditionalAdded="RentalAdditionalAdded";
     public static String RentalAdditionalUpdated="RentalAdditionalUpdated";
     public static String RentalAdditionalDeleted="RentalAdditionalDeleted";
+    public static String RentalCanNotDelete="RentalCanNotDelete";
     public static String FileTypeNotValid="FileTypeNotValid";
     public static String FileNotSelected="FileNotSelected";
     public static String ReturnKilometerCanNotBeLessThanInitialKilometer="ReturnKilometerCanNotBeLessThanInitialKilometer";
+    public static String MessageKeyAlreadyExists="MessageKeyAlreadyExists";
+    public static String LanguageAdded="LanguageAdded";
+    public static String LanguageUpdated="LanguageUpdated";
+    public static String LanguageDeleted="LanguageDeleted";
+    public static String LanguagesListed="LanguagesListed";
+    public static String LanguageCanNotDelete="LanguageCanNotDelete";
+    public static String MessageKeyAdded="MessageKeyAdded";
+    public static String MessageKeyUpdated="MessageKeyUpdated";
+    public static String MessageKeyDeleted="MessageKeyDeleted";
+    public static String MessageKeysListed="MessageKeysListed";
+    public static String MessageKeyCanNotDelete="MessageKeyCanNotDelete";
+
 
 
 

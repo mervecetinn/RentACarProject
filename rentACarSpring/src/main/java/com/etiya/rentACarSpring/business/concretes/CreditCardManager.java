@@ -2,6 +2,8 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.business.dtos.CreditCardSearchListDto;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CreditCardService;
@@ -11,12 +13,12 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteCreditCardRequest
 import com.etiya.rentACarSpring.business.requests.update.UpdateCreditCardRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.CreditCardDao;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
 import com.etiya.rentACarSpring.entities.CreditCard;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CreditCardManager implements CreditCardService {
@@ -68,7 +70,17 @@ public class CreditCardManager implements CreditCardService {
 		this.creditCardDao.deleteById(deleteCreditCardRequest.getId());
 		return new SuccessResult(this.messageService.getMessage(Messages.CreditCardDeleted));
 	}
-	
+
+	@Override
+	public DataResult<List<CreditCardSearchListDto>> getAll() {
+		List<CreditCard> result=this.creditCardDao.findAll();
+		List<CreditCardSearchListDto> response=result.stream()
+				.map(creditCard -> this.modelMapperService.forDto().map(creditCard,CreditCardSearchListDto.class))
+				.collect(Collectors.toList());
+
+		return new SuccessDataResult<>(response);
+	}
+
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
 			return  new ErrorResult(this.messageService.getMessage(Messages.UserIsNotFound));

@@ -1,6 +1,5 @@
-package com.etiya.rentACarSpring.business.requests.create;
+package com.etiya.rentACarSpring.business.requests.update;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateMessageRequest {
-
-    @JsonIgnore
+public class UpdateMessageRequest {
     private int id;
     private String messageContent;
     private int messageKeyId;

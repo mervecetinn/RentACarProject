@@ -66,8 +66,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
 		CorporateCustomer corporateCustomer=this.corporateCustomerDao.getById(deleteCorporateCustomerRequest.getCorporateCustomerId());
 		ApplicationUser user=corporateCustomer.getApplicationUser();
-		this.userService.delete(user);
 		this.corporateCustomerDao.deleteById(deleteCorporateCustomerRequest.getCorporateCustomerId());
+		this.userService.delete(user);
 		return new SuccessResult(this.messageService.getMessage(Messages.CorporateCustomerDeleted));
 	}
 
