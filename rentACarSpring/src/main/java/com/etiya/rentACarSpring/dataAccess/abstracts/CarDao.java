@@ -2,6 +2,8 @@ package com.etiya.rentACarSpring.dataAccess.abstracts;
 
 import java.util.List;
 
+import com.etiya.rentACarSpring.entities.complexTypes.CarDetailWithImage;
+import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,7 +22,7 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<Car> getByModelYear(int modelYear);
 
 
-	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
+	/*@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
 			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description,cImg.image) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl Left Join c.carImages cImg")
 	List<CarDetail> getCarsWithDetails();
@@ -28,12 +30,17 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
 			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description,cImg.image) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl Left Join c.carImages cImg where c.id=:carId")
-	List<CarDetail> getOneCarWithDetails(int carId);
+	List<CarDetail> getOneCarWithDetails(int carId);*/
 	
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
 			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description) "
 			+ "From Car c Inner Join c.brand b Inner Join c.color cl")
 	List<CarDetail> getCarsWithBrandAndColorDetails();
+
+	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail"
+			+ "(ci.id,ci.image) "
+			+ "From Car c Inner Join c.carImages ci where c.id=:carId")
+	List<CarImageDetail> getImagesOfRelatedCar(int carId);
 
 	
 	@Query("Select new com.etiya.rentACarSpring.business.dtos.CarSearchListDto(c.id,c.modelYear,c.kilometer,c.dailyPrice,c.description) From Car c Inner Join c.brand b  where lower(b.name) =lower(:brandName) ")
@@ -65,5 +72,7 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 			"(select distinct c.id from cars c inner join car_damage_informations cdi on c.id=cdi.car_id) or c.id in\n" +
 			"(select distinct c.id from cars c inner join car_images ci on c.id=ci.car_id)",nativeQuery = true)
 	List<Car> getCarsWhichHasRecordAnotherTable();
+
+
 
 }

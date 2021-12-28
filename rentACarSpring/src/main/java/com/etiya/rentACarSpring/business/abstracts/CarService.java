@@ -10,6 +10,7 @@ import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.entities.Car;
 import com.etiya.rentACarSpring.entities.complexTypes.CarDetail;
+import com.etiya.rentACarSpring.entities.complexTypes.CarDetailWithImage;
 import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
 
 
@@ -24,9 +25,8 @@ public interface CarService {
 	
 	DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails();
 	
-	DataResult<List<CarDetail>> getCarsWithDetails();
-	
-	DataResult<List<CarDetail>> getOneCarWithDetails(int carId);
+	DataResult<List<CarDetailWithImage>> getCarsWithDetails();
+
 	
 	DataResult<List<CarSearchListDto>> getByModelYear(int modelYear);
 	
@@ -38,7 +38,11 @@ public interface CarService {
 
 	DataResult<List<CarSearchListDto>> getByCityId(int cityId);
 
+	DataResult<List<CarImageDetail>> getImagesByCarId(int carId);
+
 	DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance();
+
+	DataResult<CarDetailWithImage> getOneCarWithDetails(int carId);
 
 	DataResult<Car> getById(int id);
 	

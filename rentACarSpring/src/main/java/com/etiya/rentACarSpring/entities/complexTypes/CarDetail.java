@@ -31,26 +31,6 @@ public class CarDetail {
 		
 	   
 		private String description;
-		
-		
-		private byte[] image;
 
-
-		public CarDetail(int id, String brandName, String colorName, int modelYear, int kilometer, double dailyPrice,
-				String description) {
-			super();
-			this.id = id;
-			this.brandName = brandName;
-			this.colorName = colorName;
-			this.modelYear = modelYear;
-			this.kilometer=kilometer;
-			this.dailyPrice = dailyPrice;
-			this.description = description;
-		}
-
-
-			
-		
-	    
 	    
 }

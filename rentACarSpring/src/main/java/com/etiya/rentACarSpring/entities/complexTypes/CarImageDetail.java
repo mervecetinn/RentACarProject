@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CarImageDetail {
-	private int id;
+	private int imageId;
 	private byte[] image;
 	
 	

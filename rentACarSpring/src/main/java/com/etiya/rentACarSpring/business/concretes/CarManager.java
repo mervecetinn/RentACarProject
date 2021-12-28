@@ -1,10 +1,13 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.CityService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.entities.complexTypes.CarDetailWithImage;
+import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -88,15 +91,27 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public DataResult<List<CarDetail>> getCarsWithDetails() {
-		List<CarDetail> result = this.carDao.getCarsWithDetails();
-		for (CarDetail carDetail : result) {
-			if (carDetail.getImage() == null) {
-				carDetail.setImage(this.environment.getProperty("defaultImagePath").getBytes());
+	public DataResult<List<CarDetailWithImage>> getCarsWithDetails() {
+		List<CarDetail> result= this.carDao.getCarsWithBrandAndColorDetails();
+		List<CarDetailWithImage> response=new ArrayList<>();
+
+		for(CarDetail carDetail:result){
+			List<CarImageDetail> imageList=this.carDao.getImagesOfRelatedCar(carDetail.getId());
+			if(imageList.size()==0){
+				CarImageDetail carImageDetail=new CarImageDetail();
+				carImageDetail.setImage(this.environment.getProperty("defaultImagePath").getBytes());
+				imageList.add(carImageDetail);
 			}
+
+				CarDetailWithImage carDetailWithImage=this.modelMapperService.forDto().map(carDetail,CarDetailWithImage.class);
+				carDetailWithImage.setImages(imageList);
+			    response.add(carDetailWithImage);
+
+
 		}
 
-		return new SuccessDataResult<List<CarDetail>>(result,this.messageService.getMessage(Messages.CarsListed));
+		return new SuccessDataResult<>(response);
+
 
 	}
 
@@ -139,6 +154,20 @@ public class CarManager implements CarService {
 	}
 
 	@Override
+	public DataResult<List<CarImageDetail>> getImagesByCarId(int carId) {
+		List<CarImageDetail> result=this.carDao.getImagesOfRelatedCar(carId);
+
+		if(result.size()==0){
+			CarImageDetail carImageDetail=new CarImageDetail();
+			carImageDetail.setImage(this.environment.getProperty("defaultImagePath").getBytes());
+			result.add(carImageDetail);
+		}
+
+
+		return new SuccessDataResult<>(result);
+	}
+
+	@Override
 	public DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance() {
 		List<Car> result = this.carDao.findAllCarsWhichIsNotOnMaintenance();
 		List<CarSearchListDto> response = result.stream()
@@ -147,12 +176,14 @@ public class CarManager implements CarService {
 		return new SuccessDataResult<List<CarSearchListDto>>(response,this.messageService.getMessage(Messages.CarsListed));
 	}
 
-
 	@Override
-	public DataResult<List<CarDetail>> getOneCarWithDetails(int carId) {
-		List<CarDetail> result = this.carDao.getOneCarWithDetails(carId);
-		return new SuccessDataResult<List<CarDetail>>(result);
+	public DataResult<CarDetailWithImage> getOneCarWithDetails(int carId) {
+	List<CarDetailWithImage> result=this.getCarsWithDetails().getData();
+	CarDetailWithImage response=result.stream().filter(c->c.getId()==carId).findAny().get();
+	return new SuccessDataResult<>(response);
+
 	}
+
 
 	@Override
 	public DataResult<Car> getById(int id) {

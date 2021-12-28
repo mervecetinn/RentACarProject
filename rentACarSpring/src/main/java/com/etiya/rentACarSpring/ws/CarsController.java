@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
+import com.etiya.rentACarSpring.entities.complexTypes.CarDetailWithImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,25 +88,34 @@ public class CarsController {
 		return this.carService.getByCityId(cityId);
 	}
 	
+
+
+	@GetMapping("getCarsWithBrandAndColorDetails")
+	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails(){
+		return this.carService.getCarsWithBrandAndColorDetails();
+	}
+
+	@GetMapping("getCarsWithDetails")
+	public DataResult<List<CarDetailWithImage>> getCarsWithDetails(){
+		return this.carService.getCarsWithDetails();
+	}
+
 	@GetMapping("getOneCarWithDetails")
-	public DataResult<List<CarDetail>> getOneCarWithDetails(@RequestParam(required = true) int carId) {
+	public DataResult<CarDetailWithImage> getOneCarWithDetails(int carId){
 		return this.carService.getOneCarWithDetails(carId);
 	}
 
-	/*@GetMapping("getCarsWithBrandAndColorDetails")
-	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails(){
-		return this.carService.getCarsWithBrandAndColorDetails();
-	}*/
-
-	@GetMapping("getCarsWithDetails")
-	public DataResult<List<CarDetail>> getCarsWithDetails(){
-		return this.carService.getCarsWithDetails();
+	@GetMapping("getImagesByCarId")
+	public DataResult<List<CarImageDetail>> getImagesByCarId(int carId){
+		return this.carService.getImagesByCarId(carId);
 	}
 
 	@GetMapping("getCarsNotOnMaintenance")
 	public DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance(){
 		return this.carService.getCarsNotOnMaintenance();
 	}
+
+
 
 
 }
