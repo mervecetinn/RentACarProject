@@ -119,12 +119,12 @@ public class InvoiceManager implements InvoiceService {
 		if(!this.invoiceDao.existsInvoiceByRental_Id(rentalId)){
 			return new SuccessResult();
 		}
-		return new ErrorResult(this.messageService.getMessage(Messages.InvoiceIsAlreadyExists));
+		return new ErrorResult(this.messageService.getMessage(Messages.InvoiceAlreadyExists));
 	}
 
 	private Result checkIfReturnDateIsNull(int rentalId){
 		if(this.rentalService.getById(rentalId).getData().getReturnDate()==null){
-			return new ErrorResult(this.messageService.getMessage(Messages.ReturnDateMustBeEnteredBeforeCreatInvoice));
+			return new ErrorResult(this.messageService.getMessage(Messages.ReturnDateMustBeEnteredBeforeCreateInvoice));
 		}
 		return new SuccessResult();
 	}

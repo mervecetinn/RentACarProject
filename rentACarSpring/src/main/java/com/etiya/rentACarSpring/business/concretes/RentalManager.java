@@ -69,7 +69,7 @@ public class RentalManager implements RentalService {
 		rental.setInitialKilometer(carService.getById(createRentalRequest.getCarId()).getData().getKilometer());
 		this.rentalDao.save(rental);
 
-		return new SuccessResult(this.messageService.getMessage(Messages.RentalIsSuccessful));
+		return new SuccessResult(this.messageService.getMessage(Messages.RentalSuccessful));
 	}
 
 	@Override

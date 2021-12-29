@@ -120,7 +120,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	private Result checkIfIndivudualCustomerIsNotExists(int id){
 		if(!this.individualCustomerDao.existsByIndividualCustomerId(id)){
-			return new ErrorResult(this.messageService.getMessage(Messages.IndividualCustomerIsNotFound));
+			return new ErrorResult(this.messageService.getMessage(Messages.IndividualCustomerNotFound));
 		}
 		return new SuccessResult();
 	}
