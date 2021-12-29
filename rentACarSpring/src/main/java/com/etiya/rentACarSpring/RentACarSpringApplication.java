@@ -49,21 +49,7 @@ public class RentACarSpringApplication {
 		return modelMapper;
 	}
 
-	@Bean("localeResolver")
-	public LocaleResolver acceptHeaderLocaleResolver() {
-		AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
 
-		resolver.setDefaultLocale(Locale.ENGLISH);
-		resolver.setSupportedLocales(Arrays.asList(
-				Locale.GERMAN,
-				Locale.US,
-				Locale.FRENCH
-
-		));
-
-		return resolver;
-	}
-	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorDataResult<Object> handleValidationException(MethodArgumentNotValidException exception){

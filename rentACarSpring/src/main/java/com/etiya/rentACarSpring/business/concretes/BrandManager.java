@@ -64,7 +64,7 @@ public class BrandManager implements BrandService {
 
 		Brand brand = modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 		this.brandDao.save(brand);
-		return new SuccessResult(this.messageService.getMessage(Messages.BrandAdded));
+		return new SuccessResult(this.messageService.getMessage(Messages.BrandUpdated));
 
 	}
 
@@ -122,7 +122,7 @@ public class BrandManager implements BrandService {
 	private Result checkIfBrandHasNotAnyCar(int brandId) {
 		List<CarSearchListDto> result = this.carService.getByBrandId(brandId).getData();
 		if (result.size() > 0) {
-			return new ErrorResult(this.messageService.getMessage(Messages.BrandCanNotBeDeletedBeforeItsCars));
+			return new ErrorResult(this.messageService.getMessage(Messages.BrandCanNotDelete));
 		}
 		return new SuccessResult();
 	}

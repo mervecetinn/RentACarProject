@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.*;
 import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
+import com.etiya.rentACarSpring.business.dtos.UserSearchListDto;
 import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
+import com.etiya.rentACarSpring.core.entities.concretes.User;
 import com.etiya.rentACarSpring.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -179,7 +182,7 @@ public class RentalManager implements RentalService {
 		if (customerFindexScore >= carFindexScore) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(this.messageService.getMessage(Messages.FindexScoreIsNotEnough));
+		return new ErrorResult(this.messageService.getMessage(Messages.FindexScoreNotEnough));
 	}
 
 
@@ -189,25 +192,25 @@ public class RentalManager implements RentalService {
 		}
 		return new SuccessResult();
 	}
-	
+
 	private Result checkIfCarIsNotExists(int carId) {
 		if(!this.carService.checkCarExists(carId).isSuccess()) {
 			return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
 		}
-		
+
 		return new SuccessResult();
 	}
 
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
-			return new  ErrorResult(this.messageService.getMessage(Messages.UserIsNotFound));
+			return new  ErrorResult(this.messageService.getMessage(Messages.UserNotFound));
 		}
 		return  new SuccessResult();
 	}
 
 	private Result checkIfLimitIsInsufficient(PayCreditCardRequest payCreditCardRequest){
 		if(!this.paymentService.payByCreditCard(payCreditCardRequest).isSuccess()){
-			return new ErrorResult(this.messageService.getMessage(Messages.LimitIsInsufficient));
+			return new ErrorResult(this.messageService.getMessage(Messages.LimitInsufficient));
 		}
 		return new SuccessResult();
 	}

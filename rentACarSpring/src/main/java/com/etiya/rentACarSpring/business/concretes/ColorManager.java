@@ -85,7 +85,7 @@ public class ColorManager implements ColorService {
 
 	private Result checkIfColorIsNotExists(int colorId){
 		if(!this.colorDao.existsById(colorId)){
-			return new ErrorResult(this.messageService.getMessage(Messages.ColorIsNotFound));
+			return new ErrorResult(this.messageService.getMessage(Messages.ColorNotFound));
 		}
 		return new SuccessResult();
 	}

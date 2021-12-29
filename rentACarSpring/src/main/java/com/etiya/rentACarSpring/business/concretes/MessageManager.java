@@ -2,10 +2,12 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import com.etiya.rentACarSpring.business.abstracts.LanguageService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.MessageSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateMessageRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteMessageRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateMessageRequest;
+import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.dataAccess.abstracts.MessageDao;
@@ -26,6 +28,7 @@ public class MessageManager implements MessageService {
     private ModelMapperService modelMapperService;
 
 
+
     @Autowired
     public MessageManager(MessageDao messageDao,ModelMapperService modelMapperService) {
 
@@ -33,26 +36,33 @@ public class MessageManager implements MessageService {
         this.modelMapperService=modelMapperService;
 
 
+
+
     }
 
     @Override
     public Result add(CreateMessageRequest createMessageRequest) {
+        Result result = BusinessRules.run(checkIfSameMessageKeyIdAndLanguageIdExistsTogether(createMessageRequest.getLanguageId(),createMessageRequest.getMessageKeyId()));
+
+        if (result != null) {
+            return result;
+        }
         Message message=this.modelMapperService.forRequest().map(createMessageRequest,Message.class);
         this.messageDao.save(message);
-        return new SuccessResult();
+        return new SuccessResult(this.getMessage(Messages.MessageAdded));
     }
 
     @Override
     public Result update(UpdateMessageRequest updateMessageRequest) {
         Message message=this.modelMapperService.forRequest().map(updateMessageRequest,Message.class);
         this.messageDao.save(message);
-        return new  SuccessResult();
+        return new  SuccessResult(this.getMessage(Messages.MessageUpdated));
     }
 
     @Override
     public Result delete(DeleteMessageRequest deleteMessageRequest) {
         this.messageDao.deleteById(deleteMessageRequest.getId());
-        return new SuccessResult();
+        return new SuccessResult(this.getMessage(Messages.MessageDeleted));
     }
 
     @Override
@@ -61,7 +71,7 @@ public class MessageManager implements MessageService {
         List<MessageSearchListDto> messages = result.stream()
                 .map(message -> this.modelMapperService.forDto().map(message,MessageSearchListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<>(messages,"");
+        return new SuccessDataResult<>(messages,this.getMessage(Messages.MessagesListed));
     }
 
     @Override
@@ -79,6 +89,14 @@ public class MessageManager implements MessageService {
         if(!this.messageDao.existsByLanguage_LanguageId(this.languageId)){
             this.languageId=this.defaultLanguageId;
         }
+    }
+
+    private Result checkIfSameMessageKeyIdAndLanguageIdExistsTogether(int languageId,int messageKeyId){
+        List<Message> result= this.messageDao.findAll();
+        if(!result.stream().anyMatch(m->m.getLanguage().getLanguageId()==languageId &&m.getMessageKey().getMessageKeyId()==messageKeyId)){
+            return new SuccessResult();
+        }
+        return new ErrorResult(this.getMessage(Messages.MessageKeyIdAndLanguageIdCanNotRepeatTogether));
     }
 
 

@@ -8,23 +8,22 @@ public class Messages {
     public static String BrandsListed="BrandsListed";
     public static String BrandNotFound="BrandNotFound";
     public static String BrandAlreadyExists="BrandAlreadyExists";
-    public static String BrandCanNotBeDeletedBeforeItsCars="BrandCanNotBeDeletedBeforeItsCars";
+    public static String BrandCanNotDelete="BrandCanNotDelete";
     public static String ColorAdded="ColorAdded";
     public static String ColorUpdated="ColorUpdated";
     public static String ColorDeleted="ColorDeleted";
     public static String ColorsListed="ColorsListed";
     public static String ColorAlreadyExists="ColorAlreadyExists";
-    public static String ColorIsNotFound="ColorIsNotFound";
+    public static String ColorNotFound="ColorNotFound";
     public static String ColorCanNotDelete="ColorCanNotDelete";
     public static String CarAdded="CarAdded";
     public static String CarUpdated="CarUpdated";
     public static String CarDeleted="CarDeleted";
     public static String CarsListed="CarsListed";
     public static String CarNotFound="CarNotFound";
-    public static String CarAlreadyExists="CarAlreadyExists";
     public static String CarIsOnRent="CarIsOnRent";
     public static String CarIsOnMaintenance="CarIsOnMaintenance";
-    public static String CarKilometerUpdated=" CarKilometerUpdated";
+    public static String CarCanNotDelete="CarCanNotDelete";
     public static String CityAdded="CityAdded";
     public static String CityUpdated="CityUpdated";
     public static String CityDeleted="CityDeleted";
@@ -37,7 +36,7 @@ public class Messages {
     public static String ImageDeleted="ImageDeleted";
     public static String ImagesListed="ImagesListed";
     public static String ImageLimitOfCarCanNotBeExceeded="ImageLimitOfCarCanNotBeExceeded";
-    public static String ImageIsNotFound="ImageIsNotFound";
+    public static String ImageNotFound="ImageNotFound";
     public static String CarDamageAdded="CarDamageAdded";
     public static String CarDamageUpdated="CarDamageUpdated";
     public static String CarDamageDeleted="CarDamageDeleted";
@@ -51,7 +50,7 @@ public class Messages {
     public static String LoginSuccessful="LoginSuccessful";
     public static String UserNameOrPasswordWrong="UserNameOrPasswordWrong";
     public static String UserAlreadyExists="UserAlreadyExists";
-    public static String UserIsNotFound="UserIsNotFound";
+    public static String UserNotFound="UserNotFound";
     public static String EmailNotValid="EmailNotValid";
     public static String IndividualCustomerAdded="IndividualCustomerAdded";
     public static String IndividualCustomerUpdated="IndividualCustomerUpdated";
@@ -73,8 +72,8 @@ public class Messages {
     public static String RentalUpdated="RentalUpdated";
     public static String RentalDeleted="RentalDeleted";
     public static String RentalsListed="RentalsListed";
-    public static String LimitIsInsufficient="LimitIsInsufficient";
-    public static String FindexScoreIsNotEnough="FindexScoreIsNotEnough";
+    public static String LimitInsufficient="LimitInsufficient";
+    public static String FindexScoreNotEnough="FindexScoreNotEnough";
     public static String CreditCardAdded="CreditCardAdded";
     public static String CreditCardUpdated="CreditCardUpdated";
     public static String CreditCardDeleted="CreditCardDeleted";
@@ -102,6 +101,11 @@ public class Messages {
     public static String MessageKeyDeleted="MessageKeyDeleted";
     public static String MessageKeysListed="MessageKeysListed";
     public static String MessageKeyCanNotDelete="MessageKeyCanNotDelete";
+    public static String MessageAdded="MessageAdded";
+    public static String MessageUpdated="MessageUpdated";
+    public static String MessageDeleted="MessageDeleted";
+    public static String MessagesListed="MessagesListed";
+    public static String MessageKeyIdAndLanguageIdCanNotRepeatTogether="MessageKeyIdAndLanguageIdCanNotRepeatTogether";
 
 
 

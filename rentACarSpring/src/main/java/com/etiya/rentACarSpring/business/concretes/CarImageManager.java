@@ -118,7 +118,7 @@ public class CarImageManager implements CarImageService {
 
 	private Result checkImageIsNotExists(int imageId) {
 		if (!this.carImageDao.existsById(imageId)) {
-			return new ErrorResult(this.messageService.getMessage(Messages.ImageIsNotFound));
+			return new ErrorResult(this.messageService.getMessage(Messages.ImageNotFound));
 
 		}
 		return new SuccessResult();

@@ -83,7 +83,7 @@ public class CreditCardManager implements CreditCardService {
 
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
-			return  new ErrorResult(this.messageService.getMessage(Messages.UserIsNotFound));
+			return  new ErrorResult(this.messageService.getMessage(Messages.UserNotFound));
 		}
 		return new SuccessResult();
 	}

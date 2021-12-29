@@ -24,6 +24,9 @@ public interface RentalDao extends JpaRepository<Rental, Integer> {
 	List<Rental> getRentalsInRentalAdditional();*/
 
 	List<Rental> getByRentalAdditionalsIsNotNull();
+
+	@Query(value = "select u.user_id from users u where u.user_id=?1",nativeQuery = true)
+	Integer getUserId(int userId);
 	
 
 }

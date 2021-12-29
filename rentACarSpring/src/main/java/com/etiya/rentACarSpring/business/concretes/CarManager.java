@@ -237,7 +237,7 @@ public class CarManager implements CarService {
 		if (id != null) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(this.messageService.getMessage(Messages.ColorIsNotFound));
+		return new ErrorResult(this.messageService.getMessage(Messages.ColorNotFound));
 	}
 
 	private Result checkIfCityIsNotExists(int cityId){
@@ -252,7 +252,7 @@ public class CarManager implements CarService {
 		List<Car> result=this.carDao.getCarsWhichHasRecordAnotherTable();
 		for(Car car:result){
 			if(car.getId()==carId){
-				return new ErrorResult("Araba silinemez.");
+				return new ErrorResult(this.messageService.getMessage(Messages.CarCanNotDelete));
 			}
 		}
 		return new SuccessResult();
