@@ -16,7 +16,6 @@ import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.dataAccess.abstracts.CreditCardDao;
 import com.etiya.rentACarSpring.entities.ApplicationUser;
 import com.etiya.rentACarSpring.entities.CreditCard;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result add(CreateCreditCardRequest createCreditCardRequest) {
-		Result result=BusinessRules.run(checkIfUserNotExists(createCreditCardRequest.getUserId()));
+		Result result=BusinessRules.run(checkIfUserNotExists(createCreditCardRequest.getUserId()),checkIfCreditCartNumberNotExists(createCreditCardRequest.getCardNumber(),createCreditCardRequest.getUserId()));
 		
 		if(result!=null) {
 			return result;
@@ -56,6 +55,11 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result update(UpdateCreditCardRequest updateCreditCardRequest) {
+		Result result=BusinessRules.run(checkIfCreditCartNumberNotExists(updateCreditCardRequest.getCardNumber(),updateCreditCardRequest.getUserId()));
+
+		if(result!=null) {
+			return result;
+		}
 		CreditCard creditCard=this.creditCardDao.getById(updateCreditCardRequest.getId());
 		ApplicationUser user=creditCard.getApplicationUser();
 		CreditCard updatedCreditCard=this.modelMapperService.forRequest().map(updateCreditCardRequest,CreditCard.class);
@@ -84,6 +88,13 @@ public class CreditCardManager implements CreditCardService {
 	private Result checkIfUserNotExists(int userId){
 		if(!this.userService.checkUserExists(userId).isSuccess()){
 			return  new ErrorResult(this.messageService.getMessage(Messages.UserNotFound));
+		}
+		return new SuccessResult();
+	}
+
+	private Result checkIfCreditCartNumberNotExists(String creditCartNumber, int userId){
+		if (this.creditCardDao.existsCreditCardByCardNumberAndAndApplicationUserUserId(creditCartNumber, userId)){
+			return new ErrorResult(this.messageService.getMessage(Messages.CreditCardNumberAlreadyExists));
 		}
 		return new SuccessResult();
 	}

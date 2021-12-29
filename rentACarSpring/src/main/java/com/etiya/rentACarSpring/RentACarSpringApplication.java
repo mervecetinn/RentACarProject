@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -102,6 +103,12 @@ public class RentACarSpringApplication {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException exception){
 		return new ErrorResult("Invalid Data Access Api Usage Exception Error");
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
+		return new  ErrorResult ("tarih formatınız yıl/gün/ay şeklinde olmalıdır ");
 	}
 
 

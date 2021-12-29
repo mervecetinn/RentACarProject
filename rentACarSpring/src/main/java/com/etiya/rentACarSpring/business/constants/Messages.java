@@ -77,6 +77,7 @@ public class Messages {
     public static String CreditCardAdded="credit_card_added";
     public static String CreditCardUpdated="credit_card_updated";
     public static String CreditCardDeleted="credit_card_deleted";
+    public static String CreditCardNumberAlreadyExists="credit_card_number_already_exists";
     public static String AdditionalItemAdded="additional_item_added";
     public static String AdditionalItemUpdated="additional_item_updated";
     public static String AdditionalItemDeleted="additional_item_deleted";

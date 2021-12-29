@@ -6,4 +6,6 @@ import com.etiya.rentACarSpring.entities.CreditCard;
 
 public interface CreditCardDao extends JpaRepository<CreditCard, Integer>  {
 
+    boolean existsCreditCardByCardNumberAndAndApplicationUserUserId (String cardNumber,int userId);
+
 }

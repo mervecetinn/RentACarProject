@@ -65,7 +65,7 @@ public class ImageFileHelper implements FileHelper {
 
 	@Override
 	public Result deleteFile(String imagePath) {
-		if (!imagePath.isEmpty() && !imagePath.isBlank()) {
+		if (!imagePath.isEmpty()) {
 			File deletedImage = new File(imagePath);
 			deletedImage.delete();
 		}
