@@ -2,7 +2,10 @@ package com.etiya.rentACarSpring;
 
 import java.util.*;
 
+import com.etiya.rentACarSpring.business.abstracts.MessageService;
+import com.etiya.rentACarSpring.business.constants.Messages;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +34,9 @@ import javax.persistence.EntityNotFoundException;
 @EnableSwagger2
 @RestControllerAdvice
 public class RentACarSpringApplication {
+	@Autowired
+	private MessageService messageService;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(RentACarSpringApplication.class, args);
@@ -60,7 +66,7 @@ public class RentACarSpringApplication {
 			validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
 		}
 		
-		ErrorDataResult<Object> error=new ErrorDataResult<Object>(validationErrors,"Validation Errors");
+		ErrorDataResult<Object> error=new ErrorDataResult<Object>(validationErrors,this.messageService.getMessage(Messages.ValidationErrors));
 		return error;
 
 	}
@@ -68,21 +74,21 @@ public class RentACarSpringApplication {
 	@ExceptionHandler(NoSuchElementException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleNoSuchElementException(NoSuchElementException exception) {
-		ErrorResult error=new ErrorResult("Kayıt bulunamadı.");
+		ErrorResult error=new ErrorResult(this.messageService.getMessage(Messages.NoSuchElementException));
 		return error;
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public  ErrorResult handleEntityNotFoundException(EntityNotFoundException exception){
-		ErrorResult error=new ErrorResult("Böyle bir kayıt bulunmamaktadır.");
+		ErrorResult error=new ErrorResult(this.messageService.getMessage(Messages.EntityNotFoundException));
 		return  error;
 	}
 
 	@ExceptionHandler(EmptyResultDataAccessException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public  ErrorResult handleEmptyResultDataAccessException(EmptyResultDataAccessException exception){
-		ErrorResult error=new ErrorResult("Böyle bir kayıt zaten yok!");
+		ErrorResult error=new ErrorResult(this.messageService.getMessage(Messages.EmptyResultDataAccessException));
 		return error;
 	}
 
@@ -90,26 +96,34 @@ public class RentACarSpringApplication {
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
-		return new ErrorResult("yanlış veri tipi girdiniz.");
+		return new ErrorResult(this.messageService.getMessage(Messages.HttpMessageNotReadableException));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleDataIntegrityViolationException(DataIntegrityViolationException exception){
-		return new ErrorResult("Başka tablolarla bağlantısı olan öğeleri silemezsiniz.");
+		return new ErrorResult(this.messageService.getMessage(Messages.DataIntegrityViolationException));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException exception){
-		return new ErrorResult("Invalid Data Access Api Usage Exception Error");
+		return new ErrorResult(this.messageService.getMessage(Messages.InvalidDataAccessApiUsageException));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
-		return new  ErrorResult ("tarih formatınız yıl/gün/ay şeklinde olmalıdır ");
+		return new  ErrorResult (this.messageService.getMessage(Messages.MethodArgumentTypeMismatchException));
 	}
+
+	@ExceptionHandler(NullPointerException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public  ErrorResult handleNullPointerException(NullPointerException exception){
+		ErrorResult error=new ErrorResult(this.messageService.getMessage(Messages.NullPointerException));
+		return  error;
+	}
+
 
 
 

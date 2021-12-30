@@ -3,7 +3,6 @@ package com.etiya.rentACarSpring.business.concretes;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.RentalService;
 import com.etiya.rentACarSpring.business.constants.Messages;
@@ -31,7 +30,6 @@ public class InvoiceManager implements InvoiceService {
 
 	@Autowired
 	public InvoiceManager(InvoiceDao invoiceDao,ModelMapperService modelMapperService,RentalService rentalService,MessageService messageService) {
-		super();
 		this.invoiceDao = invoiceDao;
 		this.modelMapperService=modelMapperService;
 		this.rentalService=rentalService;
@@ -40,7 +38,7 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result add(CreateInvoiceRequest createInvoiceRequest) {
-		Result result= BusinessRules.run(checkIfInvoiceNotExists(createInvoiceRequest.getRentalId()),checkIfReturnDateIsNull(createInvoiceRequest.getRentalId()));
+		Result result= BusinessRules.run(checkIfInvoiceAlreadyExists(createInvoiceRequest.getRentalId()),checkIfReturnDateIsNull(createInvoiceRequest.getRentalId()));
 
 		if(result!=null){
 			return result;
@@ -57,6 +55,11 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result update(UpdateInvoiceRequest updateInvoiceRequest) {
+		Result result= BusinessRules.run(checkIfInvoiceIsNotExists(updateInvoiceRequest.getId()));
+
+		if(result!=null){
+			return result;
+		}
 		Invoice invoice=this.invoiceDao.getById(updateInvoiceRequest.getId());
 		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
 		this.invoiceDao.save(invoice);
@@ -65,6 +68,11 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
+		Result result= BusinessRules.run(checkIfInvoiceIsNotExists(deleteInvoiceRequest.getId()));
+
+		if(result!=null){
+			return result;
+		}
 		this.invoiceDao.deleteById(deleteInvoiceRequest.getId());
 		return new SuccessResult(this.messageService.getMessage(Messages.InvoiceDeleted));
 	}
@@ -115,7 +123,7 @@ public class InvoiceManager implements InvoiceService {
 
 	}
 
-	private Result checkIfInvoiceNotExists(int rentalId){
+	private Result checkIfInvoiceAlreadyExists(int rentalId){
 		if(!this.invoiceDao.existsInvoiceByRental_Id(rentalId)){
 			return new SuccessResult();
 		}
@@ -127,6 +135,15 @@ public class InvoiceManager implements InvoiceService {
 			return new ErrorResult(this.messageService.getMessage(Messages.ReturnDateMustBeEnteredBeforeCreateInvoice));
 		}
 		return new SuccessResult();
+	}
+
+	private Result checkIfInvoiceIsNotExists(int id) {
+		if (!this.invoiceDao.existsById(id)) {
+			return new ErrorResult(this.messageService.getMessage(Messages.InvoiceNotFound));
+
+		}
+		return new SuccessResult();
+
 	}
 
 

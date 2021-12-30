@@ -1,6 +1,5 @@
 package com.etiya.rentACarSpring.business.concretes;
 
-import com.etiya.rentACarSpring.business.abstracts.LanguageService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.MessageSearchListDto;
@@ -54,6 +53,12 @@ public class MessageManager implements MessageService {
 
     @Override
     public Result update(UpdateMessageRequest updateMessageRequest) {
+        Result result = BusinessRules.run(checkIfSameMessageKeyIdAndLanguageIdExistsTogether(updateMessageRequest.getLanguageId(),updateMessageRequest.getMessageKeyId()),
+                checkIfMessageIsNotExists(updateMessageRequest.getId()));
+
+        if (result != null) {
+            return result;
+        }
         Message message=this.modelMapperService.forRequest().map(updateMessageRequest,Message.class);
         this.messageDao.save(message);
         return new  SuccessResult(this.getMessage(Messages.MessageUpdated));
@@ -61,6 +66,11 @@ public class MessageManager implements MessageService {
 
     @Override
     public Result delete(DeleteMessageRequest deleteMessageRequest) {
+        Result result = BusinessRules.run(checkIfMessageIsNotExists(deleteMessageRequest.getId()));
+
+        if (result != null) {
+            return result;
+        }
         this.messageDao.deleteById(deleteMessageRequest.getId());
         return new SuccessResult(this.getMessage(Messages.MessageDeleted));
     }
@@ -97,6 +107,15 @@ public class MessageManager implements MessageService {
             return new SuccessResult();
         }
         return new ErrorResult(this.getMessage(Messages.MessageKeyIdAndLanguageIdCanNotRepeatTogether));
+    }
+
+    private Result checkIfMessageIsNotExists(int id) {
+        if (!this.messageDao.existsById(id)) {
+            return new ErrorResult(this.getMessage(Messages.MessageNotFound));
+
+        }
+        return new SuccessResult();
+
     }
 
 

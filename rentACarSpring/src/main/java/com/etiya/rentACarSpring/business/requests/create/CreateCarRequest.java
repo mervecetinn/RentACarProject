@@ -36,14 +36,15 @@ public class CreateCarRequest {
 	private int modelYear;
 
 	@NotNull
+	@Min(value = 0,message = "Kilometre negatif sayı olamaz.")
 	private int kilometer;
 	
 	@NotNull
-	@Min(100)
+	@Range(min = 0,max = 1000000)
 	private double dailyPrice;
 	
 	@NotNull
-	@Size(min = 2, max=100)
+	@Size(min = 2, max=1000)
 	private String description;
 
 	@NotNull
@@ -51,6 +52,6 @@ public class CreateCarRequest {
 	private int cityId;
 
 	@NotNull
-	@Range(min=1,max=1900)
+	@Range(min=0,max=1900)
 	private int minFindexScore;
 }

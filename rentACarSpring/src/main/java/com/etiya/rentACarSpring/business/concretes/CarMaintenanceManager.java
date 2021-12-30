@@ -57,7 +57,10 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 	@Override
 	public Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest) {
-
+		Result result = BusinessRules.run(checkIfCarMaintenanceIsNotExists(updateCarMaintenanceRequest.getId()));
+		if (result != null) {
+			return result;
+		}
 		CarMaintenance carMaintenance=this.carMaintenanceDao.getById(updateCarMaintenanceRequest.getId());
 		CarMaintenance updatedCarMaintenance=this.modelMapperService.forRequest().map(updateCarMaintenanceRequest,CarMaintenance.class);
 		updatedCarMaintenance.setCar(carMaintenance.getCar());
@@ -66,8 +69,12 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	}
 
 	@Override
-	public Result delete(DeleteCarMaintenanceRequest deleteMaintenanceCarRequest) {
-		this.carMaintenanceDao.deleteById(deleteMaintenanceCarRequest.getId());
+	public Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
+		Result result = BusinessRules.run(checkIfCarMaintenanceIsNotExists(deleteCarMaintenanceRequest.getId()));
+		if (result != null) {
+			return result;
+		}
+		this.carMaintenanceDao.deleteById(deleteCarMaintenanceRequest.getId());
 		return new SuccessResult(this.messageService.getMessage(Messages.CarMaintenanceDeleted));
 	}
 
@@ -101,6 +108,15 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 			return new ErrorResult(this.messageService.getMessage(Messages.CarIsAlreadyOnMaintenance));
 		}
 		return new SuccessResult();
+	}
+
+	private Result checkIfCarMaintenanceIsNotExists(int id) {
+		if (!this.carMaintenanceDao.existsById(id)) {
+			return new ErrorResult(this.messageService.getMessage(Messages.CarMaintenanceNotFound));
+
+		}
+		return new SuccessResult();
+
 	}
 
 

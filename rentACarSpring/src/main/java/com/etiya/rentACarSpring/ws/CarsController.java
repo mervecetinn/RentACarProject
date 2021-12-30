@@ -68,23 +68,23 @@ public class CarsController {
 	}
 	
 	@GetMapping("getByBrandName")
-	public DataResult<List<CarSearchListDto>> getByBrandName(@RequestParam String brandName) {
+	public DataResult<List<CarSearchListDto>> getByBrandName(@RequestParam @Valid String brandName) {
 		return this.carService.getByBrandName(brandName);
 	}
 
 	@GetMapping("getByBrandId")
-	public DataResult<List<CarSearchListDto>> getByBrandId(int brandId) {
+	public DataResult<List<CarSearchListDto>> getByBrandId(@RequestParam @Valid int brandId) {
 
 		return this.carService.getByBrandId(brandId);
 	}
 
 	@GetMapping("getByColorId")
-	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(int colorId){
+	public DataResult<List<CarSearchListDto>> getCarsOfRelatedColor(@RequestParam @Valid int colorId){
 		return this.carService.getByColorId(colorId);
 	}
 
 	@GetMapping("getByCityId")
-	public DataResult<List<CarSearchListDto>> getByCityId(@RequestParam(required = true) int cityId){
+	public DataResult<List<CarSearchListDto>> getByCityId(@RequestParam @Valid int cityId){
 		return this.carService.getByCityId(cityId);
 	}
 	
@@ -101,12 +101,12 @@ public class CarsController {
 	}
 
 	@GetMapping("getOneCarWithDetails")
-	public DataResult<CarDetailWithImage> getOneCarWithDetails(int carId){
+	public DataResult<CarDetailWithImage> getOneCarWithDetails(@RequestParam @Valid int carId){
 		return this.carService.getOneCarWithDetails(carId);
 	}
 
 	@GetMapping("getImagesByCarId")
-	public DataResult<List<CarImageDetail>> getImagesByCarId(int carId){
+	public DataResult<List<CarImageDetail>> getImagesByCarId(@RequestParam @Valid int carId){
 		return this.carService.getImagesByCarId(carId);
 	}
 

@@ -4,10 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateMessageKeyRequest {
+
+    @NotNull
+    @Min(value = 1,message ="Lütfen bir message key id girin.")
     private int messageKeyId;
+
+    @NotNull
+    @Size(min = 2,max=100)
     private String messageKey;
 }

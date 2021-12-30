@@ -28,6 +28,7 @@ public class UpdateRentalRequest {
 	@JsonIgnore
 	private int initialKilometer;
 
+	@NotNull
 	private int returnKilometer;
 
 	@NotNull

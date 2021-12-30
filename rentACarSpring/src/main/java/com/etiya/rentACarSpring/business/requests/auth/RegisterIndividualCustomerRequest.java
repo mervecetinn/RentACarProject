@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class RegisterIndividualCustomerRequest {
 
 	@NotNull
+	@Email
 	private String email;
 	
 	@NotNull
@@ -33,6 +35,7 @@ public class RegisterIndividualCustomerRequest {
 	private String lastName;
 	
 	@NotNull
+	@Past(message = "Date input is invalid for a birth date.")
 	private LocalDate birthday;
 
 }

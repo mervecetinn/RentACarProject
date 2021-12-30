@@ -2,7 +2,6 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.abstracts.UserService;
 import com.etiya.rentACarSpring.business.constants.Messages;
@@ -46,10 +45,6 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 	@Override
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
 
-		Result result= BusinessRules.run(checkEmailFormat(createIndividualCustomerRequest.getEmail()));
-		if(result!=null) {
-			return result;
-		}
 		ApplicationUser user = new ApplicationUser();
 		user.setEmail(createIndividualCustomerRequest.getEmail());
 		user.setPassword(createIndividualCustomerRequest.getPassword());

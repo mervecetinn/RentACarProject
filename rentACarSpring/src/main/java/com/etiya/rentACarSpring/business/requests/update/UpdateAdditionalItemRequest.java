@@ -3,6 +3,7 @@ package com.etiya.rentACarSpring.business.requests.update;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,6 @@ public class UpdateAdditionalItemRequest {
     private String name;
 
     @NotNull
-    @Min(1)
+    @Range(min = 1,max = 1000000)
     private double dailyPrice;
 }

@@ -39,7 +39,7 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result add(CreateCreditCardRequest createCreditCardRequest) {
-		Result result=BusinessRules.run(checkIfUserNotExists(createCreditCardRequest.getUserId()),checkIfCreditCartNumberNotExists(createCreditCardRequest.getCardNumber(),createCreditCardRequest.getUserId()));
+		Result result=BusinessRules.run(checkIfUserNotExists(createCreditCardRequest.getUserId()),checkIfUserAlreadyHasThatCreditCard(createCreditCardRequest.getCardNumber(),createCreditCardRequest.getUserId()));
 		
 		if(result!=null) {
 			return result;
@@ -55,7 +55,8 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result update(UpdateCreditCardRequest updateCreditCardRequest) {
-		Result result=BusinessRules.run(checkIfCreditCartNumberNotExists(updateCreditCardRequest.getCardNumber(),updateCreditCardRequest.getUserId()));
+		Result result=BusinessRules.run(checkIfUserAlreadyHasThatCreditCard(updateCreditCardRequest.getCardNumber(),updateCreditCardRequest.getUserId()),
+				checkIfCreditCardIsNotExists(updateCreditCardRequest.getId()));
 
 		if(result!=null) {
 			return result;
@@ -71,6 +72,11 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result delete(DeleteCreditCardRequest deleteCreditCardRequest) {
+		Result result=BusinessRules.run(checkIfCreditCardIsNotExists(deleteCreditCardRequest.getId()));
+
+		if(result!=null) {
+			return result;
+		}
 		this.creditCardDao.deleteById(deleteCreditCardRequest.getId());
 		return new SuccessResult(this.messageService.getMessage(Messages.CreditCardDeleted));
 	}
@@ -92,11 +98,21 @@ public class CreditCardManager implements CreditCardService {
 		return new SuccessResult();
 	}
 
-	private Result checkIfCreditCartNumberNotExists(String creditCartNumber, int userId){
-		if (this.creditCardDao.existsCreditCardByCardNumberAndAndApplicationUserUserId(creditCartNumber, userId)){
-			return new ErrorResult(this.messageService.getMessage(Messages.CreditCardNumberAlreadyExists));
+	private Result checkIfUserAlreadyHasThatCreditCard(String creditCardNumber, int userId){
+		if (this.creditCardDao.existsCreditCardByCardNumberAndAndApplicationUserUserId(creditCardNumber, userId)){
+			return new ErrorResult(this.messageService.getMessage(Messages.UserAlreadyHasThatCreditCard));
 		}
 		return new SuccessResult();
 	}
 
+	private Result checkIfCreditCardIsNotExists(int id) {
+		if (!this.creditCardDao.existsById(id)) {
+			return new ErrorResult(this.messageService.getMessage(Messages.CreditCardNotFound));
+
+		}
+		return new SuccessResult();
+
+	}
+
 }
+

@@ -26,7 +26,7 @@ public class CreateIndividualCustomerRequest{
 	private int userId;
 	
 	@NotNull
-	@Email(message = "Email düzeni hatalı.")
+	@Email
 	private String email;
 
 	@NotNull

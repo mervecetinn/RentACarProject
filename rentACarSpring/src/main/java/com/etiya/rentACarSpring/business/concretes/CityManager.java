@@ -1,14 +1,10 @@
 package com.etiya.rentACarSpring.business.concretes;
 
-import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.CitySearchListDto;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.*;
-import com.etiya.rentACarSpring.entities.AdditionalItem;
-import com.etiya.rentACarSpring.entities.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CityService;
@@ -50,6 +46,10 @@ public class CityManager implements CityService {
 
 	@Override
 	public Result update(UpdateCityRequest updateCityRequest) {
+		Result result= BusinessRules.run(checkIfCityNotExists(updateCityRequest.getId()));
+		if(result!=null){
+			return result;
+		}
 		City city=this.cityDao.getById(updateCityRequest.getId());
 		city.setName(updateCityRequest.getName());
 		this.cityDao.save(city);
@@ -92,7 +92,7 @@ public class CityManager implements CityService {
 	private Result checkIfCityAlreadyExists(String cityName) {
 		List<City> cities=this.cityDao.findAll();
 		for(City city:cities){
-			if(city.getName().equalsIgnoreCase(cityName.toLowerCase())){
+			if(city.getName().equalsIgnoreCase(cityName.trim())){
 				return new ErrorResult(this.messageService.getMessage(Messages.CityAlreadyExists));
 			}
 		}

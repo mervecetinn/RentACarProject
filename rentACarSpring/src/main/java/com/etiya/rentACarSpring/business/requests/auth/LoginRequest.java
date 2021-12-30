@@ -14,8 +14,10 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
  
 	@NotNull
+	@Email
 	private String email;
 	
 	@NotNull
+	@Size(min=8,max=20)
 	private  String password;
 }

@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreditCardSearchListDto {
-    private int id;
+    private int creditCardId;
     private String cardNumber;
     private String cardHolderName;
     private String expirationDate;

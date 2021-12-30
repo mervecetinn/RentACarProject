@@ -23,14 +23,16 @@ public class RegisterCorporateCustomerRequest {
 	@Size(min=3,max=30)
 	private String companyName;
 
-	@Size(min=10,max=10)
+
 	@NotNull
+	@Size(min=10,max=10)
 	private String taxNumber;
 
 	@JsonIgnore
 	private int userId;
 
 	@NotNull
+	@Email
 	private String email;
 
 	@NotNull

@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +19,9 @@ public class CreateCarDamageRequest {
     private int id;
 
     @NotNull
-    @Size(min=10,max=200)
+    @NotEmpty
+    @NotBlank
+    @Size(max=300)
     private String damageInformation;
 
     @NotNull

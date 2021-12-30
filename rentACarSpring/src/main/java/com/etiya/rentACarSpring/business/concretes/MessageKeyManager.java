@@ -4,7 +4,6 @@ import com.etiya.rentACarSpring.business.abstracts.MessageKeyService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.MessageKeySearchListDto;
-import com.etiya.rentACarSpring.business.dtos.MessageSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateMessageKeyRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteMessageKeyRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateMessageKeyRequest;
@@ -12,8 +11,6 @@ import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.dataAccess.abstracts.MessageKeyDao;
-import com.etiya.rentACarSpring.entities.Brand;
-import com.etiya.rentACarSpring.entities.Language;
 import com.etiya.rentACarSpring.entities.MessageKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +46,12 @@ public class MessageKeyManager implements MessageKeyService {
 
     @Override
     public Result update(UpdateMessageKeyRequest updateMessageKeyRequest) {
+        Result result = BusinessRules.run(checkIfMessageKeyAlreadyExists(updateMessageKeyRequest.getMessageKey()),
+                checkIfMessageKeyIsNotExists(updateMessageKeyRequest.getMessageKeyId()));
+
+        if (result != null) {
+            return result;
+        }
         MessageKey messageKey=this.modelMapperService.forRequest().map(updateMessageKeyRequest,MessageKey.class);
         this.messageKeyDao.save(messageKey);
         return new SuccessResult(this.messageService.getMessage(Messages.MessageKeyUpdated));
@@ -56,7 +59,8 @@ public class MessageKeyManager implements MessageKeyService {
 
     @Override
     public Result delete(DeleteMessageKeyRequest deleteMessageKeyRequest) {
-        Result result= BusinessRules.run(checkIfMessageKeyHasAnyMessage(deleteMessageKeyRequest.getMessageKeyId()));
+        Result result= BusinessRules.run(checkIfMessageKeyHasAnyMessage(deleteMessageKeyRequest.getMessageKeyId()),
+                checkIfMessageKeyIsNotExists(deleteMessageKeyRequest.getMessageKeyId()));
         if(result!=null){
             return result;
         }
@@ -79,7 +83,7 @@ public class MessageKeyManager implements MessageKeyService {
     private Result checkIfMessageKeyAlreadyExists(String messageKey) {
         List<MessageKey> messageKeys=this.messageKeyDao.findAll();
         for(MessageKey key:messageKeys){
-            if(key.getMessageKey().equalsIgnoreCase(messageKey.toLowerCase())){
+            if(key.getMessageKey().equalsIgnoreCase(messageKey.trim())){
                 return new ErrorResult(this.messageService.getMessage(Messages.MessageKeyAlreadyExists));
             }
         }
@@ -94,5 +98,14 @@ public class MessageKeyManager implements MessageKeyService {
             }
         }
         return new SuccessResult();
+    }
+
+    private Result checkIfMessageKeyIsNotExists(int id) {
+        if (!this.messageKeyDao.existsById(id)) {
+            return new ErrorResult(this.messageService.getMessage(Messages.MessageKeyNotFound));
+
+        }
+        return new SuccessResult();
+
     }
 }

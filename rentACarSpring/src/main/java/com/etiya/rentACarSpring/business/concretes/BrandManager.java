@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
-import com.etiya.rentACarSpring.dataAccess.abstracts.MessageDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.BrandService;
@@ -111,7 +110,7 @@ public class BrandManager implements BrandService {
 	private Result checkIfBrandAlreadyExists(String brandName) {
 		List<Brand> brands=this.brandDao.findAll();
 		for(Brand brand:brands){
-			if(brand.getName().equalsIgnoreCase(brandName.toLowerCase())){
+			if(brand.getName().equalsIgnoreCase(brandName.trim())){
 				return new ErrorResult(this.messageService.getMessage(Messages.BrandAlreadyExists));
 			}
 		}

@@ -49,7 +49,7 @@ public class AuthManager implements AuthService {
 
 	@Override
 	public Result individualCustomerRegister(RegisterIndividualCustomerRequest registerIndividualCustomerRequest) {
-		Result result=BusinessRules.run(checkIfUserAlreadyExists(registerIndividualCustomerRequest.getEmail()),checkEmailFormat(registerIndividualCustomerRequest.getEmail()));
+		Result result=BusinessRules.run(checkIfUserAlreadyExists(registerIndividualCustomerRequest.getEmail()));
 		
 		if(result!=null) {
 			return result;
@@ -63,7 +63,7 @@ public class AuthManager implements AuthService {
 	@Override
 	public Result corporateCustomerRegister(
 			RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
-		Result result = BusinessRules.run(checkIfUserAlreadyExists(registerCorporateCustomerRequest.getEmail()),checkEmailFormat(registerCorporateCustomerRequest.getEmail()));
+		Result result = BusinessRules.run(checkIfUserAlreadyExists(registerCorporateCustomerRequest.getEmail()));
 
 		if (result != null) {
 			return result;
@@ -101,7 +101,7 @@ public class AuthManager implements AuthService {
 		return new SuccessResult();
 	}
 	
-	private Result checkEmailFormat(String email) {
+	/*private Result checkEmailFormat(String email) {
 		String pattern = "^[A-Za-z0-9+_.-]+@(.+)$";
 		if (email.matches(pattern)) {
 			return new SuccessResult();
@@ -109,12 +109,7 @@ public class AuthManager implements AuthService {
 		
 		return new ErrorResult(this.messageService.getMessage(Messages.EmailNotValid));
 		
-	}
-//	private Result checkIfPasswordsMatch(String password,String passwordRepeat) {
-//		if(password.equals(passwordRepeat)) {
-//			return new SuccessResult();
-//		}
-//		return new ErrorResult(this.messageService.getMessage(Messages.PasswordsNotMatch));
-//	}
+	}*/
+
 
 }

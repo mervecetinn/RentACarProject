@@ -62,6 +62,13 @@ public class CarManager implements CarService {
 
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) {
+		Result result = BusinessRules.run(checkIfCarIsNotExists(updateCarRequest.getId()),
+				checkIfBrandNotExists(updateCarRequest.getBrandId()),checkIfColorNotExists(updateCarRequest.getColorId()),
+				checkIfCityIsNotExists(updateCarRequest.getCityId()));
+		if (result != null) {
+			return result;
+		}
+
 		Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
 		this.carDao.save(car);
 		return new SuccessResult(this.messageService.getMessage(Messages.CarUpdated));
@@ -71,7 +78,7 @@ public class CarManager implements CarService {
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 
-		Result result = BusinessRules.run(checkCarExists(deleteCarRequest.getId()),checkIfCarCanNotDelete(deleteCarRequest.getId()));
+		Result result = BusinessRules.run(checkIfCarIsNotExists(deleteCarRequest.getId()),checkIfCarCanNotDelete(deleteCarRequest.getId()));
 		if (result != null) {
 			return result;
 		}
@@ -219,7 +226,14 @@ public class CarManager implements CarService {
 		if (this.carDao.existsById(id)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
+		return new ErrorResult();
+	}
+
+	private Result checkIfCarIsNotExists(int id){
+		if(!this.carDao.existsById(id)){
+			return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
+		}
+		return new SuccessResult();
 	}
 
 	private Result checkIfBrandNotExists(int brandId) {

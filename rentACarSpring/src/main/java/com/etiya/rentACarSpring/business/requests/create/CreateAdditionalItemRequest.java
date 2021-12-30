@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Min;
@@ -23,6 +24,6 @@ public class CreateAdditionalItemRequest {
     private String name;
 
     @NotNull
-    @Min(1)
+    @Range(min = 1,max = 1000000)
     private double dailyPrice;
 }

@@ -4,10 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.*;
 import com.etiya.rentACarSpring.business.constants.Messages;
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
-import com.etiya.rentACarSpring.business.dtos.UserSearchListDto;
 import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
-import com.etiya.rentACarSpring.core.entities.concretes.User;
 import com.etiya.rentACarSpring.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,7 +71,8 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
-		Result result = BusinessRules.run(checkIfReturnKilometerLessThanInitialKilometer(updateRentalRequest.getRentalId(),updateRentalRequest.getReturnKilometer()));
+		Result result = BusinessRules.run(checkIfReturnKilometerLessThanInitialKilometer(updateRentalRequest.getRentalId(),updateRentalRequest.getReturnKilometer()),
+				checkIfRentalIsNotExists(updateRentalRequest.getRentalId()));
 
 		if (result != null) {
 			return result;
@@ -85,7 +83,6 @@ public class RentalManager implements RentalService {
 		Rental rental=this.rentalDao.getById(updateRentalRequest.getRentalId());
 		user=rental.getApplicationUser();
 		car=rental.getCar();
-		//rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		rental.setApplicationUser(user);
 		rental.setCar(car);
 		rental.setReturnDate(updateRentalRequest.getReturnDate());
@@ -101,7 +98,8 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result delete(DeleteRentalRequest deleteRentalRequest) {
-		Result result = BusinessRules.run(checkIfRentalHasNotAnyRentalAdditional(deleteRentalRequest.getId()));
+		Result result = BusinessRules.run(checkIfRentalHasNotAnyRentalAdditional(deleteRentalRequest.getId()),
+				checkIfRentalIsNotExists(deleteRentalRequest.getId()));
 		if (result != null) {
 			return result;
 		}
@@ -230,6 +228,15 @@ public class RentalManager implements RentalService {
 			}
 		}
 		return new SuccessResult();
+	}
+
+	private Result checkIfRentalIsNotExists(int id) {
+		if (!this.rentalDao.existsById(id)) {
+			return new ErrorResult(this.messageService.getMessage(Messages.RentalNotFound));
+
+		}
+		return new SuccessResult();
+
 	}
 
 }

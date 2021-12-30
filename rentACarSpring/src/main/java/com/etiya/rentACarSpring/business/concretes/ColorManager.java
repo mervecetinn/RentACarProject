@@ -8,7 +8,6 @@ import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.*;
-import com.etiya.rentACarSpring.entities.Brand;
 import org.springframework.stereotype.Service;
 import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.abstracts.ColorService;
@@ -93,7 +92,7 @@ public class ColorManager implements ColorService {
 	private Result checkIfColorAlreadyExists(String colorName) {
 		List<Color> colors=this.colorDao.findAll();
 		for(Color color:colors){
-			if(color.getName().equalsIgnoreCase(colorName.toLowerCase())){
+			if(color.getName().equalsIgnoreCase(colorName.trim())){
 				return new ErrorResult(this.messageService.getMessage(Messages.ColorAlreadyExists));
 			}
 		}

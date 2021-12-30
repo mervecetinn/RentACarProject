@@ -9,16 +9,13 @@ import com.etiya.rentACarSpring.business.dtos.RentalAdditionalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalAdditionalRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateRentalAdditionalRequest;
+import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.dataAccess.abstracts.RentalAdditionalDao;
 import com.etiya.rentACarSpring.entities.RentalAdditional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +41,11 @@ public class RentalAdditionalManager implements RentalAdditionalService {
 
     @Override
     public Result add(CreateRentalAdditionalRequest createRentalAdditionalRequest) {
+        Result result = BusinessRules.run();
+
+        if (result != null) {
+            return result;
+        }
         RentalAdditional rentalAdditional=this.modelMapperService.forRequest().map(createRentalAdditionalRequest,RentalAdditional.class);
         this.rentalAdditionalDao.save(rentalAdditional);
 
@@ -52,6 +54,11 @@ public class RentalAdditionalManager implements RentalAdditionalService {
 
     @Override
     public Result update(UpdateRentalAdditionalRequest updateRentalAdditionalRequest) {
+        Result result = BusinessRules.run(checkIfRentalAdditionalIsNotExists(updateRentalAdditionalRequest.getId()));
+
+        if (result != null) {
+            return result;
+        }
         RentalAdditional rentalAdditional=this.rentalAdditionalDao.getById(updateRentalAdditionalRequest.getId());
         rentalAdditional.setRental(this.rentalService.getById(updateRentalAdditionalRequest.getRentalId()).getData());
         rentalAdditional.setAdditionalItem(this.additionalItemService.getById(updateRentalAdditionalRequest.getAdditionalItemId()).getData());
@@ -62,6 +69,11 @@ public class RentalAdditionalManager implements RentalAdditionalService {
 
     @Override
     public Result delete(DeleteRentalAdditionalRequest deleteRentalAdditionalRequest) {
+        Result result = BusinessRules.run(checkIfRentalAdditionalIsNotExists(deleteRentalAdditionalRequest.getId()));
+
+        if (result != null) {
+            return result;
+        }
         this.rentalAdditionalDao.deleteById(deleteRentalAdditionalRequest.getId());
         return new SuccessResult(this.messageService.getMessage(Messages.RentalAdditionalDeleted));
     }
@@ -74,5 +86,13 @@ public class RentalAdditionalManager implements RentalAdditionalService {
                 .collect(Collectors.toList());
 
         return new SuccessDataResult<>(response);
+    }
+    private Result checkIfRentalAdditionalIsNotExists(int id) {
+        if (!this.rentalAdditionalDao.existsById(id)) {
+            return new ErrorResult(this.messageService.getMessage(Messages.RentalAdditionalNotFound));
+
+        }
+        return new SuccessResult();
+
     }
 }
