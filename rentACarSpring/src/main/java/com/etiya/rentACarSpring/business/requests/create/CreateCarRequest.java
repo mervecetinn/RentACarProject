@@ -44,6 +44,7 @@ public class CreateCarRequest {
 	private double dailyPrice;
 	
 	@NotNull
+	@NotBlank
 	@Size(min = 2, max=1000)
 	private String description;
 

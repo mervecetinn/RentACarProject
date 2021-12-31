@@ -40,7 +40,8 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) {
  
-		Result result=BusinessRules.run(checkCarIsNotOnRent(createCarMaintenanceRequest.getCarId()),checkIfCarIsNotExists(createCarMaintenanceRequest.getCarId()),
+		Result result=BusinessRules.run(checkIfCarIsNotExists(createCarMaintenanceRequest.getCarId()),
+				checkCarIsNotOnRent(createCarMaintenanceRequest.getCarId()),
 				checkCarIsNotOnMaintenance(createCarMaintenanceRequest.getCarId()));
 		
 		if(result!=null) {
@@ -88,14 +89,6 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		return new SuccessDataResult<List<CarMaintenanceSearchListDto>>(response,this.messageService.getMessage(Messages.CarMaintenancesListed));
 	}
 
-	private Result checkCarIsNotOnRent(int carId) {
-		if(!this.carService.checkCarIsNotOnRent(carId).isSuccess()) {
-			return new ErrorResult(this.messageService.getMessage(Messages.CarIsOnRent));
-		}
-		
-		return new SuccessResult();
-	}
-
 	private Result checkIfCarIsNotExists(int carId) {
 		if(!this.carService.checkCarExists(carId).isSuccess()) {
 			return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
@@ -103,11 +96,25 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 		return new SuccessResult();
 	}
-	private Result checkCarIsNotOnMaintenance(int carId) {
-		if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
+	@Override
+	public Result checkCarIsNotOnMaintenance(int carId) {
+		/*if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
+			return new ErrorResult(this.messageService.getMessage(Messages.CarIsAlreadyOnMaintenance));
+		}
+		return new SuccessResult();*/
+		if(this.carMaintenanceDao.existsByCarIdAndMaintenanceFinishDateIsNull(carId)){
 			return new ErrorResult(this.messageService.getMessage(Messages.CarIsAlreadyOnMaintenance));
 		}
 		return new SuccessResult();
+	}
+
+	private Result checkCarIsNotOnRent(int id) {
+		if (this.carMaintenanceDao.getCarIfItIsOnRent(id).size() == 0) {
+			return new SuccessResult();
+		}
+
+		return new ErrorResult(this.messageService.getMessage(Messages.CarIsOnRent));
+
 	}
 
 	private Result checkIfCarMaintenanceIsNotExists(int id) {

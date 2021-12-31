@@ -45,11 +45,7 @@ public interface CarService {
 	DataResult<CarDetailWithImage> getOneCarWithDetails(int carId);
 
 	DataResult<Car> getById(int id);
-	
-	Result checkCarIsNotOnRent(int id);
-	
-	Result checkCarIsNotOnMaintenance(int id);
-	
+
 	Result checkCarExists(int id);
 
 

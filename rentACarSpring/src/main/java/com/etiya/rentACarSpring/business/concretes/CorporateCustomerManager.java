@@ -39,6 +39,10 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 	@Override
 	public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) {
+		Result result= BusinessRules.run(checkIfUserAlreadyExists(createCorporateCustomerRequest.getEmail()));
+		if(result!=null){
+			return result;
+		}
 
 		ApplicationUser user = new ApplicationUser();
 		user.setEmail(createCorporateCustomerRequest.getEmail());
@@ -53,7 +57,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
 	@Override
 	public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
-		Result result= BusinessRules.run(checkIfCorporateCustomerIsNotExists(updateCorporateCustomerRequest.getCorporateCustomerId()));
+		Result result= BusinessRules.run(checkIfCorporateCustomerIsNotExists(updateCorporateCustomerRequest.getCorporateCustomerId()),
+				checkIfUserAlreadyExists(updateCorporateCustomerRequest.getEmail()));
 		if(result!=null){
 			return result;
 		}
@@ -92,6 +97,13 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		}
 		return new SuccessResult();
 
+	}
+
+	private Result checkIfUserAlreadyExists(String email) {
+		if(this.userService.getByEmail(email).isSuccess()) {
+			return new ErrorResult(this.messageService.getMessage(Messages.UserAlreadyExists));
+		}
+		return new SuccessResult();
 	}
 	
 	

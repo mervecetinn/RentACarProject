@@ -55,13 +55,16 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result update(UpdateInvoiceRequest updateInvoiceRequest) {
-		Result result= BusinessRules.run(checkIfInvoiceIsNotExists(updateInvoiceRequest.getId()));
+		Result result= BusinessRules.run(checkIfInvoiceIsNotExists(updateInvoiceRequest.getId()),
+				checkIfInvoiceNumberAlreadyExists(updateInvoiceRequest.getInvoiceNumber()));
 
 		if(result!=null){
 			return result;
 		}
 		Invoice invoice=this.invoiceDao.getById(updateInvoiceRequest.getId());
 		invoice.setInvoiceNumber(updateInvoiceRequest.getInvoiceNumber());
+		invoice.setCreationDate(updateInvoiceRequest.getCreationDate());
+		invoice.setInvoiceAmount(updateInvoiceRequest.getInvoiceAmount());
 		this.invoiceDao.save(invoice);
 		return new SuccessResult(this.messageService.getMessage(Messages.InvoiceUpdated));
 	}
@@ -144,6 +147,13 @@ public class InvoiceManager implements InvoiceService {
 		}
 		return new SuccessResult();
 
+	}
+
+	private Result checkIfInvoiceNumberAlreadyExists(String invoiceNumber){
+		if(this.invoiceDao.existsByInvoiceNumber(invoiceNumber)){
+			return new ErrorResult(this.messageService.getMessage(Messages.InvoiceAlreadyExists));
+		}
+		return new SuccessResult();
 	}
 
 

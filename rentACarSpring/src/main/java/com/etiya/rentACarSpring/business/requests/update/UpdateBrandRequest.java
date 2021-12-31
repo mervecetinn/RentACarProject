@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.requests.update;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,6 +19,7 @@ public class UpdateBrandRequest {
 	private int id;
 
 	@NotNull
+	@NotBlank
 	@Size(min = 3,max=20)
 	private String name;
 }

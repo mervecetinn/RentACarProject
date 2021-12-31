@@ -20,4 +20,6 @@ public interface CarMaintenanceService {
 
 	DataResult<List<CarMaintenanceSearchListDto>> getAll();
 
+	Result checkCarIsNotOnMaintenance(int carId);
+
 }

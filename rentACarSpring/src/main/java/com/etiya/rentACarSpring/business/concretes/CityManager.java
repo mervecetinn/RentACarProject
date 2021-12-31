@@ -46,7 +46,7 @@ public class CityManager implements CityService {
 
 	@Override
 	public Result update(UpdateCityRequest updateCityRequest) {
-		Result result= BusinessRules.run(checkIfCityNotExists(updateCityRequest.getId()));
+		Result result= BusinessRules.run(checkIfCityNotExists(updateCityRequest.getId()),checkIfCityAlreadyExists(updateCityRequest.getName()));
 		if(result!=null){
 			return result;
 		}
@@ -78,6 +78,9 @@ public class CityManager implements CityService {
 
 	@Override
 	public DataResult<City> getById(int cityId) {
+		if(!this.cityDao.existsById(cityId)){
+			return new ErrorDataResult<>(null);
+		}
 		return new SuccessDataResult<City>(this.cityDao.getById(cityId));
 	}
 

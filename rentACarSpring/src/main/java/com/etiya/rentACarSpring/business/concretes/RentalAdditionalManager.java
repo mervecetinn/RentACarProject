@@ -41,7 +41,8 @@ public class RentalAdditionalManager implements RentalAdditionalService {
 
     @Override
     public Result add(CreateRentalAdditionalRequest createRentalAdditionalRequest) {
-        Result result = BusinessRules.run();
+        Result result = BusinessRules.run(checkIfAdditionalItemIsNotExists(createRentalAdditionalRequest.getAdditionalItemId()),
+                checkIfRentalIsNotExists(createRentalAdditionalRequest.getRentalId()));
 
         if (result != null) {
             return result;
@@ -54,7 +55,9 @@ public class RentalAdditionalManager implements RentalAdditionalService {
 
     @Override
     public Result update(UpdateRentalAdditionalRequest updateRentalAdditionalRequest) {
-        Result result = BusinessRules.run(checkIfRentalAdditionalIsNotExists(updateRentalAdditionalRequest.getId()));
+        Result result = BusinessRules.run(checkIfRentalAdditionalIsNotExists(updateRentalAdditionalRequest.getId()),
+                checkIfAdditionalItemIsNotExists(updateRentalAdditionalRequest.getAdditionalItemId()),
+                checkIfRentalIsNotExists(updateRentalAdditionalRequest.getRentalId()));
 
         if (result != null) {
             return result;
@@ -94,5 +97,17 @@ public class RentalAdditionalManager implements RentalAdditionalService {
         }
         return new SuccessResult();
 
+    }
+    private Result checkIfAdditionalItemIsNotExists(int id){
+        if(!this.additionalItemService.getById(id).isSuccess()){
+            return new ErrorResult(this.messageService.getMessage(Messages.AdditionalItemNotFound));
+        }
+        return new SuccessResult();
+    }
+    private Result checkIfRentalIsNotExists(int id){
+        if(!this.rentalService.getById(id).isSuccess()){
+            return new ErrorResult(this.messageService.getMessage(Messages.RentalNotFound));
+        }
+        return new SuccessResult();
     }
 }

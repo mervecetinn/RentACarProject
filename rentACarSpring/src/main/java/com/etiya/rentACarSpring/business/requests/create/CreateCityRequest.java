@@ -1,5 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,6 +17,7 @@ public class CreateCityRequest {
 	private int id;
 
 	@NotNull
+	@NotBlank
 	@Size(min=3,max=20)
 	private String name;
 	

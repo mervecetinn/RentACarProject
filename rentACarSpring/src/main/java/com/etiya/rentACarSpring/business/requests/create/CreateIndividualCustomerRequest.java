@@ -30,14 +30,17 @@ public class CreateIndividualCustomerRequest{
 	private String email;
 
 	@NotNull
+	@NotBlank
 	@Size(min=8,max=20)
 	private String password;
 	
 	@NotNull
+	@NotBlank
 	@Size(min=2,max=20)
 	private String firstName;
 
 	@NotNull
+	@NotBlank
 	@Size(min=2,max=20)
 	private String lastName;
 

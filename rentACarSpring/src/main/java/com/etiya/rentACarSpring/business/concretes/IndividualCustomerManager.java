@@ -44,7 +44,10 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	@Override
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
-
+		Result result= BusinessRules.run(checkIfUserAlreadyExists(createIndividualCustomerRequest.getEmail()));
+		if(result!=null){
+			return result;
+		}
 		ApplicationUser user = new ApplicationUser();
 		user.setEmail(createIndividualCustomerRequest.getEmail());
 		user.setPassword(createIndividualCustomerRequest.getPassword());
@@ -58,7 +61,8 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
 	@Override
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
-		Result result= BusinessRules.run(checkIfIndivudualCustomerIsNotExists(updateIndividualCustomerRequest.getIndividualCustomerId()));
+		Result result= BusinessRules.run(checkIfIndivudualCustomerIsNotExists(updateIndividualCustomerRequest.getIndividualCustomerId()),
+				checkIfUserAlreadyExists(updateIndividualCustomerRequest.getEmail()));
 		if(result!=null) {
 			return result;
 		}
@@ -119,5 +123,10 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 		}
 		return new SuccessResult();
 	}
-
+	private Result checkIfUserAlreadyExists(String email) {
+		if(this.userService.getByEmail(email).isSuccess()) {
+			return new ErrorResult(this.messageService.getMessage(Messages.UserAlreadyExists));
+		}
+		return new SuccessResult();
+	}
 }

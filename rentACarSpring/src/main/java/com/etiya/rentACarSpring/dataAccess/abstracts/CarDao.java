@@ -21,6 +21,7 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<Car> getByColorId(int colorId);
 	List<Car> getByModelYear(int modelYear);
 
+
 	
 	@Query("Select new com.etiya.rentACarSpring.entities.complexTypes.CarDetail"
 			+ "(c.id,b.name,cl.name,c.modelYear,c.kilometer,c.dailyPrice,c.description) "

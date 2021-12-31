@@ -82,6 +82,9 @@ public class AdditionalItemManager implements AdditionalItemService {
 
     @Override
     public DataResult<AdditionalItem> getById(int id) {
+        if(!this.additionalItemDao.existsById(id)){
+            return new ErrorDataResult<>(null);
+        }
         return new SuccessDataResult<AdditionalItem>(this.additionalItemDao.getById(id));
     }
 
@@ -105,7 +108,7 @@ public class AdditionalItemManager implements AdditionalItemService {
         return new SuccessResult();
         }
 
-    private Result checkIfAdditionalItemIsNotExists(int id) {
+    public Result checkIfAdditionalItemIsNotExists(int id) {
         if (!this.additionalItemDao.existsById(id)) {
             return new ErrorResult(this.messageService.getMessage(Messages.AdditionalItemNotFound));
 

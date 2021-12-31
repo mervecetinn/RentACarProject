@@ -34,14 +34,13 @@ public class MessageManager implements MessageService {
         this.messageDao = messageDao;
         this.modelMapperService=modelMapperService;
 
-
-
-
     }
 
     @Override
     public Result add(CreateMessageRequest createMessageRequest) {
-        Result result = BusinessRules.run(checkIfSameMessageKeyIdAndLanguageIdExistsTogether(createMessageRequest.getLanguageId(),createMessageRequest.getMessageKeyId()));
+        Result result = BusinessRules.run(checkIfSameMessageKeyIdAndLanguageIdExistsTogether(createMessageRequest.getLanguageId(),
+                createMessageRequest.getMessageKeyId()),checkIfLanguageIsNotExists(createMessageRequest.getLanguageId()),
+                checkIfMessageKeyIsNotExists(createMessageRequest.getMessageKeyId()));
 
         if (result != null) {
             return result;
@@ -54,7 +53,8 @@ public class MessageManager implements MessageService {
     @Override
     public Result update(UpdateMessageRequest updateMessageRequest) {
         Result result = BusinessRules.run(checkIfSameMessageKeyIdAndLanguageIdExistsTogether(updateMessageRequest.getLanguageId(),updateMessageRequest.getMessageKeyId()),
-                checkIfMessageIsNotExists(updateMessageRequest.getId()));
+                checkIfMessageIsNotExists(updateMessageRequest.getId()),checkIfLanguageIsNotExists(updateMessageRequest.getLanguageId()),
+                checkIfMessageKeyIsNotExists(updateMessageRequest.getMessageKeyId()));
 
         if (result != null) {
             return result;
@@ -116,6 +116,19 @@ public class MessageManager implements MessageService {
         }
         return new SuccessResult();
 
+    }
+    private Result checkIfLanguageIsNotExists(int id){
+        if(this.messageDao.getLanguageById(id).size()==0){
+            return new ErrorResult(this.getMessage(Messages.LanguageNotFound));
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfMessageKeyIsNotExists(int id){
+        if(this.messageDao.getMessageKeyById(id).size()==0){
+            return new ErrorResult(this.getMessage(Messages.MessageKeyNotFound));
+        }
+        return new SuccessResult();
     }
 
 

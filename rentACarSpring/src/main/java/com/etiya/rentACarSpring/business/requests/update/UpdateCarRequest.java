@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.requests.update;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -40,6 +41,7 @@ public class UpdateCarRequest {
 	private int dailyPrice;
 	
 	@NotNull
+	@NotBlank
 	@Size(min = 2, max=1000)
 	private String description;
 

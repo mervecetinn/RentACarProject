@@ -1,9 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.update;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -20,10 +17,12 @@ public class UpdateCorporateCustomerRequest {
 	private int corporateCustomerId;
 
 	@NotNull
+	@NotBlank
 	@Size(min=3,max=30)
 	private String companyName;
 
 	@NotNull
+	@NotBlank
 	@Size(min=10,max=10)
 	private String taxNumber;
 
@@ -36,6 +35,7 @@ public class UpdateCorporateCustomerRequest {
 	private String email;
 
 	@NotNull
+	@NotBlank
 	@Size(min=8,max=20)
 	private String password;
 

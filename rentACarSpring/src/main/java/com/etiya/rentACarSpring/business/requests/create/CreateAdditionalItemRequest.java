@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,6 +21,7 @@ public class CreateAdditionalItemRequest {
     private int id;
 
     @NotNull
+    @NotBlank
     @Size(min=2,max=50)
     private String name;
 

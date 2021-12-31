@@ -1,9 +1,6 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.CreditCardNumber;
@@ -25,14 +22,17 @@ public class CreateCreditCardRequest {
 	private String cardNumber;
 	
 	@NotNull
+	@NotBlank
 	@Size(min=4,max=40)
 	private String cardHolderName;
 	
 	@NotNull
+	@NotBlank
 	@Size(min=5,max=5,message = "Tarih 5 haneli olmalıdır.")
 	private String expirationDate;
 	
 	@NotNull
+	@NotBlank
 	@Size(min=3,max=3,message = "Cvv 3 haneli olmalıdır.")
 	private String cvv;
 	

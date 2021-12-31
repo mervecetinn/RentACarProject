@@ -22,7 +22,7 @@ public class FakePosService {
     private Result checkIfLimitIsInsufficient(PayCreditCardRequest payCreditCardRequest){
         double cardLimit=5000;
         if(payCreditCardRequest.getTotalPrice()>cardLimit){
-            return new ErrorResult("Limit is insufficient!");
+            return new ErrorResult();
         }
         return new SuccessResult();
     }

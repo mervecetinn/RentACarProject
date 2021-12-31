@@ -1,6 +1,7 @@
 package com.etiya.rentACarSpring.business.requests.auth;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,6 +19,7 @@ public class LoginRequest {
 	private String email;
 	
 	@NotNull
+	@NotBlank
 	@Size(min=8,max=20)
 	private  String password;
 }

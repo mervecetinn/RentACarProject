@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.*;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,6 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateRentalRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.RentalDao;
 
 @Service
@@ -31,12 +27,13 @@ public class RentalManager implements RentalService {
 	private CarService carService;
 	private CityService cityService;
 	private PaymentService paymentService;
+	private CarMaintenanceService carMaintenanceService;
 	private MessageService messageService;
 
 	@Autowired
 	public RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, UserService userService,
 			CustomerFindexScoreService customerFindexScoreService, CarService carService,CityService cityService,
-						 PaymentService paymentService,MessageService messageService) {
+						 PaymentService paymentService,CarMaintenanceService carMaintenanceService,MessageService messageService) {
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
 		this.userService = userService;
@@ -44,6 +41,7 @@ public class RentalManager implements RentalService {
 		this.carService = carService;
 		this.cityService=cityService;
 		this.paymentService=paymentService;
+		this.carMaintenanceService=carMaintenanceService;
 		this.messageService=messageService;
 
 	}
@@ -51,9 +49,10 @@ public class RentalManager implements RentalService {
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
 		PayCreditCardRequest payCreditCardRequest=new PayCreditCardRequest();
-		Result result = BusinessRules.run(checkReturnDateExists(createRentalRequest.getCarId()),
+		Result result = BusinessRules.run(checkIfCarIsNotExists(createRentalRequest.getCarId()),
+				checkIfUserNotExists(createRentalRequest.getUserId()),checkCarIsNotOnRent(createRentalRequest.getCarId()),
 				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(),createRentalRequest.getCarId()),
-				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfCarIsNotExists(createRentalRequest.getCarId()),checkIfUserNotExists(createRentalRequest.getUserId()),checkIfLimitIsInsufficient(payCreditCardRequest));
+				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfLimitIsInsufficient(payCreditCardRequest));
 
 		if (result != null) {
 			return result;
@@ -72,7 +71,8 @@ public class RentalManager implements RentalService {
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
 		Result result = BusinessRules.run(checkIfReturnKilometerLessThanInitialKilometer(updateRentalRequest.getRentalId(),updateRentalRequest.getReturnKilometer()),
-				checkIfRentalIsNotExists(updateRentalRequest.getRentalId()));
+				checkIfRentalIsNotExists(updateRentalRequest.getRentalId()),
+				checkIfCityIsNotExists(updateRentalRequest.getReturnToCityId()));
 
 		if (result != null) {
 			return result;
@@ -138,6 +138,9 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public DataResult<Rental> getById(int rentalId) {
+		if(!this.rentalDao.existsById(rentalId)){
+			return new ErrorDataResult<>(null);
+		}
 		return new SuccessDataResult<Rental>(this.rentalDao.getById(rentalId));
 	}
 
@@ -152,9 +155,8 @@ public class RentalManager implements RentalService {
 		return additionalsTotalPrice;
 	}
 
-	private Result checkReturnDateExists(int carId) {
-		Rental rental = this.rentalDao.getByCarIdAndReturnDateIsNull(carId);
-		if (rental != null) {
+	private Result checkCarIsNotOnRent(int carId) {
+		if (this.rentalDao.existsByCarIdAndReturnDateIsNull(carId)) {
 			return new ErrorResult(this.messageService.getMessage(Messages.CarIsOnRent));
 		}
 		return new SuccessResult();
@@ -175,6 +177,9 @@ public class RentalManager implements RentalService {
 	}
 
 	private Result checkCustomerFindexScoreIsEnough(int userId,int carId){
+		if(!checkIfCarIsNotExists(carId).isSuccess()||!checkIfUserNotExists(userId).isSuccess()) {
+			return  new ErrorResult(this.messageService.getMessage(Messages.EntityNotFoundException));
+		}
 		int carFindexScore = this.carService.getById(carId).getData().getMinFindexScore();
 		int customerFindexScore=getCustomerFindexScore(userId);
 		if (customerFindexScore >= carFindexScore) {
@@ -184,8 +189,9 @@ public class RentalManager implements RentalService {
 	}
 
 
+
 	private Result checkCarIsNotOnMaintenance(int carId) {
-		if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
+		if (!this.carMaintenanceService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
 			return new ErrorResult(this.messageService.getMessage(Messages.CarIsOnMaintenance));
 		}
 		return new SuccessResult();
@@ -237,6 +243,12 @@ public class RentalManager implements RentalService {
 		}
 		return new SuccessResult();
 
+	}
+	private Result checkIfCityIsNotExists(int id){
+		if(!this.cityService.getById(id).isSuccess()){
+			return new ErrorResult(this.messageService.getMessage(Messages.CityNotFound));
+		}
+		return new SuccessResult();
 	}
 
 }

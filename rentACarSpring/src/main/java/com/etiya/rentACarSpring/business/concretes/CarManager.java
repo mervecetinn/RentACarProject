@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.CityService;
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
+import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.entities.complexTypes.CarDetailWithImage;
 import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,6 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteCarRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCarRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentACarSpring.core.utilities.results.DataResult;
-import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
-import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACarSpring.core.utilities.results.SuccessResult;
 import com.etiya.rentACarSpring.dataAccess.abstracts.CarDao;
 import com.etiya.rentACarSpring.entities.Car;
 import com.etiya.rentACarSpring.entities.complexTypes.CarDetail;
@@ -62,7 +58,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) {
-		Result result = BusinessRules.run(checkIfCarIsNotExists(updateCarRequest.getId()),
+		Result result = BusinessRules.run(checkCarExists(updateCarRequest.getId()),
 				checkIfBrandNotExists(updateCarRequest.getBrandId()),checkIfColorNotExists(updateCarRequest.getColorId()),
 				checkIfCityIsNotExists(updateCarRequest.getCityId()));
 		if (result != null) {
@@ -78,7 +74,7 @@ public class CarManager implements CarService {
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 
-		Result result = BusinessRules.run(checkIfCarIsNotExists(deleteCarRequest.getId()),checkIfCarCanNotDelete(deleteCarRequest.getId()));
+		Result result = BusinessRules.run(checkCarExists(deleteCarRequest.getId()),checkIfCarCanNotDelete(deleteCarRequest.getId()));
 		if (result != null) {
 			return result;
 		}
@@ -162,16 +158,20 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<List<CarImageDetail>> getImagesByCarId(int carId) {
-		List<CarImageDetail> result=this.carDao.getImagesOfRelatedCar(carId);
+		Result result = BusinessRules.run(checkCarExists(carId));
+		if (result != null) {
+			return new ErrorDataResult<>(null,result.getMessage());
+		}
+		List<CarImageDetail> carImages=this.carDao.getImagesOfRelatedCar(carId);
 
-		if(result.size()==0){
+		if(carImages.size()==0){
 			CarImageDetail carImageDetail=new CarImageDetail();
 			carImageDetail.setImage(this.environment.getProperty("defaultImagePath").getBytes());
-			result.add(carImageDetail);
+			carImages.add(carImageDetail);
 		}
 
 
-		return new SuccessDataResult<>(result);
+		return new SuccessDataResult<>(carImages);
 	}
 
 	@Override
@@ -203,38 +203,14 @@ public class CarManager implements CarService {
 		return new SuccessDataResult<List<CarDetail>>(this.carDao.getCarsWithBrandAndColorDetails());
 	}
 
-
-	@Override
-	public Result checkCarIsNotOnRent(int id) {
-		if (this.carDao.getCarIfItIsOnRent(id).size() > 0) {
-			return new ErrorResult();
-		}
-		return new SuccessResult();
-
-	}
-
-	@Override
-	public Result checkCarIsNotOnMaintenance(int id) {
-		if (this.carDao.getCarIfItIsOnMaintenance(id).size() > 0) {
-			return new ErrorResult();
-		}
-		return new SuccessResult();
-	}
-
 	@Override
 	public Result checkCarExists(int id) {
 		if (this.carDao.existsById(id)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult();
+		return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
 	}
 
-	private Result checkIfCarIsNotExists(int id){
-		if(!this.carDao.existsById(id)){
-			return new ErrorResult(this.messageService.getMessage(Messages.CarNotFound));
-		}
-		return new SuccessResult();
-	}
 
 	private Result checkIfBrandNotExists(int brandId) {
 		Object id = this.carDao.getOneBrandId(brandId);

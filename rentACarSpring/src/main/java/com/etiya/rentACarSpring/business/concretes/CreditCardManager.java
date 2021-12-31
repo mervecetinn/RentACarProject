@@ -55,7 +55,7 @@ public class CreditCardManager implements CreditCardService {
 
 	@Override
 	public Result update(UpdateCreditCardRequest updateCreditCardRequest) {
-		Result result=BusinessRules.run(checkIfUserAlreadyHasThatCreditCard(updateCreditCardRequest.getCardNumber(),updateCreditCardRequest.getUserId()),
+		Result result=BusinessRules.run(checkIfUserAlreadyHasThatCreditCard(updateCreditCardRequest.getCardNumber(),this.creditCardDao.getById(updateCreditCardRequest.getId()).getApplicationUser().getUserId()),
 				checkIfCreditCardIsNotExists(updateCreditCardRequest.getId()));
 
 		if(result!=null) {
