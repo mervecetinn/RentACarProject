@@ -1,6 +1,5 @@
 package com.etiya.rentACarSpring.outServices;
 
-import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
 import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
@@ -10,8 +9,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FakePosService {
 
-    public Result pay(PayCreditCardRequest payCreditCardRequest){
-        Result result= BusinessRules.run(checkIfLimitIsInsufficient(payCreditCardRequest));
+    public Result pay(double totalPrice){
+        Result result= BusinessRules.run(checkIfLimitIsInsufficient(totalPrice));
 
         if(result!=null){
             return result;
@@ -19,9 +18,9 @@ public class FakePosService {
         return new SuccessResult();
     }
 
-    private Result checkIfLimitIsInsufficient(PayCreditCardRequest payCreditCardRequest){
+    private Result checkIfLimitIsInsufficient(double totalPrice){
         double cardLimit=5000;
-        if(payCreditCardRequest.getTotalPrice()>cardLimit){
+        if(totalPrice>cardLimit){
             return new ErrorResult();
         }
         return new SuccessResult();

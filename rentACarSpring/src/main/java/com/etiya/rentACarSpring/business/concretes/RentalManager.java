@@ -1,10 +1,13 @@
 package com.etiya.rentACarSpring.business.concretes;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import com.etiya.rentACarSpring.business.abstracts.*;
 import com.etiya.rentACarSpring.business.constants.Messages;
-import com.etiya.rentACarSpring.business.requests.payment.PayCreditCardRequest;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +51,11 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
-		PayCreditCardRequest payCreditCardRequest=new PayCreditCardRequest();
+
 		Result result = BusinessRules.run(checkIfCarIsNotExists(createRentalRequest.getCarId()),
 				checkIfUserNotExists(createRentalRequest.getUserId()),checkCarIsNotOnRent(createRentalRequest.getCarId()),
 				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(),createRentalRequest.getCarId()),
-				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()),checkIfLimitIsInsufficient(payCreditCardRequest));
+				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()));
 
 		if (result != null) {
 			return result;
@@ -70,9 +73,9 @@ public class RentalManager implements RentalService {
 
 	@Override
 	public Result update(UpdateRentalRequest updateRentalRequest) {
-		Result result = BusinessRules.run(checkIfReturnKilometerLessThanInitialKilometer(updateRentalRequest.getRentalId(),updateRentalRequest.getReturnKilometer()),
-				checkIfRentalIsNotExists(updateRentalRequest.getRentalId()),
-				checkIfCityIsNotExists(updateRentalRequest.getReturnToCityId()));
+		Result result = BusinessRules.run(checkIfRentalIsNotExists(updateRentalRequest.getRentalId()),
+				checkIfReturnKilometerLessThanInitialKilometer(updateRentalRequest.getRentalId(),updateRentalRequest.getReturnKilometer()),
+				checkIfCityIsNotExists(updateRentalRequest.getReturnToCityId()),checkIfLimitIsInsufficient(calculateTotalPrice(updateRentalRequest)));
 
 		if (result != null) {
 			return result;
@@ -212,8 +215,8 @@ public class RentalManager implements RentalService {
 		return  new SuccessResult();
 	}
 
-	private Result checkIfLimitIsInsufficient(PayCreditCardRequest payCreditCardRequest){
-		if(!this.paymentService.payByCreditCard(payCreditCardRequest).isSuccess()){
+	private Result checkIfLimitIsInsufficient(double totalPrice){
+		if(!this.paymentService.payByCreditCard(totalPrice).isSuccess()){
 			return new ErrorResult(this.messageService.getMessage(Messages.LimitInsufficient));
 		}
 		return new SuccessResult();
@@ -249,6 +252,26 @@ public class RentalManager implements RentalService {
 			return new ErrorResult(this.messageService.getMessage(Messages.CityNotFound));
 		}
 		return new SuccessResult();
+	}
+
+	private double calculateTotalPrice(UpdateRentalRequest updateRentalRequest){
+		if(!this.rentalDao.existsById(updateRentalRequest.getRentalId())){return 0;}
+		LocalDateTime rentLocalDateTime=this.rentalDao.getRentDateOfRental(updateRentalRequest.getRentalId());
+		LocalDateTime returnLocalDateTime=updateRentalRequest.getReturnDate();
+		Date rentDate = Date.from(rentLocalDateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date returnDate = Date.from(returnLocalDateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		long differenceFromDates=returnDate.getTime()-rentDate.getTime();
+		long countOfRentalDays=TimeUnit.DAYS.convert(differenceFromDates, TimeUnit.MILLISECONDS);
+		double dailyPriceOfRentedCar=this.rentalDao.getDailyPriceOfRentedCar(updateRentalRequest.getRentalId());
+		double additionalItemTotalPrice=this.getAdditionalItemsTotalPrice(updateRentalRequest.getRentalId())*countOfRentalDays;
+		double totalPrice=(countOfRentalDays*dailyPriceOfRentedCar)+additionalItemTotalPrice;
+		double additionalServicePrice=500;
+
+		if(this.rentalDao.getTakenFromCityId(updateRentalRequest.getRentalId()).get(0)!=updateRentalRequest.getReturnToCityId()){
+			totalPrice=totalPrice+additionalServicePrice;
+		}
+		return totalPrice;
+
 	}
 
 }

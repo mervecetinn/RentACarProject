@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.etiya.rentACarSpring.entities.Rental;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RentalDao extends JpaRepository<Rental, Integer> {
@@ -21,6 +22,14 @@ public interface RentalDao extends JpaRepository<Rental, Integer> {
 
 	@Query(value = "SELECT ai.daily_price FROM Rentals r INNER JOIN rental_additionals ra ON r.rental_id=ra.rental_id inner join additional_items ai on ra.additional_item_id=ai.id where r.rental_id=?1 ",nativeQuery = true)
 	List<Double> getAdditionalItemsOfRelevantRental(int rentalId);
+
+	@Query(value = "select r.rent_date from  rentals r where rental_id=?1",nativeQuery = true)
+	LocalDateTime getRentDateOfRental(int rentalId);
+
+	@Query(value = "select r.taken_from_city_id from  rentals r where rental_id=?1",nativeQuery = true)
+	List<Integer> getTakenFromCityId(int rentalId);
+
+
 
 
 

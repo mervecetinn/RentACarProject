@@ -98,10 +98,6 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	}
 	@Override
 	public Result checkCarIsNotOnMaintenance(int carId) {
-		/*if (!this.carService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
-			return new ErrorResult(this.messageService.getMessage(Messages.CarIsAlreadyOnMaintenance));
-		}
-		return new SuccessResult();*/
 		if(this.carMaintenanceDao.existsByCarIdAndMaintenanceFinishDateIsNull(carId)){
 			return new ErrorResult(this.messageService.getMessage(Messages.CarIsAlreadyOnMaintenance));
 		}
