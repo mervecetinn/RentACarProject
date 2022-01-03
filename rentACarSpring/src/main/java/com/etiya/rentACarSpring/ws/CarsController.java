@@ -1,12 +1,7 @@
 package com.etiya.rentACarSpring.ws;
 
-
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-
-import com.etiya.rentACarSpring.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACarSpring.entities.complexTypes.CarDetailWithImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.etiya.rentACarSpring.business.abstracts.CarService;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateCarRequest;
@@ -27,7 +21,6 @@ import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import com.etiya.rentACarSpring.entities.complexTypes.CarDetail;
 import com.etiya.rentACarSpring.entities.complexTypes.CarImageDetail;
-
 
 
 @RestController
@@ -87,8 +80,6 @@ public class CarsController {
 	public DataResult<List<CarSearchListDto>> getByCityId(@RequestParam @Valid int cityId){
 		return this.carService.getByCityId(cityId);
 	}
-	
-
 
 	@GetMapping("getCarsWithBrandAndColorDetails")
 	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails(){
@@ -114,8 +105,6 @@ public class CarsController {
 	public DataResult<List<CarSearchListDto>> getCarsNotOnMaintenance(){
 		return this.carService.getCarsNotOnMaintenance();
 	}
-
-
 
 
 }

@@ -14,7 +14,6 @@ import com.etiya.rentACarSpring.dataAccess.abstracts.MessageKeyDao;
 import com.etiya.rentACarSpring.entities.MessageKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,7 +102,6 @@ public class MessageKeyManager implements MessageKeyService {
     private Result checkIfMessageKeyIsNotExists(int id) {
         if (!this.messageKeyDao.existsById(id)) {
             return new ErrorResult(this.messageService.getMessage(Messages.MessageKeyNotFound));
-
         }
         return new SuccessResult();
 

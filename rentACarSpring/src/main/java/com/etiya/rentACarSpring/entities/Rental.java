@@ -2,9 +2,7 @@ package com.etiya.rentACarSpring.entities;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,6 @@ public class Rental {
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
-
 
     @ManyToOne
     @JoinColumn(name="user_id")

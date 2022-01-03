@@ -1,9 +1,7 @@
 package com.etiya.rentACarSpring.ws;
 
 import java.io.IOException;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +17,6 @@ import com.etiya.rentACarSpring.business.requests.create.CreateCarImageRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCarImageRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCarImageRequest;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-
-import lombok.val;
 
 
 @RestController
@@ -57,7 +53,6 @@ public class CarImagesController {
 	public Result getAll() {
 		return this.carImageService.getAll();
 	}
-	
 	
 
 }

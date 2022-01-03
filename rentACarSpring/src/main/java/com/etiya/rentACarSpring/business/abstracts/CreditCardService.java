@@ -6,7 +6,6 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteCreditCardRequest
 import com.etiya.rentACarSpring.business.requests.update.UpdateCreditCardRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-
 import java.util.List;
 
 public interface CreditCardService {

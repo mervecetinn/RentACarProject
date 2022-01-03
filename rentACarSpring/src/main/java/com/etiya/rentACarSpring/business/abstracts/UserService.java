@@ -1,7 +1,6 @@
 package com.etiya.rentACarSpring.business.abstracts;
 
 import java.util.List;
-
 import com.etiya.rentACarSpring.business.dtos.UserSearchListDto;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;

@@ -7,7 +7,7 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteCorporateCustomer
 import com.etiya.rentACarSpring.business.requests.update.UpdateCorporateCustomerRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.entities.CorporateCustomer;
+
 
 public interface CorporateCustomerService {
 	

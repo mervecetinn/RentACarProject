@@ -1,7 +1,5 @@
 package com.etiya.rentACarSpring.entities.complexTypes;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,26 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CarDetail {
 
-	
 		private int id;
-		
-	    
 		private String brandName;
-		
-	    
 		private String colorName;
-		
-	  
 		private int modelYear;
-
-
 	    private int kilometer;
-	    
-	   
 	   	private double dailyPrice;
-		
-	   
 		private String description;
 
-	    
 }

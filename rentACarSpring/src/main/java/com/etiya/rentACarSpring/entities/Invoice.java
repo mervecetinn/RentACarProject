@@ -1,10 +1,7 @@
 package com.etiya.rentACarSpring.entities;
 
 import java.time.LocalDate;
-import java.util.Date;
-
 import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -2,7 +2,6 @@ package com.etiya.rentACarSpring.business.concretes;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;

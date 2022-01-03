@@ -192,7 +192,6 @@ public class RentalManager implements RentalService {
 	}
 
 
-
 	private Result checkCarIsNotOnMaintenance(int carId) {
 		if (!this.carMaintenanceService.checkCarIsNotOnMaintenance(carId).isSuccess()) {
 			return new ErrorResult(this.messageService.getMessage(Messages.CarIsOnMaintenance));
@@ -255,7 +254,6 @@ public class RentalManager implements RentalService {
 	}
 
 	private double calculateTotalPrice(UpdateRentalRequest updateRentalRequest){
-		if(!this.rentalDao.existsById(updateRentalRequest.getRentalId())){return 0;}
 		LocalDateTime rentLocalDateTime=this.rentalDao.getRentDateOfRental(updateRentalRequest.getRentalId());
 		LocalDateTime returnLocalDateTime=updateRentalRequest.getReturnDate();
 		Date rentDate = Date.from(rentLocalDateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());

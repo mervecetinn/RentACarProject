@@ -1,9 +1,7 @@
 package com.etiya.rentACarSpring.ws;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.etiya.rentACarSpring.business.abstracts.BrandService;
@@ -51,7 +49,6 @@ public class BrandsController {
 	public DataResult<List<CarSearchListDto>> getCarsOfRelatedBrand(@RequestParam @Valid int brandId){
 		return this.brandService.getCarsOfRelatedBrand(brandId);
 	}
-	
 	
 
 }

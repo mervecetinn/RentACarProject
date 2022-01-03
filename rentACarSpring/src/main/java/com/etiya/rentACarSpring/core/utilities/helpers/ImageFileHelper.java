@@ -3,7 +3,6 @@ package com.etiya.rentACarSpring.core.utilities.helpers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,6 @@ public class ImageFileHelper implements FileHelper {
 		FileOutputStream fileOutputStream = new FileOutputStream(carImageFile);
 		fileOutputStream.write(file.getBytes());
 		fileOutputStream.close();
-		
-		
 
 		return new SuccessDataResult<String>(mainPath+carImagesFolderName+"\\"+carImageFileName);
 	}

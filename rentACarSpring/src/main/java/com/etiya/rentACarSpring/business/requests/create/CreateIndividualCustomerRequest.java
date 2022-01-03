@@ -1,18 +1,11 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import javax.validation.constraints.*;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @AllArgsConstructor
@@ -46,7 +39,5 @@ public class CreateIndividualCustomerRequest{
 
 	@Past(message = "Date input is invalid for a birth date.")
 	private LocalDate birthday;
-	
-	
-	
+
 }

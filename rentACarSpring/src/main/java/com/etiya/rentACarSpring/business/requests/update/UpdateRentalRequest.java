@@ -1,10 +1,8 @@
 package com.etiya.rentACarSpring.business.requests.update;
 
 import java.time.LocalDateTime;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +19,6 @@ public class UpdateRentalRequest {
 
 	@JsonIgnore
 	private LocalDateTime rentDate;
-
 
 	private LocalDateTime returnDate;
 

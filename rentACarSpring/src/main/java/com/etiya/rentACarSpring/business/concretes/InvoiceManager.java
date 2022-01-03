@@ -105,7 +105,6 @@ public class InvoiceManager implements InvoiceService {
 
 
 	private DataResult<String> createInvoiceNumber(int rentalId){
-		//Date now=new Date();
 		LocalDate now=LocalDate.now();
 		int currentYear=now.getYear();
 		String invoiceNumber=currentYear+"FTR"+rentalId;

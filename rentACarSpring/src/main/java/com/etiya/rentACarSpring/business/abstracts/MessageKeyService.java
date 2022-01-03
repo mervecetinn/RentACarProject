@@ -6,9 +6,6 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteMessageKeyRequest
 import com.etiya.rentACarSpring.business.requests.update.UpdateMessageKeyRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.entities.Language;
-import com.etiya.rentACarSpring.entities.MessageKey;
-
 import java.util.List;
 
 public interface MessageKeyService {

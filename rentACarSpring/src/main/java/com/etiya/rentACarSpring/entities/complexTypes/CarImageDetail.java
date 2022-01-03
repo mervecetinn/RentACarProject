@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class CarImageDetail {
 	private int imageId;
 	private byte[] image;
-	
-	
+
 }

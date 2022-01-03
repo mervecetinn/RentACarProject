@@ -1,9 +1,7 @@
 package com.etiya.rentACarSpring.business.requests.create;
 
 import javax.validation.constraints.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.CreditCardNumber;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -26,14 +26,10 @@ public class MessageManager implements MessageService {
     private MessageDao messageDao;
     private ModelMapperService modelMapperService;
 
-
-
     @Autowired
     public MessageManager(MessageDao messageDao,ModelMapperService modelMapperService) {
-
         this.messageDao = messageDao;
         this.modelMapperService=modelMapperService;
-
     }
 
     @Override
@@ -130,7 +126,5 @@ public class MessageManager implements MessageService {
         }
         return new SuccessResult();
     }
-
-
 
 }

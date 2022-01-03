@@ -11,7 +11,6 @@ import com.etiya.rentACarSpring.core.utilities.business.BusinessRules;
 import com.etiya.rentACarSpring.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACarSpring.core.utilities.results.*;
 import com.etiya.rentACarSpring.dataAccess.abstracts.LanguageDao;
-import com.etiya.rentACarSpring.entities.AdditionalItem;
 import com.etiya.rentACarSpring.entities.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

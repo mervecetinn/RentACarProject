@@ -1,11 +1,8 @@
 package com.etiya.rentACarSpring.dataAccess.abstracts;
 
-import com.etiya.rentACarSpring.entities.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.etiya.rentACarSpring.entities.CarMaintenance;
 import org.springframework.data.jpa.repository.Query;
-
 import java.util.List;
 
 public interface CarMaintenanceDao extends JpaRepository<CarMaintenance, Integer>{

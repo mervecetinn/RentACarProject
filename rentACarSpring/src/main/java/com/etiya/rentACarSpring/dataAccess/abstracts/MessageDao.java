@@ -1,12 +1,8 @@
 package com.etiya.rentACarSpring.dataAccess.abstracts;
 
-import com.etiya.rentACarSpring.entities.Language;
 import com.etiya.rentACarSpring.entities.Message;
-import com.etiya.rentACarSpring.entities.MessageKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.Collection;
 import java.util.List;
 
 public interface MessageDao extends JpaRepository<Message,Integer> {

@@ -1,7 +1,6 @@
 package com.etiya.rentACarSpring;
 
 import java.util.*;
-
 import com.etiya.rentACarSpring.business.abstracts.MessageService;
 import com.etiya.rentACarSpring.business.constants.Messages;
 import org.modelmapper.ModelMapper;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorDataResult;
 import com.etiya.rentACarSpring.core.utilities.results.ErrorResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;

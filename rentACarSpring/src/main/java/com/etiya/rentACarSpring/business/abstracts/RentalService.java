@@ -1,7 +1,6 @@
 package com.etiya.rentACarSpring.business.abstracts;
 
 import java.util.List;
-
 import com.etiya.rentACarSpring.business.dtos.RentalSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateRentalRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteRentalRequest;

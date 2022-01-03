@@ -1,18 +1,15 @@
 package com.etiya.rentACarSpring.ws;
 
 import javax.validation.Valid;
-
 import com.etiya.rentACarSpring.business.dtos.CitySearchListDto;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import com.etiya.rentACarSpring.business.abstracts.CityService;
 import com.etiya.rentACarSpring.business.requests.create.CreateCityRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCityRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCityRequest;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-
 import java.util.List;
 
 @RestController

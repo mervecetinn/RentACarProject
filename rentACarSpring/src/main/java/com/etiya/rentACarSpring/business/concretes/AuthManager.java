@@ -101,15 +101,5 @@ public class AuthManager implements AuthService {
 		return new SuccessResult();
 	}
 	
-	/*private Result checkEmailFormat(String email) {
-		String pattern = "^[A-Za-z0-9+_.-]+@(.+)$";
-		if (email.matches(pattern)) {
-			return new SuccessResult();
-		}
-		
-		return new ErrorResult(this.messageService.getMessage(Messages.EmailNotValid));
-		
-	}*/
-
 
 }

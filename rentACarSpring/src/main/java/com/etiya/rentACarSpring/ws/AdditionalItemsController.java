@@ -7,10 +7,8 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteAdditionalItemReq
 import com.etiya.rentACarSpring.business.requests.update.UpdateAdditionalItemRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-import com.etiya.rentACarSpring.entities.AdditionalItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 

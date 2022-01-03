@@ -1,8 +1,6 @@
 package com.etiya.rentACarSpring.business.abstracts;
 
 import java.util.List;
-
-import com.etiya.rentACarSpring.business.dtos.CarSearchListDto;
 import com.etiya.rentACarSpring.business.dtos.ColorSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateColorRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteColorRequest;

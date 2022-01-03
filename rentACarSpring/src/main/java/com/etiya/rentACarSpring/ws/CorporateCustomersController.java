@@ -1,19 +1,13 @@
 package com.etiya.rentACarSpring.ws;
 
 import com.etiya.rentACarSpring.business.abstracts.CorporateCustomerService;
-import com.etiya.rentACarSpring.business.abstracts.IndividualCustomerService;
 import com.etiya.rentACarSpring.business.dtos.CorporateCustomerSearchListDto;
-import com.etiya.rentACarSpring.business.dtos.IndividualCustomerSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateCorporateCustomerRequest;
-import com.etiya.rentACarSpring.business.requests.create.CreateIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.delete.DeleteCorporateCustomerRequest;
-import com.etiya.rentACarSpring.business.requests.delete.DeleteIndividualCustomerRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateCorporateCustomerRequest;
-import com.etiya.rentACarSpring.business.requests.update.UpdateIndividualCustomerRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 

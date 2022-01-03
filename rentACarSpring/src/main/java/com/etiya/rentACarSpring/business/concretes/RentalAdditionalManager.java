@@ -38,7 +38,6 @@ public class RentalAdditionalManager implements RentalAdditionalService {
     }
 
 
-
     @Override
     public Result add(CreateRentalAdditionalRequest createRentalAdditionalRequest) {
         Result result = BusinessRules.run(checkIfAdditionalItemIsNotExists(createRentalAdditionalRequest.getAdditionalItemId()),

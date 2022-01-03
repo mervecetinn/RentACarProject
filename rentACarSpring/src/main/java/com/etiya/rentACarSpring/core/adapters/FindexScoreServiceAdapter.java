@@ -2,7 +2,6 @@ package com.etiya.rentACarSpring.core.adapters;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.etiya.rentACarSpring.business.abstracts.CustomerFindexScoreService;
 import com.etiya.rentACarSpring.outServices.FindexScoreService;
 

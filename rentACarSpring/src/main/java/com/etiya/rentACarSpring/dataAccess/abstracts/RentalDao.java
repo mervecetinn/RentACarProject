@@ -1,10 +1,8 @@
 package com.etiya.rentACarSpring.dataAccess.abstracts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.etiya.rentACarSpring.entities.Rental;
 import org.springframework.data.jpa.repository.Query;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,10 +26,6 @@ public interface RentalDao extends JpaRepository<Rental, Integer> {
 
 	@Query(value = "select r.taken_from_city_id from  rentals r where rental_id=?1",nativeQuery = true)
 	List<Integer> getTakenFromCityId(int rentalId);
-
-
-
-
 
 
 }

@@ -4,7 +4,6 @@ import com.etiya.rentACarSpring.entities.complexTypes.CustomerInvoiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
 import com.etiya.rentACarSpring.business.abstracts.InvoiceService;
 import com.etiya.rentACarSpring.business.dtos.InvoiceSearchListDto;
 import com.etiya.rentACarSpring.business.requests.create.CreateInvoiceRequest;
@@ -12,11 +11,8 @@ import com.etiya.rentACarSpring.business.requests.delete.DeleteInvoiceRequest;
 import com.etiya.rentACarSpring.business.requests.update.UpdateInvoiceRequest;
 import com.etiya.rentACarSpring.core.utilities.results.DataResult;
 import com.etiya.rentACarSpring.core.utilities.results.Result;
-
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-
 import javax.validation.Valid;
 
 @RestController

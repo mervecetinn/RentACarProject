@@ -71,8 +71,6 @@ public class CarImageManager implements CarImageService {
 		carImage.setPath(
 				this.fileHelper.updateFile(updateCarImageRequest.getImageFile(), carImage.getPath()).getData());
 		carImage.setImage(updateCarImageRequest.getImageFile().getBytes());
-		// CarImage carImage =
-		// modelMapperService.forRequest().map(updateCarImageRequest, CarImage.class);
 		this.carImageDao.save(carImage);
 		return new SuccessResult(this.messageService.getMessage(Messages.ImageUpdated));
 	}
