@@ -15,23 +15,23 @@ import lombok.NoArgsConstructor;
 public class UpdateCarRequest {
 	
     @NotNull
-	@Range(min=1,message = "Geçerli bir car id girin")
+	@Range(min=1)
 	private int id;
 	
 	@NotNull
-	@Range(min=1,message = "Geçerli bir  brand id girin")
+	@Range(min=1)
     private int brandId;
 	
 	@NotNull
-	@Range(min=1,message = "Geçerli bir color id girin")
+	@Range(min=1)
 	private int colorId;
 	
 	@NotNull
-	@Range(min=1000,max=3000,message="Geçerli bir yıl giriniz.")
+	@Range(min=1000,max=3000)
 	private int modelYear;
 
 	@NotNull
-	@Min(value = 0,message = "Kilometre negatif sayı olamaz.")
+	@Min(value = 0)
 	private int kilometer;
 	
 	@NotNull
@@ -44,7 +44,7 @@ public class UpdateCarRequest {
 	private String description;
 
 	@NotNull
-	@Range(min=1,message = "Geçerli bir id girin")
+	@Range(min=1)
 	private int cityId;
 
 	@NotNull

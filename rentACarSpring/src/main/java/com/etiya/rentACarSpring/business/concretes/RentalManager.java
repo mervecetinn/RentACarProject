@@ -52,8 +52,10 @@ public class RentalManager implements RentalService {
 	@Override
 	public Result add(CreateRentalRequest createRentalRequest) {
 
-		Result result = BusinessRules.run(checkIfCarIsNotExists(createRentalRequest.getCarId()),
-				checkIfUserNotExists(createRentalRequest.getUserId()),checkCarIsNotOnRent(createRentalRequest.getCarId()),
+		Result result = BusinessRules.run(
+				checkIfCarIsNotExists(createRentalRequest.getCarId()),
+				checkIfUserNotExists(createRentalRequest.getUserId()),
+				checkCarIsNotOnRent(createRentalRequest.getCarId()),
 				checkCustomerFindexScoreIsEnough(createRentalRequest.getUserId(),createRentalRequest.getCarId()),
 				checkCarIsNotOnMaintenance(createRentalRequest.getCarId()));
 

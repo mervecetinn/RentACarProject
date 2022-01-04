@@ -17,11 +17,11 @@ public class CreateRentalRequest {
 	private int rentalId;
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir user id girin")
+	@Min(value = 1)
 	private int userId;
 
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir car id girin")
+	@Min(value = 1)
 	private int carId;
 
 	@JsonIgnore
@@ -29,7 +29,6 @@ public class CreateRentalRequest {
 
 	@NotNull
 	private LocalDateTime rentDate;
-
 
 	@JsonIgnore
 	private LocalDateTime returnDate;

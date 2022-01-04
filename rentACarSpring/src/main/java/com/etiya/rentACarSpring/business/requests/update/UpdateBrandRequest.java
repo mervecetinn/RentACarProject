@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UpdateBrandRequest {
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir marka id girin")
+	@Min(value = 1)
 	private int id;
 
 	@NotNull

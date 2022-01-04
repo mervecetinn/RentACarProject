@@ -23,10 +23,10 @@ public class CreateMessageRequest {
     private String messageContent;
 
     @NotNull
-    @Min(value = 1,message = "Lütfen geçerli bir id girin.")
+    @Min(value = 1)
     private int messageKeyId;
 
     @NotNull
-    @Min(value = 1,message = "Lütfen geçerli bir id girin.")
+    @Min(value = 1)
     private int languageId;
 }

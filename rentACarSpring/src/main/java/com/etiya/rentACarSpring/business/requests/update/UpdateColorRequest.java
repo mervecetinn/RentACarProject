@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UpdateColorRequest {
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir renk id girin")
+	@Min(value = 1)
 	private int id;
 
 	@NotNull

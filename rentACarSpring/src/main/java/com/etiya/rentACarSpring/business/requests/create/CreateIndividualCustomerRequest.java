@@ -37,7 +37,7 @@ public class CreateIndividualCustomerRequest{
 	@Size(min=2,max=20)
 	private String lastName;
 
-	@Past(message = "Date input is invalid for a birth date.")
+	@Past
 	private LocalDate birthday;
 
 }

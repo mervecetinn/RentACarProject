@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UpdateAdditionalItemRequest {
 
-    @Min(value = 1,message ="Lütfen bir ek hizmet id girin")
+    @Min(value = 1)
     private int id;
 
     @NotNull

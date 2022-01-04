@@ -11,6 +11,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class DeleteMessageKeyRequest {
     @NotNull
-    @Min(value = 1,message = "Lütfen bir id giriniz.")
+    @Min(value = 1)
     private int messageKeyId;
 }

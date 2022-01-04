@@ -13,12 +13,11 @@ import lombok.NoArgsConstructor;
 public class UpdateCreditCardRequest {
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir kart id girin")
+	@Min(value = 1)
 	private int id;
 
 	@NotNull
-	@Pattern(regexp = "^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\\d{11})$",
-			message = "Geçerli bir kart numarası giriniz.")
+	@Pattern(regexp = "^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\\d{11})$")
 	private String cardNumber;
 	
 	@NotNull
@@ -28,12 +27,12 @@ public class UpdateCreditCardRequest {
 	
 	@NotNull
 	@NotBlank
-	@Size(min=5,max=5,message = "Tarih 5 haneli olmalıdır.")
+	@Size(min=5,max=5)
 	private String expirationDate;
 	
 	@NotNull
 	@NotBlank
-	@Size(min=3,max=3,message = "Cvv 3 haneli olmalıdır.")
+	@Size(min=3,max=3)
 	private String cvv;
 
 	@JsonIgnore

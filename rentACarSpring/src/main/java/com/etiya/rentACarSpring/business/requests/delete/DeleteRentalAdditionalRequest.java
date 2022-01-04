@@ -10,6 +10,6 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 public class DeleteRentalAdditionalRequest {
 
-    @Min(value = 1,message = "Lütfen bir id giriniz.")
+    @Min(value = 1)
     private  int id;
 }

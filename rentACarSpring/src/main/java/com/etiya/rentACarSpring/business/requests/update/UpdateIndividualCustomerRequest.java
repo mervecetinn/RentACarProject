@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UpdateIndividualCustomerRequest {
 
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir bireysel müşteri id girin")
+	@Min(value = 1)
 	private int individualCustomerId;
 	
 	@NotNull
@@ -21,7 +21,7 @@ public class UpdateIndividualCustomerRequest {
 	private int userId;
 	
 	@NotNull
-	@Email(message = "Email düzeni hatalı.")
+	@Email
 	private String email;
 
 	@NotNull
@@ -40,6 +40,6 @@ public class UpdateIndividualCustomerRequest {
 	private String lastName;
 
 	@NotNull
-	@Past(message = "Date input is invalid for a birth date.")
+	@Past
 	private LocalDate birthday;
 }

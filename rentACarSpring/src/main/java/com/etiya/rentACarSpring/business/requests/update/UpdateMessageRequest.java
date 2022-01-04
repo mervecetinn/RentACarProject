@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UpdateMessageRequest {
     @NotNull
-    @Min(value = 1,message = "Lütfen geçerli bir id girin")
+    @Min(value = 1)
     private int id;
 
     @NotNull
@@ -22,10 +22,10 @@ public class UpdateMessageRequest {
     private String messageContent;
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir message key id girin.")
+    @Min(value = 1)
     private int messageKeyId;
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir language id girin.")
+    @Min(value = 1)
     private int languageId;
 }

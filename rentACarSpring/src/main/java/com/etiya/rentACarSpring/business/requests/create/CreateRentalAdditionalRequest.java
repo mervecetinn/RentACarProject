@@ -16,10 +16,10 @@ public class CreateRentalAdditionalRequest {
     private int id;
 
     @NotNull
-    @Min(value = 1,message = "Lütfen bir item id girin.")
+    @Min(value = 1)
     private int additionalItemId;
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir rental id girin")
+    @Min(value = 1)
     private int rentalId;
 }

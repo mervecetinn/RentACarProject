@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 public class UpdateMessageKeyRequest {
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir message key id girin.")
+    @Min(value = 1)
     private int messageKeyId;
 
     @NotNull

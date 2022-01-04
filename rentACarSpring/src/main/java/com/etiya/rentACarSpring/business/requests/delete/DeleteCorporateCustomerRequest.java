@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class DeleteCorporateCustomerRequest {
 	
 	@NotNull
-	@Min(value = 1,message = "Lütfen bir id giriniz.")
+	@Min(value = 1)
 	private int corporateCustomerId;
 	}
 

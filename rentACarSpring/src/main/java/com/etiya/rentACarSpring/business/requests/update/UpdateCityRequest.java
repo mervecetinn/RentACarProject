@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCityRequest {
 
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir şehir id girin")
+	@Min(value = 1)
 	private int id;
 
 	@NotNull

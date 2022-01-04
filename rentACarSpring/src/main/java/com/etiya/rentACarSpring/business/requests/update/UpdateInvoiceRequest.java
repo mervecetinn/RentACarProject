@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class UpdateInvoiceRequest {
 
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir fatura id girin")
+	@Min(value = 1)
 	private int id;
 
 	@NotNull

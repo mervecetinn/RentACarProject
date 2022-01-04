@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCorporateCustomerRequest {
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir kurumsal müşteri id girin")
+	@Min(value = 1)
 	private int corporateCustomerId;
 
 	@NotNull
@@ -30,7 +30,7 @@ public class UpdateCorporateCustomerRequest {
 	private int userId;
 
 	@NotNull
-	@Email(message = "Email düzeni hatalı.")
+	@Email
 	private String email;
 
 	@NotNull

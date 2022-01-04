@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UpdateLanguageRequest {
     @NotNull
-    @Min(value = 1,message ="Lütfen bir language id girin.")
+    @Min(value = 1)
     private int languageId;
 
     @NotNull

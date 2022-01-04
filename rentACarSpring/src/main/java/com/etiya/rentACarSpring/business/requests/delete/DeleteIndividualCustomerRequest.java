@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteIndividualCustomerRequest {
 	
-	@Min(value = 1,message = "Lütfen bir id giriniz.")
+	@Min(value = 1)
 	private int individualCustomerId;
 }

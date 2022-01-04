@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 public class UpdateCarDamageRequest {
 
-    @Min(value = 1,message ="Lütfen bir hasar id girin")
+    @Min(value = 1)
     private int id;
 
     @NotNull

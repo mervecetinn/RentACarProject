@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserRequest {
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir user id girin")
+	@Min(value = 1)
 	private int id;
 	
 	@NotNull
-	@Email(message = "Email düzeni hatalı")
+	@Email
 	private String email;
 
 	@NotNull

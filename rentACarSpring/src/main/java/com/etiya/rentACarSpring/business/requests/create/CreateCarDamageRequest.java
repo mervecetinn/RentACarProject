@@ -20,7 +20,7 @@ public class CreateCarDamageRequest {
     private String damageInformation;
 
     @NotNull
-    @Min(value = 1,message = "Lütfen car id girin.")
+    @Min(value = 1)
     private int carId;
 
 

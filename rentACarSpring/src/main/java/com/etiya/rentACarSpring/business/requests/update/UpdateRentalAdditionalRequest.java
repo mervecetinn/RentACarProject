@@ -12,14 +12,14 @@ import javax.validation.constraints.NotNull;
 public class UpdateRentalAdditionalRequest {
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir rental additional id girin")
+    @Min(value = 1)
     private int id;
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir item id girin")
+    @Min(value = 1)
     private int additionalItemId;
 
     @NotNull
-    @Min(value = 1,message ="Lütfen bir rental id girin")
+    @Min(value = 1)
     private int rentalId;
 }

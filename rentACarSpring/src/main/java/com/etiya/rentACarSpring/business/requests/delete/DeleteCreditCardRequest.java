@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class DeleteCreditCardRequest {
 
 	@NotNull
-	@Min(value = 1,message = "Lütfen bir id giriniz.")
+	@Min(value = 1)
 	private int id;
 }

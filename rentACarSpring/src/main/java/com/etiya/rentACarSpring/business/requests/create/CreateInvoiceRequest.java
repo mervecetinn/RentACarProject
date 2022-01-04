@@ -20,6 +20,6 @@ public class CreateInvoiceRequest {
     private LocalDate creationDate;
 
 	@NotNull
-	@Min(value = 1,message = "Lütfen bir rental id girin.")
+	@Min(value = 1)
 	private int rentalId;
 }

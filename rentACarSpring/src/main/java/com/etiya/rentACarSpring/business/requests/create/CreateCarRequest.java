@@ -19,20 +19,20 @@ public class CreateCarRequest {
 	private int id;
 
 	@NotNull
-	@Range(min=1,message = "Geçerli bir id girin")
+	@Range(min=1)
     private int brandId;
 	
 	
 	@NotNull
-	@Range(min=1,message = "Geçerli bir id girin")
+	@Range(min=1)
 	private int colorId;
 
 	@NotNull
-	@Range(min=1000,max=3000,message="Geçerli bir yıl giriniz.")
+	@Range(min=1000,max=3000)
 	private int modelYear;
 
 	@NotNull
-	@Min(value = 0,message = "Kilometre negatif sayı olamaz.")
+	@Min(value = 0)
 	private int kilometer;
 	
 	@NotNull
@@ -45,7 +45,7 @@ public class CreateCarRequest {
 	private String description;
 
 	@NotNull
-	@Range(min=1,message = "Geçerli bir id girin")
+	@Range(min=1)
 	private int cityId;
 
 	@NotNull

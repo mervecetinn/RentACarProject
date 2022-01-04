@@ -31,7 +31,7 @@ public class RegisterIndividualCustomerRequest {
 	private String lastName;
 	
 	@NotNull
-	@Past(message = "Date input is invalid for a birth date.")
+	@Past
 	private LocalDate birthday;
 
 }

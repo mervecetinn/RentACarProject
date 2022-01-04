@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UpdateRentalRequest {
 
 	@NotNull
-	@Min(value = 1, message="Lütfen bir rental id girin")
+	@Min(value = 1)
 	private int rentalId;
 
 	@JsonIgnore
@@ -29,7 +29,7 @@ public class UpdateRentalRequest {
 	private int returnKilometer;
 
 	@NotNull
-	@Min(value=1, message="Lütfen bir city id girin")
+	@Min(value=1)
 	private int returnToCityId;
 
 	@NotNull

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCarMaintenanceRequest {
 
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir bakım id girin")
+	@Min(value = 1)
 	private int id;
 	
 	@NotNull

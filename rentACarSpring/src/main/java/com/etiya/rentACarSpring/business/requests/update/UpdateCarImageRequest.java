@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCarImageRequest {
 	
 	@NotNull
-	@Min(value = 1,message ="Lütfen bir resim id girin")
+	@Min(value = 1)
 	private int id;
 	
 	@NotNull
